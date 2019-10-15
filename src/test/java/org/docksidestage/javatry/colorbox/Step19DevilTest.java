@@ -103,6 +103,7 @@ public class Step19DevilTest extends PlainTestCase {
         List<ColorBox> targetBoxList = colorBoxList.stream()
                 .filter(box -> box.getColor().getColorName().length() == firstPlaceNumber)
                 .collect(Collectors.toList());
+        log("targetBoxList: {}", targetBoxList.stream().map(box -> box.getColor().getColorName()).collect(Collectors.toList()));
 
         List<BoxSpace> lowerSpaceList = targetBoxList.stream().map(box -> {
             List<BoxSpace> spaceList = box.getSpaceList();
