@@ -47,9 +47,9 @@ public class Step19DevilTest extends PlainTestCase {
     public void test_too_long() {
         List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
 
-        List<ColorBox> nullingBoxList = colorBoxList.stream()
-                .filter(box -> box.getSpaceList().stream().anyMatch(space -> space.getContent() == null))
-                .collect(Collectors.toList());
+        List<ColorBox> nullingBoxList = colorBoxList.stream().filter(box -> {
+            return box.getSpaceList().stream().anyMatch(space -> space.getContent() == null);
+        }).collect(Collectors.toList());
         log("nullingBoxList: {}", nullingBoxList.stream().map(box -> box.getColor().getColorName()).collect(Collectors.toList()));
 
         Set<Character> thirdCharSet = nullingBoxList.stream()
