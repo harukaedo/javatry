@@ -15,6 +15,14 @@
  */
 package org.docksidestage.javatry.colorbox;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.docksidestage.bizfw.colorbox.ColorBox;
+import org.docksidestage.bizfw.colorbox.space.BoxSpace;
+import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -37,6 +45,71 @@ public class Step19DevilTest extends PlainTestCase {
      * スペースの中のリストの中で最初に見つかるBigDecimalの一の位の数字と同じ色の長さのカラーボックスの一番下のスペースに入っているものは？)
      */
     public void test_too_long() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+
+        List<ColorBox> nullingBoxList = colorBoxList.stream()
+                .filter(box -> box.getSpaceList().stream().anyMatch(space -> space.getContent() == null))
+                .collect(Collectors.toList());
+        log("nullingBoxList: {}", nullingBoxList.stream().map(box -> box.getColor().getColorName()).collect(Collectors.toList()));
+
+        Set<Character> thirdCharSet = nullingBoxList.stream()
+                .map(box -> box.getColor().getColorName())
+                .filter(name -> name.length() >= 3) // avoid too short name
+                .map(name -> name.charAt(2)) // e.g. green => e
+                .collect(Collectors.toSet());
+        log("thirdCharSet: {}", thirdCharSet);
+
+        List<ColorBox> depthBoxList = colorBoxList.stream().filter(box -> {
+            return thirdCharSet.stream().anyMatch(ch -> box.getColor().getColorName().endsWith(String.valueOf(ch)));
+        }).collect(Collectors.toList());
+        log("depthBoxList: {}",
+                depthBoxList.stream()
+                        .map(box -> box.getColor().getColorName() + ":" + box.getSize().getDepth())
+                        .collect(Collectors.toList()));
+
+        Set<Integer> tensPlaceSet = depthBoxList.stream()
+                .map(box -> box.getSize().getDepth())
+                .filter(depth -> depth >= 10)
+                .map(depth -> String.valueOf(depth))
+                .map(depstr -> depstr.substring(depstr.length() - 2, depstr.length() - 1)) // other way?
+                .map(depstr -> Integer.valueOf(depstr))
+                .collect(Collectors.toSet());
+        log("tensPlaceSet: {}", tensPlaceSet);
+
+        Integer firstPlaceNumber = colorBoxList.stream()
+                .flatMap(box -> box.getSpaceList().stream())
+                .filter(space -> space.getContent() instanceof List<?>)
+                .map(space -> (List<?>) space.getContent())
+                .flatMap(list -> list.stream())
+                .filter(element -> element instanceof BigDecimal)
+                .map(element -> (BigDecimal) element)
+                .filter(decimal -> {
+                    String moved = String.valueOf(decimal.movePointRight(2).intValue());
+                    String lastStr = moved.substring(moved.length() - 1, moved.length());
+                    Integer second = Integer.valueOf(lastStr);
+                    return tensPlaceSet.contains(second);
+                })
+                .map(decimal -> {
+                    String numberStr = String.valueOf(decimal.intValue());
+                    String lastStr = numberStr.substring(numberStr.length() - 1, numberStr.length());
+                    return Integer.valueOf(lastStr);
+                })
+                .findFirst()
+                .orElseThrow(() -> {
+                    return new IllegalStateException("Not found the specified BigDecimal: tensPlaceSet=" + tensPlaceSet);
+                });
+        log("firstPlaceNumber: {}", firstPlaceNumber);
+
+        List<ColorBox> targetBoxList = colorBoxList.stream()
+                .filter(box -> box.getColor().getColorName().length() == firstPlaceNumber)
+                .collect(Collectors.toList());
+
+        List<BoxSpace> lowerSpaceList = targetBoxList.stream().map(box -> {
+            List<BoxSpace> spaceList = box.getSpaceList();
+            return spaceList.get(spaceList.size() - 1);
+        }).collect(Collectors.toList());
+
+        lowerSpaceList.stream().forEach(space -> log("answer: {}", space.getContent()));
     }
 
     // ===================================================================================
