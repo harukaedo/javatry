@@ -15,12 +15,14 @@
  */
 package org.docksidestage.javatry.colorbox;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.docksidestage.bizfw.colorbox.ColorBox;
+import org.docksidestage.bizfw.colorbox.size.BoxSize;
 import org.docksidestage.bizfw.colorbox.space.BoxSpace;
 import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom;
 import org.docksidestage.unit.PlainTestCase;
@@ -29,7 +31,7 @@ import org.docksidestage.unit.PlainTestCase;
  * The test of Devil with color-box, (try if you woke up Devil in StringTest) <br>
  * Show answer by log() for question of javadoc.
  * @author jflute
- * @author your_name_here
+ * @author jflute (as user)
  */
 public class Step19DevilTest extends PlainTestCase {
 
@@ -121,6 +123,22 @@ public class Step19DevilTest extends PlainTestCase {
      * ((このテストメソッドの中だけで無理やり)赤いカラーボックスの高さを160に変更して、BoxSizeをtoString()すると？)
      */
     public void test_looks_like_easy() {
+        List<ColorBox> redBoxList = new YourPrivateRoom().getColorBoxList()
+                .stream()
+                .filter(box -> box.getColor().getColorName().equals("red"))
+                .collect(Collectors.toList());
+        redBoxList.forEach(box -> {
+            BoxSize size = box.getSize();
+            String fieldName = "height";
+            try {
+                Field heightField = size.getClass().getDeclaredField(fieldName);
+                heightField.setAccessible(true);
+                heightField.set(size, 160);
+            } catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
+                throw new IllegalStateException("Failed to handle field object of height: fieldName=" + fieldName, e);
+            }
+            log(size.toString()); // {160, 32, 41}
+        });
     }
 
     // ===================================================================================
