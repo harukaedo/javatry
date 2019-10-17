@@ -16,6 +16,7 @@
 package org.docksidestage.javatry.colorbox;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.docksidestage.bizfw.colorbox.ColorBox;
 import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom;
@@ -83,5 +84,24 @@ public class Step15MiscTypeTest extends PlainTestCase {
      * (getColorBoxList()メソッドの中のmakeEighthColorBox()メソッドを呼び出している箇所の行数は？)
      */
     public void test_lineNumber() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        List<Throwable> throwableList = colorBoxList.stream()
+                .flatMap(box -> box.getSpaceList().stream())
+                .filter(space -> space.getContent() instanceof Throwable)
+                .map(space -> (Throwable) space.getContent())
+                .collect(Collectors.toList());
+        throwableList.forEach(throwable -> {
+            StackTraceElement[] stackTrace = throwable.getStackTrace();
+            boolean found = false;
+            for (StackTraceElement element : stackTrace) {
+                if (found) {
+                    log("answer: {} in {}@{}()", element.getLineNumber(), element.getClassName(), element.getMethodName());
+                    break;
+                }
+                if (element.getMethodName().equals("makeEighthColorBox")) {
+                    found = true; // next element is just caller
+                }
+            }
+        });
     }
 }
