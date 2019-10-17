@@ -15,6 +15,11 @@
  */
 package org.docksidestage.javatry.colorbox;
 
+import java.util.List;
+
+import org.docksidestage.bizfw.colorbox.ColorBox;
+import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom;
+import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom.FavoriteProvider;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -50,6 +55,14 @@ public class Step15MiscTypeTest extends PlainTestCase {
      * (カラーボックスに入っているFavoriteProviderインターフェースのjustHere()メソッドの戻り値は？)
      */
     public void test_interfaceCall() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        colorBoxList.stream()
+                .flatMap(box -> box.getSpaceList().stream())
+                .filter(space -> space.getContent() instanceof FavoriteProvider)
+                .map(space -> (FavoriteProvider) space.getContent())
+                .forEach(provider -> {
+                    log("answer: {}", provider.justHere());
+                });
     }
 
     // ===================================================================================
