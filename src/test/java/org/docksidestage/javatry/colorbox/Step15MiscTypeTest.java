@@ -40,6 +40,15 @@ public class Step15MiscTypeTest extends PlainTestCase {
      * (カラーボックスに入っているthrowできるオブジェクトのクラス名は？)
      */
     public void test_throwable() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        List<Throwable> throwableList = colorBoxList.stream()
+                .flatMap(box -> box.getSpaceList().stream())
+                .filter(space -> space.getContent() instanceof Throwable)
+                .map(space -> (Throwable) space.getContent())
+                .collect(Collectors.toList());
+        throwableList.forEach(throwable -> {
+            log("answer: {}", throwable.getClass().getName());
+        });
     }
 
     /**
@@ -47,6 +56,15 @@ public class Step15MiscTypeTest extends PlainTestCase {
      * (カラーボックスに入っている例外オブジェクトのネストした例外インスタンスのメッセージは？)
      */
     public void test_nestedException() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        List<Throwable> throwableList = colorBoxList.stream()
+                .flatMap(box -> box.getSpaceList().stream())
+                .filter(space -> space.getContent() instanceof Throwable)
+                .map(space -> (Throwable) space.getContent())
+                .collect(Collectors.toList());
+        throwableList.forEach(throwable -> {
+            log("answer: {}", throwable.getCause().getMessage());
+        });
     }
 
     // ===================================================================================
@@ -88,7 +106,9 @@ public class Step15MiscTypeTest extends PlainTestCase {
                     return resort.getPark().flatMap(park -> park.getStage()).map(stage -> stage.getKeyword()).orElse("none");
                 })
                 .collect(Collectors.toList());
-        log(keywordList);
+        keywordList.forEach(keyword -> {
+            log("answer: {}", keyword);
+        });
     }
 
     // ===================================================================================
