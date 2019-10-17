@@ -15,6 +15,10 @@
  */
 package org.docksidestage.javatry.framework;
 
+import org.docksidestage.bizfw.basic.objanimal.Cat;
+import org.docksidestage.bizfw.di.container.SimpleDiContainer;
+import org.docksidestage.bizfw.di.usingdi.UsingDiWebFrameworkProcess;
+import org.docksidestage.bizfw.di.usingdi.settings.UsingDiModule;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -97,16 +101,51 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
     //                                                           Execute like WebFramework
     //                                                           =========================
     /**
-     * Execute accessor and annotation and delegating actions by UsingDiWebFrameworkProcess. <br>
-     * (accessor, annotation, delegating の Action を UsingDiWebFrameworkProcess 経由で実行してみましょう)
+     * Execute callFriend() of accessor action by UsingDiWebFrameworkProcess. <br>
+     * (accessor の Action の callFriend() を UsingDiWebFrameworkProcess 経由で実行してみましょう)
      */
-    public void test_usingdi_UsingDiWebFrameworkProcess() {
+    public void test_usingdi_UsingDiWebFrameworkProcess_callfriend_accessor() {
         // execution code here
+        initializeSimpleContainer(new UsingDiModule());
+
+        UsingDiWebFrameworkProcess process = new UsingDiWebFrameworkProcess();
+        process.requestAccessorCallFriend();
     }
 
     /**
-     * What is concrete class of instance variable "animal" of UsingDiAnnotationAction? (when executing by UsingDiWebFrameworkProcess) <br>
-     * (UsingDiAnnotationAction のインスタンス変数 "animal" の実体クラスは？ (UsingDiWebFrameworkProcessで実行した時))
+     * Execute callFriend() of annotation and delegating actions by UsingDiWebFrameworkProcess.
+     * (And you can increase hit-points of sleepy cat in this method) <br>
+     * (annotation, delegating の Action の callFriend() を UsingDiWebFrameworkProcess 経由で実行してみましょう。
+     * (眠い猫のヒットポイントをこのメソッド内で増やしてもOK))
+     */
+    public void test_usingdi_UsingDiWebFrameworkProcess_callfriend_annotation_delegating() {
+        // execution code here
+        initializeSimpleContainer(new UsingDiModule() {
+            @Override
+            protected Cat createPlayingCat() {
+                return new Cat() {
+                    @Override
+                    protected int getInitialHitPoint() {
+                        return 20;
+                    }
+                };
+            }
+        });
+
+        UsingDiWebFrameworkProcess process = new UsingDiWebFrameworkProcess();
+        process.requestAnnotationCallFriend();
+        process.requestDelegatingCallFriend();
+    }
+
+    private void initializeSimpleContainer(UsingDiModule module) {
+        SimpleDiContainer container = SimpleDiContainer.getInstance();
+        container.registerModule(module);
+        container.resolveDependency();
+    }
+
+    /**
+     * What is concrete class of instance variable "animal" of UsingDiAnnotationAction? (when registering UsingDiModule) <br>
+     * (UsingDiAnnotationAction のインスタンス変数 "animal" の実体クラスは？ (UsingDiModuleを登録した時))
      */
     public void test_usingdi_whatis_animal() {
         // your answer? => 
