@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import org.docksidestage.bizfw.colorbox.ColorBox;
 import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom;
+import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom.BoxedResort;
 import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom.FavoriteProvider;
 import org.docksidestage.unit.PlainTestCase;
 
@@ -74,6 +75,20 @@ public class Step15MiscTypeTest extends PlainTestCase {
      * (beigeのカラーボックスに入っているListの中のBoxedResortのBoxedStageのkeywordは？(値がなければ固定の"none"という値を))
      */
     public void test_optionalMapping() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        List<String> keywordList = colorBoxList.stream()
+                .filter(box -> box.getColor().getColorName().equals("beige"))
+                .flatMap(box -> box.getSpaceList().stream())
+                .filter(space -> space.getContent() instanceof List)
+                .map(space -> (List<?>) space.getContent())
+                .flatMap(list -> list.stream())
+                .filter(element -> element instanceof BoxedResort)
+                .map(element -> (BoxedResort) element)
+                .map(resort -> {
+                    return resort.getPark().flatMap(park -> park.getStage()).map(stage -> stage.getKeyword()).orElse("none");
+                })
+                .collect(Collectors.toList());
+        log(keywordList);
     }
 
     // ===================================================================================
