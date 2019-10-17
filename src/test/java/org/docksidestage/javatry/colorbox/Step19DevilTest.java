@@ -16,10 +16,14 @@
 package org.docksidestage.javatry.colorbox;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.docksidestage.bizfw.colorbox.ColorBox;
 import org.docksidestage.bizfw.colorbox.size.BoxSize;
@@ -145,9 +149,48 @@ public class Step19DevilTest extends PlainTestCase {
     //                                                                        Meta Journey
     //                                                                        ============
     /**
-     * What value is returned from functional method of interface that has FunctionalInterface annotation in color-boxes? <br> 
-     * (カラーボックスに入っているFunctionalInterfaceアノテーションが付与されているインターフェースのFunctionalメソッドの戻り値は？)
+     * What value is returned from no-parameter functional method of interface that has FunctionalInterface annotation in color-boxes? <br> 
+     * (カラーボックスに入っているFunctionalInterfaceアノテーションが付与されているインターフェースの引数なしのFunctionalメソッドの戻り値は？)
      */
     public void test_be_frameworker() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        List<BoxSpace> spaceList = colorBoxList.stream()
+                .flatMap(box -> box.getSpaceList().stream())
+                .filter(space -> space.getContent() != null)
+                .collect(Collectors.toList());
+        spaceList.forEach(space -> {
+            Object content = space.getContent();
+            Class<? extends Object> concreteClass = content.getClass();
+            List<Class<?>> functionalTypeList = Stream.of(concreteClass.getInterfaces())
+                    .filter(inf -> inf.getAnnotation(FunctionalInterface.class) != null)
+                    .collect(Collectors.toList());
+            if (functionalTypeList.isEmpty()) {
+                return;
+            }
+            log("functionalTypeList: {}", functionalTypeList);
+            functionalTypeList.stream().forEach(type -> {
+                List<Method> functionalMethodList = Stream.of(type.getDeclaredMethods())
+                        .filter(method -> !method.isDefault())
+                        .filter(method -> !Modifier.isStatic(method.getModifiers()))
+                        .filter(method -> method.getParameterCount() == 0) // except e.g. TemporalAdjuster
+                        .collect(Collectors.toList());
+                if (functionalMethodList.isEmpty()) { // e.g. TemporalAdjuster
+                    return;
+                }
+                if (functionalMethodList.size() >= 2) { // may be something wrong in my implementation
+                    throw new IllegalStateException(
+                            "No way, functional method is only one in functional interface: " + functionalMethodList);
+                }
+                Method functionalMethod = functionalMethodList.get(0);
+                log("functionalMethod: {}", functionalMethod);
+                Object result;
+                try {
+                    result = functionalMethod.invoke(content, (Object[]) null);
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                    throw new IllegalStateException("Failed to invoke the method: " + functionalMethod, e);
+                }
+                log("answer: {}", result);
+            });
+        });
     }
 }
