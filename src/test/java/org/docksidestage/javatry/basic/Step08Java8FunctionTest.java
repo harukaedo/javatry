@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         // your answer? => 
 
         // cannot reassign because it is used at callback process
-        //name = "wave";
+        //title = "wave";
     }
 
     /**
@@ -163,8 +163,8 @@ public class Step08Java8FunctionTest extends PlainTestCase {
     //                                                                            Optional
     //                                                                            ========
     /**
-     * Are the strings by three log() methods same? (yes or no) <br>
-     * (三つのlog()によって出力される文字列は同じでしょうか？ (yes or no))
+     * Are the strings by two log() methods same? (yes or no) <br>
+     * (二つのlog()によって出力される文字列は同じでしょうか？ (yes or no))
      */
     public void test_java8_optional_concept() {
         St8Member oldmember = new St8DbFacade().oldselectMember(1);
@@ -176,9 +176,6 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             St8Member member = optMember.get();
             log(member.getMemberId(), member.getMemberName());
         }
-        optMember.ifPresent(member -> {
-            log(member.getMemberId(), member.getMemberName());
-        });
         // your answer? => 
     }
 
@@ -205,38 +202,55 @@ public class Step08Java8FunctionTest extends PlainTestCase {
     public void test_java8_optional_map_flatMap() {
         St8DbFacade facade = new St8DbFacade();
 
+        // traditional style
         St8Member oldmemberFirst = facade.oldselectMember(1);
         String sea;
         if (oldmemberFirst != null) {
             St8Withdrawal withdrawal = oldmemberFirst.oldgetWithdrawal();
             if (withdrawal != null) {
                 sea = withdrawal.oldgetPrimaryReason();
+                if (sea == null) {
+                    sea = "*no reason1: the PrimaryReason was null";
+                }
             } else {
-                sea = "*no reason1";
+                sea = "*no reason2: the Withdrawal was null";
             }
         } else {
-            sea = "*no reason2";
+            sea = "*no reason3: the selected Member was null";
         }
 
         Optional<St8Member> optMemberFirst = facade.selectMember(1);
-        String land = optMemberFirst.flatMap(mb -> mb.getWithdrawal()).flatMap(wdl -> wdl.getPrimaryReason()).orElse("*no reason");
 
-        String piari = optMemberFirst.flatMap(mb -> {
-            return mb.getWithdrawal();
-        }).map(wdl -> {
-            return wdl.oldgetPrimaryReason();
-        }).orElse("*no reason");
+        // map style
+        String land = optMemberFirst.map(mb -> mb.oldgetWithdrawal())
+                .map(wdl -> wdl.oldgetPrimaryReason())
+                .orElse("*no reason: someone was not present");
 
-        String bonvo = facade.selectMember(2).flatMap(mb -> {
-            return mb.getWithdrawal();
-        }).map(wdl -> wdl.oldgetPrimaryReason()).orElse("*no reason");
+        // flatMap style
+        String piari = optMemberFirst.flatMap(mb -> mb.getWithdrawal())
+                .flatMap(wdl -> wdl.getPrimaryReason())
+                .orElse("*no reason: someone was not present");
 
-        String dstore = facade.selectMember(3) //
-                .flatMap(mb -> mb.getWithdrawal()) //
-                .flatMap(wdl -> wdl.getPrimaryReason()) //
-                .orElse("*no reason");
+        // flatMap and map style
+        String bonvo = optMemberFirst.flatMap(mb -> mb.getWithdrawal())
+                .map(wdl -> wdl.oldgetPrimaryReason())
+                .orElse("*no reason: someone was not present");
 
-        Integer amba = facade.selectMember(2).flatMap(mb -> mb.getWithdrawal()).map(wdl -> wdl.getWithdrawalId()).orElse(-1);
+        String dstore = facade.selectMember(2)
+                .flatMap(mb -> mb.getWithdrawal())
+                .map(wdl -> wdl.oldgetPrimaryReason())
+                .orElse("*no reason: someone was not present");
+
+        String amba = facade.selectMember(3)
+                .flatMap(mb -> mb.getWithdrawal())
+                .flatMap(wdl -> wdl.getPrimaryReason())
+                .orElse("*no reason: someone was not present");
+
+        int defaultWithdrawalId = -1;
+        Integer miraco = facade.selectMember(2)
+                .flatMap(mb -> mb.getWithdrawal())
+                .map(wdl -> wdl.getWithdrawalId()) // ID here
+                .orElse(defaultWithdrawalId);
 
         log(sea); // your answer? => 
         log(land); // your answer? => 
@@ -244,6 +258,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         log(bonvo); // your answer? => 
         log(dstore); // your answer? => 
         log(amba); // your answer? => 
+        log(miraco); // your answer? => 
     }
 
     /**

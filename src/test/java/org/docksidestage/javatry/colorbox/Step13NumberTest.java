@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public class Step13NumberTest extends PlainTestCase {
     //                                                                               =====
     /**
      * How many integer-type values in color-boxes are between 0 and 54 (includes)? <br>
-     * (カラーボックの中に入っているInteger型で、0から54までの値は何個ある？)
+     * (カラーボックスの中に入っているInteger型で、0から54までの値は何個ある？)
      */
     public void test_countZeroToFiftyFour_IntegerOnly() {
     }

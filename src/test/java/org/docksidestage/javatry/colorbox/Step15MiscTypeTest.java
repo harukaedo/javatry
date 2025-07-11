@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,13 @@
  */
 package org.docksidestage.javatry.colorbox;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.docksidestage.bizfw.colorbox.ColorBox;
-import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom;
-import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom.BoxedResort;
-import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom.FavoriteProvider;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
- * The test of various type with color-box. <br>
+ * The test of miscellaneous type with color-box. <br>
  * Show answer by log() for question of javadoc.
  * @author jflute
- * @author jflute (as trainee)
+ * @author your_name_here
  */
 public class Step15MiscTypeTest extends PlainTestCase {
 
@@ -40,15 +33,6 @@ public class Step15MiscTypeTest extends PlainTestCase {
      * (カラーボックスに入っているthrowできるオブジェクトのクラス名は？)
      */
     public void test_throwable() {
-        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
-        List<Throwable> throwableList = colorBoxList.stream()
-                .flatMap(box -> box.getSpaceList().stream())
-                .filter(space -> space.getContent() instanceof Throwable)
-                .map(space -> (Throwable) space.getContent())
-                .collect(Collectors.toList());
-        throwableList.forEach(throwable -> {
-            log("answer: {}", throwable.getClass().getName());
-        });
     }
 
     /**
@@ -56,15 +40,6 @@ public class Step15MiscTypeTest extends PlainTestCase {
      * (カラーボックスに入っている例外オブジェクトのネストした例外インスタンスのメッセージは？)
      */
     public void test_nestedException() {
-        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
-        List<Throwable> throwableList = colorBoxList.stream()
-                .flatMap(box -> box.getSpaceList().stream())
-                .filter(space -> space.getContent() instanceof Throwable)
-                .map(space -> (Throwable) space.getContent())
-                .collect(Collectors.toList());
-        throwableList.forEach(throwable -> {
-            log("answer: {}", throwable.getCause().getMessage());
-        });
     }
 
     // ===================================================================================
@@ -75,14 +50,6 @@ public class Step15MiscTypeTest extends PlainTestCase {
      * (カラーボックスに入っているFavoriteProviderインターフェースのjustHere()メソッドの戻り値は？)
      */
     public void test_interfaceCall() {
-        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
-        colorBoxList.stream()
-                .flatMap(box -> box.getSpaceList().stream())
-                .filter(space -> space.getContent() instanceof FavoriteProvider)
-                .map(space -> (FavoriteProvider) space.getContent())
-                .forEach(provider -> {
-                    log("answer: {}", provider.justHere());
-                });
     }
 
     // ===================================================================================
@@ -93,22 +60,6 @@ public class Step15MiscTypeTest extends PlainTestCase {
      * (beigeのカラーボックスに入っているListの中のBoxedResortのBoxedStageのkeywordは？(値がなければ固定の"none"という値を))
      */
     public void test_optionalMapping() {
-        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
-        List<String> keywordList = colorBoxList.stream()
-                .filter(box -> box.getColor().getColorName().equals("beige"))
-                .flatMap(box -> box.getSpaceList().stream())
-                .filter(space -> space.getContent() instanceof List)
-                .map(space -> (List<?>) space.getContent())
-                .flatMap(list -> list.stream())
-                .filter(element -> element instanceof BoxedResort)
-                .map(element -> (BoxedResort) element)
-                .map(resort -> {
-                    return resort.getPark().flatMap(park -> park.getStage()).map(stage -> stage.getKeyword()).orElse("none");
-                })
-                .collect(Collectors.toList());
-        keywordList.forEach(keyword -> {
-            log("answer: {}", keyword);
-        });
     }
 
     // ===================================================================================
@@ -119,24 +70,5 @@ public class Step15MiscTypeTest extends PlainTestCase {
      * (getColorBoxList()メソッドの中のmakeEighthColorBox()メソッドを呼び出している箇所の行数は？)
      */
     public void test_lineNumber() {
-        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
-        List<Throwable> throwableList = colorBoxList.stream()
-                .flatMap(box -> box.getSpaceList().stream())
-                .filter(space -> space.getContent() instanceof Throwable)
-                .map(space -> (Throwable) space.getContent())
-                .collect(Collectors.toList());
-        throwableList.forEach(throwable -> {
-            StackTraceElement[] stackTrace = throwable.getStackTrace();
-            boolean found = false;
-            for (StackTraceElement element : stackTrace) {
-                if (found) {
-                    log("answer: {} in {}@{}()", element.getLineNumber(), element.getClassName(), element.getMethodName());
-                    break;
-                }
-                if (element.getMethodName().equals("makeEighthColorBox")) {
-                    found = true; // next element is just caller
-                }
-            }
-        });
     }
 }

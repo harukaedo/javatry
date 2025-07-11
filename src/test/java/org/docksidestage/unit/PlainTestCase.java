@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
 package org.docksidestage.unit;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -37,6 +40,7 @@ import org.docksidestage.unit.flute.util.Srl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.core.util.StatusPrinter;
 import junit.framework.TestCase;
 
 /**
@@ -45,15 +49,21 @@ import junit.framework.TestCase;
  */
 public abstract class PlainTestCase extends TestCase {
 
+    // javatry does not need logback initialization logs
+    static { // should be before logback initialization
+        StatusPrinter.setPrintStream(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                // do nothing
+            }
+        }));
+    }
+
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
     /** The logger instance for sub class. (NotNull) */
     private final Logger _xlogger = LoggerFactory.getLogger(getClass());
-    // UTFlute wants to use logger for caller output
-    // but should remove the dependency to Log4j
-    // (logging through commons-logging gives us fixed caller...)
-    //protected final Logger _xlogger = Logger.getLogger(getClass());
 
     // ===================================================================================
     //                                                                           Attribute

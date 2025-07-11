@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class Step02IfForTest extends PlainTestCase {
      * What string is sea variable at the method end? <br>
      * (メソッド終了時の変数 sea の中身は？)
      */
-    public void test_if_basic() {
+    public void test_if_basic() { // example, so begin from the next method
         int sea = 904;
         if (sea >= 904) {
             sea = 2001;
@@ -85,8 +85,14 @@ public class Step02IfForTest extends PlainTestCase {
             } else if (sea <= 903) {
                 sea++;
             }
+        } else if (sea == 8) {
+            sea++;
+            land = false;
         } else {
             sea = 9;
+        }
+        if (sea >= 9 || (sea > 7 && sea < 9)) {
+            sea--;
         }
         if (land) {
             sea = 10;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,9 +138,9 @@ public class YourPrivateRoom {
 
     private StandardColorBox makeSixthColorBox() {
         StandardColorBox colorBox = new StandardColorBox(new BoxColor("pink"), new BoxSize(50, 40, 30));
-        colorBox.getUpperSpace().setContent(asDevil("high tower</body>"));
-        colorBox.getMiddleSpace().setContent(asDevil(null));
-        colorBox.getLowerSpace().setContent(asDevil("hotel"));
+        colorBox.getUpperSpace().setContent(asGuardian("high tower</body>"));
+        colorBox.getMiddleSpace().setContent(asGuardian(null));
+        colorBox.getLowerSpace().setContent(asGuardian("hotel"));
         return colorBox;
     }
 
@@ -179,7 +179,7 @@ public class YourPrivateRoom {
         return colorBox;
     }
 
-    private StandardColorBox makeEighthColorBox() { // duplicate color here
+    protected StandardColorBox makeEighthColorBox() { // duplicate color here
         StandardColorBox colorBox = new StandardColorBox(new BoxColor("yellow"), new BoxSize(30, 50, 40));
         Set<String> set = new HashSet<String>();
         set.add("2019/04/22");
@@ -253,20 +253,20 @@ public class YourPrivateRoom {
     }
 
     // ===================================================================================
-    //                                                                               Devil
-    //                                                                               =====
-    private DevilBox asDevil(String mapString) {
-        return new DevilBox(mapString);
+    //                                                                            Guardian
+    //                                                                            ========
+    private GuardianBox asGuardian(String mapString) {
+        return new GuardianBox(mapString);
     }
 
-    public static class DevilBox {
+    public static class GuardianBox {
 
         private final String text; // null allowed
         private boolean wakeup;
         private boolean allowed;
         private boolean open;
 
-        public DevilBox(String text) {
+        public GuardianBox(String text) {
             this.text = text;
         }
 
@@ -276,7 +276,7 @@ public class YourPrivateRoom {
 
         public void allowMe() {
             if (!wakeup) {
-                String msg = "The devil is sleep now so call wakeUp() method before calling this.";
+                String msg = "The guardian is sleep now so call wakeUp() method before calling this.";
                 throw new IllegalStateException(msg);
             }
             allowed = true;
@@ -293,7 +293,7 @@ public class YourPrivateRoom {
         /**
          * Get the text in the box.
          * @return The string of text. (NotNull: exception if none)
-         * @throws DevilBoxTextNotFoundException When the text is null.
+         * @throws GuardianBoxTextNotFoundException When the text is null.
          */
         public String getText() {
             if (!open) {
@@ -302,7 +302,7 @@ public class YourPrivateRoom {
             }
             if (text == null) {
                 String msg = "Not found the text in the devil, meaning null value.";
-                throw new DevilBoxTextNotFoundException(msg);
+                throw new GuardianBoxTextNotFoundException(msg);
             }
             return text;
         }
@@ -313,11 +313,11 @@ public class YourPrivateRoom {
         }
     }
 
-    public static class DevilBoxTextNotFoundException extends RuntimeException {
+    public static class GuardianBoxTextNotFoundException extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
 
-        public DevilBoxTextNotFoundException(String msg) {
+        public GuardianBoxTextNotFoundException(String msg) {
             super(msg);
         }
     }
