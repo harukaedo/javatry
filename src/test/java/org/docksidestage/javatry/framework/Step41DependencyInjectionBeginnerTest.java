@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,13 @@
  */
 package org.docksidestage.javatry.framework;
 
-import org.docksidestage.bizfw.basic.objanimal.Cat;
-import org.docksidestage.bizfw.di.container.SimpleDiContainer;
-import org.docksidestage.bizfw.di.usingdi.UsingDiWebFrameworkProcess;
-import org.docksidestage.bizfw.di.usingdi.settings.UsingDiModule;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
  * The test of Dependency Injection (DI) as beginner level. <br>
  * Show answer by log() or write answer on comment for question of javadoc.
  * @author jflute
- * @author jflute (as trainee)
+ * @author your_name_here
  */
 public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
 
@@ -101,46 +97,22 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
     //                                                           Execute like WebFramework
     //                                                           =========================
     /**
-     * Execute callFriend() of accessor action by UsingDiWebFrameworkProcess. <br>
-     * (accessor の Action の callFriend() を UsingDiWebFrameworkProcess 経由で実行してみましょう)
+     * Execute callFriend() of accessor action by UsingDiWebFrameworkProcess. (Animal as TooLazyDog) <br>
+     * (accessor の Action の callFriend() を UsingDiWebFrameworkProcess 経由で実行してみましょう (Animal は TooLazyDog として))
      */
     public void test_usingdi_UsingDiWebFrameworkProcess_callfriend_accessor() {
         // execution code here
-        initializeSimpleContainer(new UsingDiModule());
-
-        UsingDiWebFrameworkProcess process = new UsingDiWebFrameworkProcess();
-        process.requestAccessorCallFriend();
     }
 
     /**
-     * Execute callFriend() of annotation and delegating actions by UsingDiWebFrameworkProcess.
-     * (And you can increase hit-points of sleepy cat in this method) <br>
-     * (annotation, delegating の Action の callFriend() を UsingDiWebFrameworkProcess 経由で実行してみましょう。
-     * (眠い猫のヒットポイントをこのメソッド内で増やしてもOK))
+     * Execute callFriend() of annotation and delegating actions by UsingDiWebFrameworkProcess. <br>
+     *  (Animal as TooLazyDog...so you can increase hit-points of sleepy cat in this method) <br>
+     * <br>
+     * (annotation, delegating の Action の callFriend() を UsingDiWebFrameworkProcess 経由で実行してみましょう <br>
+     *  (Animal は TooLazyDog として...ということで眠い猫のヒットポイントをこのメソッド内で増やしてもOK))
      */
     public void test_usingdi_UsingDiWebFrameworkProcess_callfriend_annotation_delegating() {
         // execution code here
-        initializeSimpleContainer(new UsingDiModule() {
-            @Override
-            protected Cat createPlayingCat() {
-                return new Cat() {
-                    @Override
-                    protected int getInitialHitPoint() {
-                        return 20;
-                    }
-                };
-            }
-        });
-
-        UsingDiWebFrameworkProcess process = new UsingDiWebFrameworkProcess();
-        process.requestAnnotationCallFriend();
-        process.requestDelegatingCallFriend();
-    }
-
-    private void initializeSimpleContainer(UsingDiModule module) {
-        SimpleDiContainer container = SimpleDiContainer.getInstance();
-        container.registerModule(module);
-        container.resolveDependency();
     }
 
     /**

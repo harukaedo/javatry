@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,13 @@ import org.docksidestage.bizfw.basic.supercar.SupercarManufacturer.Supercar;
 public class SupercarDealer {
 
     public Supercar orderSupercar(String clientRequirement) {
-        SupercarManufacturer manufacturer = createSupercarManufacturer();
+        SupercarManufacturer supercarManufacturer = createSupercarManufacturer();
         if (clientRequirement.contains("steering wheel is like sea")) {
-            return manufacturer.makeSupercar("piari");
+            return supercarManufacturer.makeSupercar("piari");
         } else if (clientRequirement.contains("steering wheel is useful on land")) {
-            return manufacturer.makeSupercar("land");
+            return supercarManufacturer.makeSupercar("land");
         } else if (clientRequirement.contains("steering wheel has many shop")) {
-            return manufacturer.makeSupercar("piari");
+            return supercarManufacturer.makeSupercar("piari");
         } else {
             throw new IllegalStateException("Cannot understand the client requirement: " + clientRequirement);
         }

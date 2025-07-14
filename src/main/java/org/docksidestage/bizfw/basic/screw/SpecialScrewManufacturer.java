@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.screw;
 
+import org.docksidestage.bizfw.basic.screw.exception.ScrewCannotMakeBySpecException;
+
 /**
  * The manufacturer(製造業者) of special screw(特別なねじ).
  * @author jflute
@@ -22,45 +24,16 @@ package org.docksidestage.bizfw.basic.screw;
 public class SpecialScrewManufacturer {
 
     public SpecialScrew makeSpecialScrew(ScrewSpec screwSpec) {
+        if (isKawaiiFaceScrewSpec(screwSpec)) {
+            String msg = "The kawaii face is already unsupported so we cannot make it.";
+            throw new ScrewCannotMakeBySpecException(msg);
+        }
+        return new SpecialScrew(screwSpec.getSpecText());
+    }
+
+    private boolean isKawaiiFaceScrewSpec(ScrewSpec screwSpec) {
         String specText = screwSpec.getSpecText();
-        if (specText.equals("\\(^_^)/")) { // too pinpoint!?
-            String msg = "The kawaii face is not useful to make screw: " + screwSpec;
-            throw new SpecialScrewCannotMakeBySpecException(msg);
-        }
-        return new SpecialScrew(specText);
-    }
-
-    public static class ScrewSpec {
-
-        private final String specText;
-
-        public ScrewSpec(String specText) {
-            this.specText = specText;
-        }
-
-        public String getSpecText() {
-            return specText;
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName() + ":{" + specText + "}";
-        }
-    }
-
-    public static class SpecialScrew {
-
-        public SpecialScrew(String specText) {
-            // dummy
-        }
-    }
-
-    public static class SpecialScrewCannotMakeBySpecException extends RuntimeException {
-
-        private static final long serialVersionUID = 1L;
-
-        public SpecialScrewCannotMakeBySpecException(String msg) {
-            super(msg);
-        }
+        String kawaiiText = new String(new byte[] { 0x5c, 0x28, 0x5e, 0x5f, 0x5e, 0x29, 0x2f });
+        return specText.equals(kawaiiText);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public abstract class Animal implements Loudable {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    protected int hitPoint;
+    protected int hitPoint; // is HP
 
     // ===================================================================================
     //                                                                         Constructor
@@ -57,13 +57,13 @@ public abstract class Animal implements Loudable {
         return barkedSound;
     }
 
-    protected void prepareAbdominalMuscle() {
-        logger.debug("...Using my abdominal muscle"); // dummy implementation
+    protected void breatheIn() { // actually depends on barking
+        logger.debug("...Breathing in for barking"); // dummy implementation
         downHitPoint();
     }
 
-    protected void breatheIn() {
-        logger.debug("...Breathing in"); // dummy implementation
+    protected void prepareAbdominalMuscle() { // also actually depends on barking
+        logger.debug("...Using my abdominal muscle for barking"); // dummy implementation
         downHitPoint();
     }
 
@@ -79,7 +79,7 @@ public abstract class Animal implements Loudable {
     //                                                                           =========
     protected void downHitPoint() {
         --hitPoint;
-        if (hitPoint == 0) {
+        if (hitPoint <= 0) {
             throw new IllegalStateException("I'm very tired, so I want to sleep" + getBarkWord());
         }
     }

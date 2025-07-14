@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public class NonDiFactoryMethodAction {
     }
 
     private SupercarDealer createSupercarDealer() { // recycle only in this class
-        // has exntesion in nested class
+        // has extension in nested class
         return new SupercarDealer() {
             @Override
             protected SupercarManufacturer createSupercarManufacturer() {

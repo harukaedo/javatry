@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ public class SupercarManufacturer {
     public Supercar makeSupercar(String catalogKey) {
         Integer steeringWheelId = catalog.findSteeringWheelSpecId(catalogKey);
 
-        SupercarSteeringWheelManufacturer manufacturer = createSupercarSteeringWheelManufacturer();
-        SteeringWheel steeringWheel = manufacturer.makeSteeringWheel(steeringWheelId);
+        SupercarSteeringWheelManufacturer wheelManufacturer = createSupercarSteeringWheelManufacturer();
+        SteeringWheel steeringWheel = wheelManufacturer.makeSteeringWheel(steeringWheelId);
 
         return new Supercar(steeringWheel);
     }

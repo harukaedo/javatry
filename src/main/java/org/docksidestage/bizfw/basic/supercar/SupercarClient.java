@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2019 the original author or authors.
+ * Copyright 2019-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package org.docksidestage.bizfw.basic.supercar;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import org.docksidestage.bizfw.basic.supercar.SupercarManufacturer.Supercar;
 
@@ -26,13 +26,17 @@ import org.docksidestage.bizfw.basic.supercar.SupercarManufacturer.Supercar;
  */
 public class SupercarClient {
 
-    private final List<Supercar> myCarList = new ArrayList<>(4);
+    private final Collection<Supercar> orderedCustomCarCollection = new ArrayList<>();
 
     public void buySupercar() {
         SupercarDealer dealer = createDealer();
-        String clientRequirement = "steering wheel is like sea";
+        String clientRequirement = prepareClientRequirement();
         Supercar orderedCustomCar = dealer.orderSupercar(clientRequirement);
-        myCarList.add(orderedCustomCar);
+        orderedCustomCarCollection.add(orderedCustomCar);
+    }
+
+    private String prepareClientRequirement() {
+        return "steering wheel is like sea"; // may be changed future
     }
 
     protected SupercarDealer createDealer() {
