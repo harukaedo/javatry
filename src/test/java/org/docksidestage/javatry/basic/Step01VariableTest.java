@@ -57,12 +57,17 @@ public class Step01VariableTest extends PlainTestCase {
         //null を空文字として扱いたい場合は、三項演算子を使って (piari != null ? piari : "") のような処理が必要になる
         //三項演算子（ternary operator）は、条件に基づいて2つの値のうち1つを選択する演算子です。?: の記号を使用する
         //<例>条件式 ? 真の場合の値 : 偽の場合の値
-        // TODO edo [いいね] 思考コメントありがとうございます。わかりやすいです。 by jflute (2025/07/14)
+        // done edo [いいね] 思考コメントありがとうございます。わかりやすいです。 by jflute (2025/07/14)
         // 昔のインターネットサービスの画面では、よく画面に「こんにちは、nullさん」とか表示されてました。
         // さすがに最近は見なくなりましたが、メールではわりと最近でもメール文章に null って表示されてたことありました。
         // 一方で、ログにとかに出力するときは null って表示されるのでわかりやすいという面はあります。
         // まあ、些細な点ですが、言語によってはこういうところの挙動が変わったりします。
         // ちなみに JavaScript だと、"null" どころか "undefined" とか表示されることがあります。
+        // #1on1: C#だと、空文字になります。
+        // 空文字で画面に表示されても、まあどっこいどっこい。
+        // 開発で言うと、nullって出たほうがわかりやすいという面もある。
+        // エラーというのは、何がなんでも落とせば良いというものではなく、エラーハンドリングのさじ加減次第。
+        // 会員登録時のメールの送信エラーを例にとってと。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -76,9 +81,10 @@ public class Step01VariableTest extends PlainTestCase {
         //sea = land; の時点で、sea は land が参照している文字列オブジェクト "oneman" を参照するようになる
         //その後、land = land + "'s dreams"; で、land は新しい文字列 "oneman's dreams" を参照するようになる
         //しかし sea は元の "oneman" を参照し続ける
-        // TODO edo [いいね] 参照という言葉が適切でとても良いです。 by jflute (2025/07/14)
+        // done edo [いいね] 参照という言葉が適切でとても良いです。 by jflute (2025/07/14)
         // 変数は実体そのものではなく実体を参照するものなので、sea = land の一瞬は sea と land が同じものを参照します。
         // (オブジェクト型(参照型)であればの話)
+        // #1on1: 変数とインスタンスの関係性についての話 (2025/07/25)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -89,20 +95,22 @@ public class Step01VariableTest extends PlainTestCase {
         land++;
         log(sea); // your answer? => 415
         //seaは元のlandを参照し続けるため、landがインクリメントされていてもseaには影響しないという認識であってますか？
-        // TODO edo [へんじ] ++のインクリメントも単純に land = land + 1 を省略した記法と言えるので... by jflute (2025/07/14)
+        // done edo [へんじ] ++のインクリメントも単純に land = land + 1 を省略した記法と言えるので... by jflute (2025/07/14)
         // そういう意味では、一つ前のエクササイズとあまり要点は変わりません。
         // 一方で、ちょっと内部的に違うのは、int はプリミティブ型と言われる値そのものが変数に入っているようなイメージなので、
         // sea = land; の一瞬は同じ値ではありますが、さっきの String と違って同じ実体を参照しているわけではなく、
         // 415という数値がそのままコピーされたような感じです。
+        // #1on1: プリミティブ型のお話
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_reassigned_BigDecimal() {
-        BigDecimal sea = new BigDecimal(94);
-        BigDecimal land = new BigDecimal(415);
-        sea = land;
-        sea = land.add(new BigDecimal(1));
-        sea.add(new BigDecimal(1));
+        BigDecimal sea = new BigDecimal(94); // sea変数は94インスタンスを参照
+        BigDecimal land = new BigDecimal(415); // land変数は415インスタンスを参照
+        sea = land; // sea変数はland変数と同じく415インスタンスを参照
+        sea = land.add(new BigDecimal(1)); // seaは416インスタンス, landは415インスタンス
+        sea.add(new BigDecimal(1));  // seaは417かな？ => あれ？416？ (417な一瞬出きて消える)
+
         log(sea); // your answer? => 416
         //sea.add(new BigDecimal(1));はsea自体に+1しているため95になっていてseaはlandを参照するため、land自体に+1して416になるという認識であっていますか？
         // TODO edo 厳密には sea は途中で415インスタンスに差し替わっているので95は発生しません。 by jflute (2025/07/14)
@@ -125,6 +133,8 @@ public class Step01VariableTest extends PlainTestCase {
         
         // TODO jflute 1on1のときに、add()の挙動から、immutableの話までフォローする予定 (2025/07/14)
         // ↑これはくぼ用のtodoということでそのまま残しておいてください。
+        // #1on1: immutable(不変)なクラス/オブジェクト
+        // クラスやメソッドにカーソルを当ててJavaDoc表示、メソッド補完時もJavaDocに注目。
     }
 
     // ===================================================================================
@@ -220,11 +230,13 @@ public class Step01VariableTest extends PlainTestCase {
         helpMethodArgumentImmutableMethodcall(sea, land);
         log(sea); // your answer? => harbor
         //受け取るものとしては、新しく作られたsea.concatではなく、元々のseaのため、回答はharborになるという認識であってますか
-        // TODO edo [へんじ] そうですね、testメソッド側のsea変数と、helpメソッド側のsea変数は、変数自体は別物で... by jflute (2025/07/14)
+        // done edo [へんじ] そうですね、testメソッド側のsea変数と、helpメソッド側のsea変数は、変数自体は別物で... by jflute (2025/07/14)
         // でも、参照している Stringインスタンスは同じものです。
         // でもでも、StringインスタンスはBigDecimalと同じように自分自身のインスタンスは変化させない特徴のクラスなので、
         // concat()してもseaが参照している "harbor" インスタンス自体は何も変わらないわけですね。
         // そして、concat() で新しく作った "harbor416" という文字列は、一瞬だけ生成されて誰にも受け取ってもらえず終了...
+        // #1on1: BigDecimalのimmutableのところから飛んできて、immutable体験
+        // 実は、immutableわかっちゃえば、helpの中を読まなくてもわかる。
     }
 
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
@@ -247,11 +259,12 @@ public class Step01VariableTest extends PlainTestCase {
         //++land で land が 416 になる
         //sea.append(land) で数値 416 が文字列として追加される
         //StringBuilder は可変なので元のオブジェクトが変更される
-        // TODO edo [ふぉろー] (^^)、ちょっと違ったところで勘違いしてしまったようですね。 by jflute (2025/07/14)
+        // done edo [ふぉろー] (^^)、ちょっと違ったところで勘違いしてしまったようですね。 by jflute (2025/07/14)
         // まあ、大事なのは「可変」であるというところですね。ここはオブジェクト(インスタンス)自体が変化するので...
         // helpメソッドの中のsea変数が別物だとしても参照するインスタンスが同じで、その唯一のものをhelp内で変化させたということで。
+        // #1on1: immutable/mutable体験、mutableだといつどこでもいじられちゃうのでじっくりhelp読まないといけない。
     }
-    // TODO jflute [memo] いったんレビューここまで (2025/07/15)
+    // done jflute [memo] いったんレビューここまで (2025/07/15)
 
     private void helpMethodArgumentMethodcall(StringBuilder sea, int land) {
         ++land;
