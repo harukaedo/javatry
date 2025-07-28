@@ -25,7 +25,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author harukaedo
  */
 public class Step02IfForTest extends PlainTestCase {
 
@@ -52,7 +52,7 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 7;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -67,38 +67,50 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 9;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7
     }
+
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_if_elseif_nested() {
         boolean land = false;
         int sea = 904;
-        if (sea > 904) {
+        //１つ目のif文
+        if (sea > 904) {//1-1
             sea = 2001;
-        } else if (land && sea >= 904) {
-            sea = 7;
-        } else if (sea >= 903 || land) {
+        } else if (land && sea >= 904) {//1-2
+            sea = 7; 
+        } else if (sea >= 903 || land) {//1-3
             sea = 8;
-            if (!land) {
+            if (!land) {//1-3-1
                 land = true;
-            } else if (sea <= 903) {
+            } else if (sea <= 903) {//1-3-2
                 sea++;
             }
-        } else if (sea == 8) {
+        } else if (sea == 8) {//1-4
             sea++;
             land = false;
-        } else {
+        } else {//1-5
             sea = 9;
         }
-        if (sea >= 9 || (sea > 7 && sea < 9)) {
+        //２つ目のif文
+        if (sea >= 9 || (sea > 7 && sea < 9)) {//2-1
             sea--;
         }
-        if (land) {
+        //３つ目のif文
+        if (land) {//3-1
             sea = 10;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 9
     }
+    //0728edo【自分なりの解釈】
+    //正しい答えは10。2つ目と3つ目のif文を考慮していなかった
+    //1-1はfalseなので、スキップ。
+    //1-２は、landがfalseのため、＆＆で全体的にfalseとなり、スキップ。
+    //1-3は、seaが903以上なので、trueとなり、sea=8に変更。
+        //ネストのif文について、landがfalseなので、1-3-1が実行され、land=trueに変更。2つ目のif文へ
+    //2−1はsea=8で、8 >= 9はfalse,しかし、8 > 7 && 8 < 9はtrueなので、sea--が実行され、sea=7に変更。3つ目のif文へ
+    //3-1はlandがtrueなので、sea=10に変更。
 
     // ===================================================================================
     //                                                                       for Statement
@@ -108,55 +120,78 @@ public class Step02IfForTest extends PlainTestCase {
         List<String> stageList = prepareStageList();
         String sea = null;
         for (int i = 0; i < stageList.size(); i++) {
-            String stage = stageList.get(i);
-            if (i == 1) {
+            String stage = stageList.get(i);//1
+            if (i == 1) {//2
                 sea = stage;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 16
     }
+    //0728edo【自分なりの解釈】
+    //正しい答えはdockside。
+    //prepareStageListのメゾットの中身を見ておらずprepareStageListのただの文字列を返してしまっていた
+    //1はprepareStageListのインデックス番号のi番目を取得する
+    //2では、iが1の時、つまり2番目の要素の文字列をseaに代入する。(indexは0から始まるため)
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_for_foreach_basic() {
         List<String> stageList = prepareStageList();
         String sea = null;
-        for (String stage : stageList) {
+        for (String stage : stageList) {//1
             sea = stage;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => magiclamp
     }
+    //0728edo【自分なりの解釈】
+    //１でstageListの要素を順番に取り出して、毎回seaに代入している。
+    //最終的に、stageListの最後の要素であるmagiclampが代入される。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_for_foreach_continueBreak() {
         List<String> stageList = prepareStageList();
         String sea = null;
         for (String stage : stageList) {
-            if (stage.startsWith("br")) {
+            if (stage.startsWith("br")) {//1
                 continue;
             }
-            sea = stage;
-            if (stage.contains("ga")) {
+            sea = stage;//2
+            if (stage.contains("ga")) {//3
                 break;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hangar
     }
+    //0728edo【自分なりの解釈】
+    //1で0番目であるbroadwayがbrで始まるため、continueでスキップされる。
+    //2で1番目のdocksideが代入される。
+    //3でdocksideはgaを含まないため、スキップされる。
+    //gaを含むhangarが来るまでループし続け、logにはhangarが出力される。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_for_listforeach_basic() {
         List<String> stageList = prepareStageList();
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();//1
         stageList.forEach(stage -> {
-            if (sb.length() > 0) {
+            if (sb.length() > 0) {//2
                 return;
             }
-            if (stage.contains("i")) {
+            if (stage.contains("i")) {//3
                 sb.append(stage);
             }
         });
         String sea = sb.toString();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => magiclamp
     }
+    //0728edo【自分なりの解釈】
+    //正しい回答はdockside。それぞれの行で何をしているのかあまり理解できていなかった
+    //1でStringBuilderのインスタンスを生成。空の状態。
+    //2でsbは0のためfalseとなり、スキップされる。
+    //3でseaにiを含む文字列があれば、sbに追加される。
+    //docksideはiを含むため、sbに追加される。
+    //そもそもhoge.forEach(hogehoge -> {});って何
+        //リストの各要素に対して、指定した処理を行うためのメソッド。
+        //hogehogeは各要素を表すパラメータになるため任意のものでいい。
+            //stageはstageListを省略したものだと勘違いしていた
 
     // ===================================================================================
     //                                                                           Challenge
@@ -167,7 +202,21 @@ public class Step02IfForTest extends PlainTestCase {
      */
     public void test_iffor_making() {
         // write if-for here
+        List<String> stageList = prepareStageList();
+        List<String> result = new ArrayList<>();
+        stageList.forEach(stage -> {
+            if (stage.contains("a")) { //1
+                result.add(stage); //2
+            }
+        });
+        result.forEach(this::log); //3
     }
+    //0728edo【自分なりの解釈】
+    //this::logは、resultの各要素をログに出力するためのメソッド参照。
+    //this→このクラス（自分自身）の
+    //::→メゾット参照の記号
+    //log→ログに出力するメソッド。
+
 
     // ===================================================================================
     //                                                                           Good Luck
@@ -176,6 +225,7 @@ public class Step02IfForTest extends PlainTestCase {
      * Change foreach statement to List's forEach() (keep result after fix) <br>
      * (foreach文をforEach()メソッドへの置き換えてみましょう (修正前と修正後で実行結果が同じになるように))
      */
+    
     public void test_iffor_refactor_foreach_to_forEach() {
         List<String> stageList = prepareStageList();
         String sea = null;
@@ -190,6 +240,10 @@ public class Step02IfForTest extends PlainTestCase {
         }
         log(sea); // should be same as before-fix
     }
+    //0728edo【質問】
+    //難しいのでスキップ。
+    //foreachはループしているわけではないと思ったためどのように書けばいいかわかりませんでした。
+    //解説していただけると嬉しいです
 
     /**
      * Make your original exercise as question style about if-for statement. <br>
@@ -203,6 +257,14 @@ public class Step02IfForTest extends PlainTestCase {
      */
     public void test_iffor_yourExercise() {
         // write your code here
+        List<String> stageList = prepareStageList();
+        int count = 0;
+        for (String stage : stageList) {
+            if (stage.contains("g")){
+                count++;
+            }
+        }
+        log(count);
     }
 
     // ===================================================================================
