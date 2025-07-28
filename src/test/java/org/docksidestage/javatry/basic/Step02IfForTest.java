@@ -251,7 +251,7 @@ public class Step02IfForTest extends PlainTestCase {
      * <pre>
      * _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
      * your question here (ここにあなたの質問を):
-     * 
+     * countで出力されるものは？
      * _/_/_/_/_/_/_/_/_/_/
      * </pre>
      */
