@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 
 import org.docksidestage.unit.PlainTestCase;
 
-// TODO edo 事務的なレビューですが、javatry研修では以下のようにjavadocのauthorをお願いします by jflute (2025/07/14)
+// done edo 事務的なレビューですが、javatry研修では以下のようにjavadocのauthorをお願いします by jflute (2025/07/14)
 // // ハンズオンのコーディングポリシー - 3. 最低限のクラスJavaDoc
 // https://dbflute.seasar.org/ja/tutorial/handson/review/codingpolicy.html#minjavadoc
 // ここでは、your_name_here のところを修正すればOKです。
@@ -95,14 +95,10 @@ public class Step01VariableTest extends PlainTestCase {
         land++;
         log(sea); // your answer? => 415
         //seaは元のlandを参照し続けるため、landがインクリメントされていてもseaには影響しないという認識であってますか？
-<<<<<<< HEAD
         //0718追記
         //sea = land; の一瞬は同じ値だが、さっきの String と違って同じ実体を参照しているわけではなく、
         // 415という数値がそのままコピーされたような感じ
-        // TODO edo [へんじ] ++のインクリメントも単純に land = land + 1 を省略した記法と言えるので... by jflute (2025/07/14)
-=======
         // done edo [へんじ] ++のインクリメントも単純に land = land + 1 を省略した記法と言えるので... by jflute (2025/07/14)
->>>>>>> ab854ec (1on1ふぉろー)
         // そういう意味では、一つ前のエクササイズとあまり要点は変わりません。
         // 一方で、ちょっと内部的に違うのは、int はプリミティブ型と言われる値そのものが変数に入っているようなイメージなので、
         // sea = land; の一瞬は同じ値ではありますが、さっきの String と違って同じ実体を参照しているわけではなく、
@@ -129,7 +125,7 @@ public class Step01VariableTest extends PlainTestCase {
         //seaはこの新しいオブジェクト（416）を参照
         //(宿題) sea.add(new BigDecimal(1)); の場合はどうなるか？　answer-> 16 + 1 = 417を計算しますが、結果を変数に代入していないため計算結果は破棄される
         //sea.add(new BigDecimal(1));はsea自体に+1しているため95になっていてseaはlandを参照するため、land自体に+1して416になるという認識であっていますか？
-        // TODO edo 厳密には sea は途中で415インスタンスに差し替わっているので95は発生しません。 by jflute (2025/07/14)
+        // done edo 厳密には sea は途中で415インスタンスに差し替わっているので95は発生しません。 by jflute (2025/07/14)
         // ちょっと一行一行の補足です:
         //  BigDecimal sea = new BigDecimal(94); // sea変数が、「94 の BigDecimalインスタンス」を参照する
         //  BigDecimal land = new BigDecimal(415); // land変数が、「415 の BigDecimalインスタンス」を参照する
@@ -147,7 +143,7 @@ public class Step01VariableTest extends PlainTestCase {
         //
         // これを元に考えてみて、また疑問に思ったことなどあったらぜひここで書いて質問してください(^^。
         
-        // TODO jflute 1on1のときに、add()の挙動から、immutableの話までフォローする予定 (2025/07/14)
+        // done jflute 1on1のときに、add()の挙動から、immutableの話までフォローする予定 (2025/07/14)
         // ↑これはくぼ用のtodoということでそのまま残しておいてください。
         // #1on1: immutable(不変)なクラス/オブジェクト
         // クラスやメソッドにカーソルを当ててJavaDoc表示、メソッド補完時もJavaDocに注目。
@@ -217,11 +213,11 @@ public class Step01VariableTest extends PlainTestCase {
         //                                       // メソッド終了時にパラメータは消える
         //   }
         //一度使用されたメソッドのパラメーターはメモリ効率のため、削除される。
-        // TODO edo [いいね] 引数の instanceMagiclamp は「メソッド専用の変数」というの良いですね by jflute (2025/07/14)
+        // done edo [いいね] 引数の instanceMagiclamp は「メソッド専用の変数」というの良いですね by jflute (2025/07/14)
         // そう、ここはたまたま同じ名前の変数が、あっちとこっちで2個あるみたいな感じです。
         // メソッドを呼び出すとき、変数が参照している先のインスタンスがhelpメソッドに引き渡されますが、
         // 変数自体は引き渡されるわけじゃなく、あくまでhelpメソッド側が用意した引数変数で受け取るという感じです。
-        // TODO edo [してき] instanceDockside は Integer ではなく int 型なので、元々 0 が入ってます by jflute (2025/07/14)
+        // done edo [してき] instanceDockside は Integer ではなく int 型なので、元々 0 が入ってます by jflute (2025/07/14)
         // なので、「Integer型のnullに++すると1になる」ではなく「int型のデフォルト0に++すると1になる」が正解ですね。
         // Integer型なのは、instanceHangarの方で、hangarは特にhelpメソッドの中では何もしていないので、
         // デフォルトnullそのままが+連結されて "null" という文字列に変換されるわけですね。
@@ -283,7 +279,6 @@ public class Step01VariableTest extends PlainTestCase {
         //sea.append(land)で、StringBuilder seaに文字列"416"を追加
         //この時、StringBuilderは可変オブジェクトであり、元のオブジェクトが変更されるため、
         //メソッド呼び出し後のseaは"harbor416"となる
-        // TODO edo [ふぉろー] (^^)、ちょっと違ったところで勘違いしてしまったようですね。 by jflute (2025/07/14)
         // done edo [ふぉろー] (^^)、ちょっと違ったところで勘違いしてしまったようですね。 by jflute (2025/07/14)
         // まあ、大事なのは「可変」であるというところですね。ここはオブジェクト(インスタンス)自体が変化するので...
         // helpメソッドの中のsea変数が別物だとしても参照するインスタンスが同じで、その唯一のものをhelp内で変化させたということで。
@@ -336,6 +331,7 @@ public class Step01VariableTest extends PlainTestCase {
         // define variables here
         String sea = "mystic";
         Integer land = null;
+        // TODO edo piariはインスタンス変数なので、メソッドの外側に定義をしましょう by jflute (2025/07/31)
         int piari;
         log(sea + "," + land + "," + piari);
     }
@@ -353,13 +349,14 @@ public class Step01VariableTest extends PlainTestCase {
      * _/_/_/_/_/_/_/_/_/_/
      * </pre>
      */
+    @SuppressWarnings("unused")
     public void test_variable_yourExercise() {
         // write your code here
         int level = 20;
         level = level + 12;
-         String levelup = "Your level is " + level + ".";
+        String levelup = "Your level is " + level + ".";
         String message = levelup + " Congratulations!";
         log(levelup); //your answer? => Your level is 32.
-         
+        // TODO edo [いいね] なかなか良い罠ですねー(^^ by jflute (2025/07/31)
     }
 }
