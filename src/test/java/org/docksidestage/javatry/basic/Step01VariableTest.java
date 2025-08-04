@@ -335,6 +335,16 @@ public class Step01VariableTest extends PlainTestCase {
         int piari;
         log(sea + "," + land + "," + piari);
     }
+    //レビューから解答を修正
+    public class test_review {
+        private int piari; // インスタンス変数 piari を定義
+        public void test_variable_writing_review() {
+            String sea = "mystic"; // ローカル変数 sea を定義
+            Integer land = null; // ローカル変数 land を定義
+            log(sea + "," + land + "," + piari); // すべての変数をカンマ区切りで表示
+        }
+    }
+        
 
     // ===================================================================================
     //                                                                           Good Luck
@@ -357,6 +367,6 @@ public class Step01VariableTest extends PlainTestCase {
         String levelup = "Your level is " + level + ".";
         String message = levelup + " Congratulations!";
         log(levelup); //your answer? => Your level is 32.
-        // TODO edo [いいね] なかなか良い罠ですねー(^^ by jflute (2025/07/31)
+        // done edo [いいね] なかなか良い罠ですねー(^^ by jflute (2025/07/31)
     }
 }

@@ -111,7 +111,7 @@ public class Step02IfForTest extends PlainTestCase {
         //ネストのif文について、landがfalseなので、1-3-1が実行され、land=trueに変更。2つ目のif文へ
     //2−1はsea=8で、8 >= 9はfalse,しかし、8 > 7 && 8 < 9はtrueなので、sea--が実行され、sea=7に変更。3つ目のif文へ
     //3-1はlandがtrueなので、sea=10に変更。
-    // TODO edo [ふぉろー] まず最初に、細かく読むのではなく、if文の構造が何個あるのか？構造だけ読むと良いです by jflute (2025/07/31)
+    // done edo [ふぉろー] まず最初に、細かく読むのではなく、if文の構造が何個あるのか？構造だけ読むと良いです by jflute (2025/07/31)
     // TODO jflute 1on1にて、ソースコードリーディングの基礎からの話 (2025/07/31)
 
     // ===================================================================================
@@ -134,7 +134,7 @@ public class Step02IfForTest extends PlainTestCase {
     //prepareStageListのメゾットの中身を見ておらずprepareStageListのただの文字列を返してしまっていた
     //1はprepareStageListのインデックス番号のi番目を取得する
     //2では、iが1の時、つまり2番目の要素の文字列をseaに代入する。(indexは0から始まるため)
-    // TODO edo [ふぉろー] 合ってます！indexって言うと基本的には0から始まるのが慣習です by jflute (2025/07/31)
+    // done edo [ふぉろー] 合ってます！indexって言うと基本的には0から始まるのが慣習です by jflute (2025/07/31)
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_for_foreach_basic() {
@@ -148,7 +148,7 @@ public class Step02IfForTest extends PlainTestCase {
     //0728edo【自分なりの解釈】
     //１でstageListの要素を順番に取り出して、毎回seaに代入している。
     //最終的に、stageListの最後の要素であるmagiclampが代入される。
-    // TODO edo [ふぉろー] OKです。まあ通常こういうプログラムを書くことはないですが^^ by jflute (2025/07/31)
+    // done edo [ふぉろー] OKです。まあ通常こういうプログラムを書くことはないですが^^ by jflute (2025/07/31)
     // ループの挙動をしっかり解釈できるようにというエクササイズです。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -171,7 +171,7 @@ public class Step02IfForTest extends PlainTestCase {
     //2で1番目のdocksideが代入される。
     //3でdocksideはgaを含まないため、スキップされる。
     //gaを含むhangarが来るまでループし続け、logにはhangarが出力される。
-    // TODO edo [いいね] 詳しく制御を追うことができていてGoodです by jflute (2025/07/31)
+    // done edo [いいね] 詳しく制御を追うことができていてGoodです by jflute (2025/07/31)
     // continue;とbreak;がちょっとややこしい動きしますよね。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -227,7 +227,7 @@ public class Step02IfForTest extends PlainTestCase {
     //this→このクラス（自分自身）の
     //::→メゾット参照の記号
     //log→ログに出力するメソッド。
-    // TODO edo [いいね] できてます、素晴らしいです by jflute (2025/07/31)
+    // done edo [いいね] できてます、素晴らしいです by jflute (2025/07/31)
     // TODO jflute 1on1にて、Lambda式とメソッドリファレンスのお話 (2025/07/31)
 
 
@@ -279,7 +279,7 @@ public class Step02IfForTest extends PlainTestCase {
             }
         }
         log(count);
-        // TODO edo [いいね] ループの挙動をしっかり把握する良いエクササイズですね！ by jflute (2025/07/31)
+        // done edo [いいね] ループの挙動をしっかり把握する良いエクササイズですね！ by jflute (2025/07/31)
     }
 
     // ===================================================================================
