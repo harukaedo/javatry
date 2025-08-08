@@ -19,6 +19,10 @@ import java.math.BigDecimal;
 
 import org.docksidestage.unit.PlainTestCase;
 
+// #1on1: gitの話、原始的なバージョン管理システムから分散まで (2025/08/08)
+// コンフリクト起きたときの対処
+// https://atmarkit.itmedia.co.jp/ait/articles/0901/14/news133.html
+
 // done edo 事務的なレビューですが、javatry研修では以下のようにjavadocのauthorをお願いします by jflute (2025/07/14)
 // // ハンズオンのコーディングポリシー - 3. 最低限のクラスJavaDoc
 // https://dbflute.seasar.org/ja/tutorial/handson/review/codingpolicy.html#minjavadoc
@@ -52,6 +56,7 @@ public class Step01VariableTest extends PlainTestCase {
         String dstore = "mai";
         sea = sea + land + piari + ":" + dstore;
         log(sea); // your answer? => mystic8：mai
+        
         //正しい出力はmystic8null:mai
         //Javaでは、+ 演算子を使って文字列連結を行う際、null 値は文字列 "null" に変換される
         //null を空文字として扱いたい場合は、三項演算子を使って (piari != null ? piari : "") のような処理が必要になる
@@ -329,12 +334,14 @@ public class Step01VariableTest extends PlainTestCase {
      */
     public void test_variable_writing() {
         // define variables here
-        String sea = "mystic";
-        Integer land = null;
-        // TODO edo piariはインスタンス変数なので、メソッドの外側に定義をしましょう by jflute (2025/07/31)
-        int piari;
-        log(sea + "," + land + "," + piari);
+        // done edo piariはインスタンス変数なので、メソッドの外側に定義をしましょう by jflute (2025/07/31)
+        // test_reviewクラスの方で回答
+        //String sea = "mystic";
+        //Integer land = null;
+        //int piari;
+        //log(sea + "," + land + "," + piari);
     }
+    // done edo [いいね] クラスを作ってインスタンス変数を表現してるのわかりやすいのでGood by jflute (2025/08/08)
     //レビューから解答を修正
     public class test_review {
         private int piari; // インスタンス変数 piari を定義
