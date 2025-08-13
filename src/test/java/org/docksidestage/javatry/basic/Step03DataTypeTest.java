@@ -26,7 +26,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author harukaedo
  */
 public class Step03DataTypeTest extends PlainTestCase {
 
@@ -54,8 +54,14 @@ public class Step03DataTypeTest extends PlainTestCase {
             BigDecimal addedDecimal = amba.add(new BigDecimal(land));
             sea = String.valueOf(addedDecimal);
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 18.4
     }
+    //0813自分なりの解釈
+    //dstoreがtrueなので、ambaにlandを足す
+    //bonvoは2001年9月4日12:34:56なので、plusMonths(1)で2001年10月4日12:34:56になる
+    //landはbonvoの月-1なので、10-1=9
+    //ambaは9.4なので、9.4+9=18.4
+    //String.valueOf(addedDecimal)で文字列に変換されるので、"18.4"が出力される
 
     // ===================================================================================
     //                                                                           Primitive
@@ -71,19 +77,26 @@ public class Step03DataTypeTest extends PlainTestCase {
         char miraco = 'a';
         boolean dohotel = miraco == 'a';
         if (dohotel && dstore >= piari) {
-            bonvo = sea;
-            land = (short) bonvo;
-            bonvo = piari;
-            sea = (byte) land;
+            bonvo = sea;//bonvo=127
+            land = (short) bonvo;//land=127
+            bonvo = piari;//bonvo=1
+            sea = (byte) land;//sea=127
             if (amba == 2.3D) {
-                sea = (byte) amba;
+                sea = (byte) amba;//sea=2.3d
             }
         }
         if ((int) dstore > piari) {
             sea = 0;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 2.3d
     }
+    //0813自分なりの解釈
+    //正しい答えは2
+    //trueかつ1.1f >= 1はtrueで1つ目のif文実行。
+    //キャストを繰り返して結局seaは127に戻る
+    //ネストしたif文もtrueなので実行。
+    //byte ambaで2.3の整数部分のみ切り取る sea=2
+    //2つ目のif文はfalseなので実行しない
 
     // ===================================================================================
     //                                                                              Object
@@ -92,8 +105,13 @@ public class Step03DataTypeTest extends PlainTestCase {
     public void test_datatype_object() {
         St3ImmutableStage stage = new St3ImmutableStage("hangar");
         String sea = stage.getStageName();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hangar
     }
+
+    //0813自分なりの解釈
+    //St3ImmutableStageクラスのインスタンスを作成
+    //コンストラクタに文字列"hangar"を渡す
+    //getStageName()メソッドでステージ名を取得
 
     private static class St3ImmutableStage {
 
