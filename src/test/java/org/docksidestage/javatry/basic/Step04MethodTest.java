@@ -22,7 +22,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author harukaedo
  */
 public class Step04MethodTest extends PlainTestCase {
 
@@ -35,16 +35,23 @@ public class Step04MethodTest extends PlainTestCase {
      */
     public void test_method_call_basic() {
         String sea = supplySomething();
-        log(sea); // your answer? =>
+        log(sea); // your answer? =>over
     }
+    //0814自分なりの解釈
+    //seaはsupplySomething()を参照。supplySomethingでのseaは文字列のoverを指定しているため
+    //overが表示される
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_method_call_many() {
         String sea = functionSomething("mystic");
         consumeSomething(supplySomething());
         runnableSomething();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => mysmys
     }
+
+    //0814自分なりの解釈
+    //functionSomethingでは、nameの該当部分ticのみをmymに置き換えるmysticはmymysとなり
+    //logではseaを表示させるのでmysmysが返される
 
     private String functionSomething(String name) {
         String replaced = name.replace("tic", "mys");
@@ -76,8 +83,18 @@ public class Step04MethodTest extends PlainTestCase {
         if (!land) {
             sea = sea + mutable.getStageName().length();
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 907
     }
+
+    //0814
+    //正しい答えは910
+    //900+mutableの7文字を+していると勘違いしてしまった
+    //mutableは初期状態としてstageName(null)
+    //helloMutableメゾットを呼び出すことでhelloMutable(904-4,false,mutable)
+    //helloMutable内部処理としては、seaは901,landはtrueとなるがローカル変数のため元のseaとlandには影響しない
+    //piari.setStageName("mystic")ではオブジェクトの中身が変更される
+    //if文の中でsea=904+"mystic"の長さ(6)となり、910になる
+
 
     private int helloMutable(int sea, Boolean land, St4MutableStage piari) {
         sea++;
@@ -115,8 +132,11 @@ public class Step04MethodTest extends PlainTestCase {
         }
         ++sea;
         sea = inParkCount;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 100
     }
+    //0814自分なりの解釈
+    //sea=inParkCountのため、inParkCountnのみを考えれば良い
+    //goToParkではgoToParkがインクリメントしているため、inParkCountは100となる
 
     private void offAnnualPassport(boolean hasAnnualPassport) {
         hasAnnualPassport = false;
