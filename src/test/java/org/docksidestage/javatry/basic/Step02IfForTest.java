@@ -124,6 +124,16 @@ public class Step02IfForTest extends PlainTestCase {
     public void test_for_inti_basic() {
         List<String> stageList = prepareStageList();
         String sea = null;
+        
+        // #1on1: while文との比較
+        //Iterator<String> iterator = stageList.iterator();
+        //while (iterator.hasNext()) {
+        //    ... = iterator.next();
+        //}
+        //for ( ; iterator.hasNext() ; ) { // 初期化と毎ループ処理がある
+        //    //    ... = iterator.next();
+        //}
+        // ただ、int i で index で制御するのがオーソドックスな使い方
         for (int i = 0; i < stageList.size(); i++) {
             String stage = stageList.get(i);//1
             if (i == 1) {//2
@@ -143,6 +153,9 @@ public class Step02IfForTest extends PlainTestCase {
     public void test_for_foreach_basic() {
         List<String> stageList = prepareStageList();
         String sea = null;
+        // #1on1: 文法用語として「拡張for文」と言われるもの (2025/08/22)
+        // 普通のfor文と言ったら？こっちを指すことが多い印象。
+        // 文法用語と現場用語のお話、BigDecimal の add() を例に。
         for (String stage : stageList) {//1
             sea = stage;
         }
@@ -181,6 +194,17 @@ public class Step02IfForTest extends PlainTestCase {
     public void test_for_listforeach_basic() {
         List<String> stageList = prepareStageList();
         StringBuilder sb = new StringBuilder();//1
+        // #1on1: for文というよりは、forEach()メソッド。
+        // #1on1: コールバックとは？
+        // A -> B  ::  test_        -> forEach()
+        //      v                       v
+        // A <- B  ::  test_(の関数) <- forEach()
+        // そのコールバックで使われる関数をコールバック関数と呼ぶようになった
+        // forEach()メソッドは、コールバックの仕組みを使ったfor分の代理メソッド
+        // (コールバックに関しては、さらにstep8で深堀りしていく予定)
+        // 1995: いんとあいのfor文 (javaの誕生)
+        // 2005: 拡張for文 (普通のfor文)
+        // 2015: forEach()メソッド
         stageList.forEach(stage -> {
             if (sb.length() > 0) {//2
                 return;
@@ -202,11 +226,41 @@ public class Step02IfForTest extends PlainTestCase {
         //リストの各要素に対して、指定した処理を行うためのメソッド。
         //hogehogeは各要素を表すパラメータになるため任意のものでいい。
             //stageはstageListを省略したものだと勘違いしていた
-    // TODO edo [ふぉろー] 一つ前のfor文と基本的には同じような挙動をするループです by jflute (2025/07/31)
+    // done edo [ふぉろー] 一つ前のfor文と基本的には同じような挙動をするループです by jflute (2025/07/31)
     // ただ調べてもらった通り、こちらはJavaに組み込まれた文法ではなく、単なるメソッドではあります。
     // ちなみに、stageList に対して stage とあった場合、大抵は複数のstageの一つを指すことが多いです。
-    // TODO jflute 1on1にて、forEach()メソッドのフォロー予定 (2025/07/31)
+    // done jflute 1on1にて、forEach()メソッドのフォロー予定 (2025/07/31)
 
+    public void test_forEach_try() {
+        List<String> stageList = prepareStageList();
+        String sea = null;
+        stageList.forEach(stage -> {
+            if (stage.startsWith("br")) {
+                // ループの外という扱いなのでbreakは使えない
+                //continue;
+                // でも、コールバックはメソッドのようなものなので、returnは使える
+                // 実質、continue;っぽい振る舞いになる
+                return;
+            }
+            // コールバックは他のクラスのメソッドなので、ローカル変数の書き換えはできない
+            // (Javaとしては、コールバックの中でローカル変数を書き換えちゃうと複雑になると考えてダメにした)
+            //sea = stage;
+            if (stage.contains("ga")) {
+                // ループの外という扱いなのでbreakは使えない
+                //break;
+            }
+        });
+        log(sea);
+        // forEach()は (for文に比べて) できないことだらけ...
+        // なぜ、後から導入された？ (導入されたからには良い理由があるはず？)
+        // 1995: いんとあいのfor文 (javaの誕生)
+        // 2005: 拡張for文 (普通のfor文)
+        // 2015: forEach()メソッド
+        //
+        // できないは安心安全のメリットになる。適材適所のやり方。
+        // 一方で、使い分けの判断の負荷は掛かる。トレードオフ。
+    }
+    
     // ===================================================================================
     //                                                                           Challenge
     //                                                                           =========
@@ -260,7 +314,9 @@ public class Step02IfForTest extends PlainTestCase {
     //難しいのでスキップ。
     //foreachはループしているわけではないと思ったためどのように書けばいいかわかりませんでした。
     //解説していただけると嬉しいです
-    // TODO jflute 1on1にて、forEach()書き換えエクササイズのフォロー予定 (そもそもforEach()とは？から) (2025/07/31)
+    // done jflute 1on1にて、forEach()書き換えエクササイズのフォロー予定 (そもそもforEach()とは？から) (2025/07/31)
+    // #1on1: forEach()でできないことを以下に工夫して代替するか？
+    // TODO edo 修行++: forEach()で同じ結果が返ってくるように工夫してみましょう by jflute (2025/08/22)
 
     /**
      * Make your original exercise as question style about if-for statement. <br>
