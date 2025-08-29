@@ -28,7 +28,7 @@ import org.docksidestage.unit.PlainTestCase;
  * (要件が曖昧なところがあれば、適切だと思われる仕様を決めても良いです)
  * 
  * @author jflute
- * @author your_name_here
+ * @author harukaedo
  */
 public class Step05ClassTest extends PlainTestCase {
 
@@ -43,23 +43,42 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         booth.buyOneDayPassport(7400);
         int sea = booth.getQuantity();
-        log(sea); // your answer? => 
+        log(sea); // your answer? =>9
     }
+    //0825自分なりの解釈
+    //正しい回答は9。
+    //quantityはMAX_QUANTITY（10）初期化
+    //buyOneDayPassportメソッドで1枚購入されるため、9になる
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_overpay() {
         TicketBooth booth = new TicketBooth();
         booth.buyOneDayPassport(10000);
         Integer sea = booth.getSalesProceeds();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 10000
     }
+
+    //0825自分なり解釈
+    //buyOneDayPassportでsalesProceeds = handedMoney;が実行され10000がそのまま反映される
+
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_nosales() {
         TicketBooth booth = new TicketBooth();
         Integer sea = booth.getSalesProceeds();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => null
     }
+
+    //0825自分なりの解釈
+    //正しい回答はnull
+    //TicketBooth booth = new TicketBooth();新しいTicketBoothインスタンスを作成
+    //初期状態：
+    //quantity = 10（チケット残数）
+    //salesProceeds = null（まだ一度も売上がない）
+    //Integer sea = booth.getSalesProceeds();
+    //チケットを一度も購入していない状態で売上を取得
+    //TicketBoothクラスのsalesProceedsフィールドはInteger型で、初期値はnull
+    //何も購入していないので、売上はnullのまま
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_wrongQuantity() {

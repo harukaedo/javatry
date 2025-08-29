@@ -170,14 +170,38 @@ public class Step04MethodTest extends PlainTestCase {
      * o showSea(): 一つのString引数、戻り値なし、引数をlog()で表示する
      * </pre>
      */
+
+
     public void test_method_making() {
-        // use after making these methods
-        //String replaced = replaceCwithB(replaceAwithB("ABC"));
-        //String sea = quote(replaced, "'");
-        //if (isAvailableLogging()) {
-        //    showSea(sea);
-        //}
+        //use after making these methods
+        String replaced = replaceCwithB(replaceAwithB("ABC"));
+        String sea = quote(replaced, "'");
+        if (isAvailableLogging()) {
+           showSea(sea);
+        }
     }
 
     // write methods here
+    private boolean availableLogging = true;
+    private String replaceAwithB(String str) {
+        return str.replace("A", "B");
+    }
+
+    private String replaceCwithB(String str) {
+        return str.replace("C", "B");
+    }
+
+    private String quote(String str, String quotation) {
+        return quotation + str + quotation;
+    }
+
+    private boolean isAvailableLogging() {
+        return availableLogging;
+    }
+
+    private void showSea(String sea) {
+        log(sea);
+    }
+
+        
 }
