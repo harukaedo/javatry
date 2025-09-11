@@ -83,8 +83,17 @@ public class Step05ClassTest extends PlainTestCase {
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_wrongQuantity() {
         Integer sea = doTest_class_ticket_wrongQuantity();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 9
     }
+
+    //0908自分なりの解釈
+    //doTest_class_ticket_wrongQuantityメソッドを実行
+    //TicketBooth booth = new TicketBooth();で新しいTicketBoothインスタンスを作成
+    //int handedMoney = 7399;で7399を handedMoney に代入
+    //try {
+    //    booth.buyOneDayPassport(handedMoney);で7399を購入
+    //} catch (TicketShortMoneyException continued) {で7399を購入
+    //お金が不足している場合でも購入できてしまう
 
     private Integer doTest_class_ticket_wrongQuantity() {
         TicketBooth booth = new TicketBooth();

@@ -318,6 +318,27 @@ public class Step02IfForTest extends PlainTestCase {
     // #1on1: forEach()でできないことを以下に工夫して代替するか？
     // TODO edo 修行++: forEach()で同じ結果が返ってくるように工夫してみましょう by jflute (2025/08/22)
 
+    //0908challenge
+    public void challenge_refactor_foreach_to_forEach_answer() {
+        List<String> stageList = prepareStageList();
+        final String[] sea = {null};
+        final boolean[] found = {false};
+
+        stageList.forEach(stage -> {
+            if(found[0]) {
+                return;
+            }
+            if (stage.startsWith("br")) {
+                return;
+            }
+            sea[0] = stage;
+            if (stage.contains("ga")) {
+                found[0] = true;
+            }
+        });
+        log(sea[0]); // should be same as before-fix
+    }   
+
     /**
      * Make your original exercise as question style about if-for statement. <br>
      * (if文for文についてあなたのオリジナルの質問形式のエクササイズを作ってみましょう)
