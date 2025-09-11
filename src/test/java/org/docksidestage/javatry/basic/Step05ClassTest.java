@@ -19,6 +19,13 @@ import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth.TicketShortMoneyException;
 import org.docksidestage.unit.PlainTestCase;
 
+// #1on1: 命名デザイン、コメントデザイン (2025/09/05)
+// プログラマーに求められるデザイン脳
+// https://jflute.hatenadiary.jp/entry/20170623/desigraming
+// 「gitコミットメッセージもコメントデザイン？」by えどさん => yes
+// o 想像力
+// o gitコミットメッセージを読む体験をする (たくさんたくさんしてください)
+
 /**
  * The test of class. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
@@ -117,6 +124,17 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_letsFix_ticketQuantityReduction() {
         Integer sea = doTest_class_ticket_wrongQuantity();
         log(sea); // should be max quantity, visual check here
+        
+        // #1on1: パズルエクササイズ (2025/09/05)
+        /*
+        //if (handedMoney(手渡し金額) >= ONE_DAY_PRICE(1枚の料金)) { ??
+            --quantity; // 在庫を一つマイナス
+        //}
+        if (handedMoney(手渡し金額) < ONE_DAY_PRICE(1枚の料金)) {
+            quantity++; ??
+            throw new TicketShortMoneyException("Short money: " + handedMoney);
+        }
+         */
     }
 
     /**
