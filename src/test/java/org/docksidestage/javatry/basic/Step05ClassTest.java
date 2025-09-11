@@ -102,6 +102,10 @@ public class Step05ClassTest extends PlainTestCase {
     //} catch (TicketShortMoneyException continued) {で7399を購入
     //お金が不足している場合でも購入できてしまう
 
+    //class修正後
+    //log(sea) => 10
+    //7399ではticketを購入することはできないので--quantity;にならない
+
     private Integer doTest_class_ticket_wrongQuantity() {
         TicketBooth booth = new TicketBooth();
         int handedMoney = 7399;
@@ -135,6 +139,12 @@ public class Step05ClassTest extends PlainTestCase {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
          */
+
+        //0910自分なりの解釈
+        //ticketを売る処理　if (handedMoney < ONE_DAY_PRICE) がticketの枚数を減らす処理の後に来ていたため
+        //ticketがあれば無条件でticketを減らしてしまっていた。
+        //if (handedMoney < ONE_DAY_PRICE)を減らす処理の前に行うことで持っているお金がticketの金額より多かった時のみ
+        //ticketの枚数を減らすことができる
     }
 
     /**
@@ -143,25 +153,38 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_letsFix_salesProceedsIncrease() {
         TicketBooth booth = new TicketBooth();
-        booth.buyOneDayPassport(10000);
+        booth.buyOneDayPassportChange(10000);
         Integer sea = booth.getSalesProceeds();
         log(sea); // should be same as one-day price, visual check here
     }
 
+        //0910自分なりの回答
+        //buyOneDayPassportChangeメソッドを作成し、handMoneyがONE_DAY_PRICEより多い時はお釣りとして返し
+        //売上金が正しい値になる
+        
     /**
      * Make method for buying two-day passport (price is 13200). (which can return change as method return value)
      * (TwoDayPassport (金額は13200) も買うメソッドを作りましょう (戻り値でお釣りをちゃんと返すように))
      */
     public void test_class_letsFix_makeMethod_twoday() {
-        // uncomment after making the method
-        //TicketBooth booth = new TicketBooth();
-        //int money = 14000;
-        //int change = booth.buyTwoDayPassport(money);
-        //Integer sea = booth.getSalesProceeds() + change;
-        //log(sea); // should be same as money
+
+        //uncomment after making the method
+        TicketBooth booth = new TicketBooth();
+        int money = 14000;
+        int change = booth.buyTwoDayPassport(money);
+        Integer sea = booth.getSalesProceeds() + change;
+        log(sea); // should be same as money
 
         // and show two-day passport quantity here
+        //0910自分なりの回答
+        //TicketBooth.javaにbuyTwoDayPassportメソッドを生成し
+        //2日分チケット13200円がhandmoneyよりも安いかどうかを見てチケットを売る場合は２枚ずつ減らしていく。
+        //handmoneyが13200円よりも多い場合、お釣りとして返す処理を行う。
     }
+    
+
+    //0910メモ
+    //TwoDayチケットの購入メソッドのロジックがあっているかわからないのでFB後取り組みます
 
     /**
      * Recycle duplicate logics between one-day and two-day by e.g. private method in class. (And confirm result of both before and after) <br>
@@ -182,12 +205,12 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_return_ticket() {
         // uncomment out after modifying the method
-        //TicketBooth booth = new TicketBooth();
-        //Ticket oneDayPassport = booth.buyOneDayPassport(10000);
-        //log(oneDayPassport.getDisplayPrice()); // should be same as one-day price
-        //log(oneDayPassport.isAlreadyIn()); // should be false
-        //oneDayPassport.doInPark();
-        //log(oneDayPassport.isAlreadyIn()); // should be true
+        TicketBooth booth = new TicketBooth();
+        Ticket oneDayPassport = booth.buyOneDayPassport(10000);
+        log(oneDayPassport.getDisplayPrice()); // should be same as one-day price
+        log(oneDayPassport.isAlreadyIn()); // should be false
+        oneDayPassport.doInPark();
+        log(oneDayPassport.isAlreadyIn()); // should be true
     }
 
     /**

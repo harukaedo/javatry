@@ -25,6 +25,7 @@ public class TicketBooth {
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
+    private static final int TWO_DAY_PRICE = 13200; // when 2019/06/15
 
     // ===================================================================================
     //                                                                           Attribute
@@ -44,7 +45,7 @@ public class TicketBooth {
     // you can rewrite comments for your own language by jflute
     // e.g. Japanese
     // /**
-    // * 1Dayパスポートを買う、パークゲスト用のメソッド。
+    // * 1Dayパスポートを買う、パークゲスト用のメソッド。お釣りを返すメソッドも追加。
     // * @param handedMoney パークゲストから手渡しされたお金(金額) (NotNull, NotMinus)
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
@@ -59,15 +60,32 @@ public class TicketBooth {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
-        --quantity;
         if (handedMoney < ONE_DAY_PRICE) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
+        --quantity;
         if (salesProceeds != null) { // second or more purchase
             salesProceeds = salesProceeds + handedMoney;
         } else { // first purchase
             salesProceeds = handedMoney;
         }
+    }
+
+    public int buyOneDayPassportChange(Integer handedMoney) {
+        if (quantity <= 0) {
+            throw new TicketSoldOutException("Sold out");
+        }
+        if (handedMoney < ONE_DAY_PRICE) {
+            throw new TicketShortMoneyException("Short money: " + handedMoney);
+        }
+        --quantity;
+        int change = handedMoney - ONE_DAY_PRICE;
+        if (salesProceeds != null) { // second or more purchase
+            salesProceeds = salesProceeds + ONE_DAY_PRICE;
+        } else { // first purchase
+            salesProceeds = ONE_DAY_PRICE;
+        }
+        return change;
     }
 
     public static class TicketSoldOutException extends RuntimeException {
@@ -86,6 +104,40 @@ public class TicketBooth {
         public TicketShortMoneyException(String msg) {
             super(msg);
         }
+    }
+
+    // ============================================================================================
+    //                                                                          Buy Two-day Ticket
+    //                                                                          ===================
+    // you can rewrite comments for your own language by jflute
+    // e.g. Japanese
+    // /**
+    // * 2Dayパスポートを買う,お釣りを返すメソッド。パークゲスト用のメソッド。
+    // * @param handedMoney パークゲストから手渡しされたお金(金額) (NotNull, NotMinus)
+    // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
+    // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
+    // */
+    /**
+     * Buy two-day passport, method for park guest.
+     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @throws TicketSoldOutException When ticket in booth is sold out.
+     * @throws TicketShortMoneyException When the specified money is short for purchase.
+     */
+    public int buyTwoDayPassport(Integer handedMoney) {
+        if (quantity <= 2) {
+            throw new TicketSoldOutException("Sold out");
+        }
+        if (handedMoney < TWO_DAY_PRICE) {
+            throw new TicketShortMoneyException("Short money: " + handedMoney);
+        }
+        quantity -= 2;
+        int change = handedMoney - TWO_DAY_PRICE;
+        if (salesProceeds != null) { // second or more purchase
+            salesProceeds = salesProceeds + TWO_DAY_PRICE;
+        } else { // first purchase
+            salesProceeds = TWO_DAY_PRICE;
+        }
+        return change;
     }
 
     // ===================================================================================

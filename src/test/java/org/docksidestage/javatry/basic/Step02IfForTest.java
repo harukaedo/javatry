@@ -336,7 +336,7 @@ public class Step02IfForTest extends PlainTestCase {
                 found[0] = true;
             }
         });
-        log(sea[0]); // should be same as before-fix
+        log(sea[0]);
     }   
 
     /**
