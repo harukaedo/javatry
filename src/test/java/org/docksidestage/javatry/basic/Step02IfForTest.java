@@ -316,11 +316,15 @@ public class Step02IfForTest extends PlainTestCase {
     //解説していただけると嬉しいです
     // done jflute 1on1にて、forEach()書き換えエクササイズのフォロー予定 (そもそもforEach()とは？から) (2025/07/31)
     // #1on1: forEach()でできないことを以下に工夫して代替するか？
-    // TODO edo 修行++: forEach()で同じ結果が返ってくるように工夫してみましょう by jflute (2025/08/22)
+    // done edo 修行++: forEach()で同じ結果が返ってくるように工夫してみましょう by jflute (2025/08/22)
 
     //0908challenge
     public void challenge_refactor_foreach_to_forEach_answer() {
         List<String> stageList = prepareStageList();
+        // #1on1: mutableなオブジェクトを連れてきて回避 (2025/09/19)
+        // e.g. StringBuilder sb = new StringBuilder();
+        // TODO edo 修行#: boolean[] found 無しで実現してみましょう by jflute (2025/09/19)
+        // found変数を削除、そして、これ以上変数は追加しない。(マッチ棒問題みたいな)
         final String[] sea = {null};
         final boolean[] found = {false};
 

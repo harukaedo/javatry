@@ -145,6 +145,10 @@ public class Step05ClassTest extends PlainTestCase {
         //ticketがあれば無条件でticketを減らしてしまっていた。
         //if (handedMoney < ONE_DAY_PRICE)を減らす処理の前に行うことで持っているお金がticketの金額より多かった時のみ
         //ticketの枚数を減らすことができる
+        
+        // #1on1: 順番逆転のバグは、システムが分かれたり、クラスが分かれたりすると、隠されがち (2025/09/19)
+        // 処理の流れをわかりやすく表現しておくってのも大切。
+        // 以前、FizzBuzzのエクササイズで順番の大切さを痛感したことがある by えどさん
     }
 
     /**
@@ -185,6 +189,10 @@ public class Step05ClassTest extends PlainTestCase {
 
     //0910メモ
     //TwoDayチケットの購入メソッドのロジックがあっているかわからないのでFB後取り組みます
+    // #1on1: 確認してロジックOKなので、再利用エクササイズ進んじゃってOKです。
+    // ↓こことつながる話でとても良い姿勢です。
+    // // 別に、プルリクレビューの前にレビューしてもらっていいんだからね
+    // https://jflute.hatenadiary.jp/entry/20170630/reviewbefore
 
     /**
      * Recycle duplicate logics between one-day and two-day by e.g. private method in class. (And confirm result of both before and after) <br>
@@ -277,6 +285,9 @@ public class Step05ClassTest extends PlainTestCase {
         // your confirmation code here
     }
 
+    // ===================================================================================
+    //                                                                         Bonus Stage
+    //                                                                         ===========
     /**
      * Refactor if you want to fix (e.g. is it well-balanced name of method and variable?). <br>
      * (その他、気になるところがあったらリファクタリングしてみましょう (例えば、バランスの良いメソッド名や変数名になっていますか？))
@@ -290,6 +301,19 @@ public class Step05ClassTest extends PlainTestCase {
      * (Ticketクラスのpublicなクラス/コンストラクター/メソッドに、気の利いたJavaDocコメントを本気で書いてみましょう)
      */
     public void test_class_moreFix_yourSuperJavaDoc() {
+        // your confirmation code here
+    }
+
+    // ===================================================================================
+    //                                                                         Devil Stage
+    //                                                                         ===========
+    /**
+     * If your specification is to share inventory (quantity) between OneDay/TwoDay/...,
+     * change the specification to separate inventory for each OneDay/TwoDay/.... <br>
+     * (もし、OneDay/TwoDay/...で在庫(quantity)を共有する仕様になってたら、
+     * OneDay/TwoDay/...ごとに在庫を分ける仕様に変えてみましょう)
+     */
+    public void test_class_moreFix_zonedQuantity() {
         // your confirmation code here
     }
 }

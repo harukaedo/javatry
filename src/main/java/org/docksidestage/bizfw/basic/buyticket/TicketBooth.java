@@ -30,6 +30,11 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // #1on1: 在庫のパターンの話、在庫を分けるのも思いついてた by えどさん (2025/09/19)
+    // 「(関数とか変数とか) あんまり増やしすぎるのもよくないかな？と思って」by えどさん
+    // クラスの作り方のお作法としてそれはその通りではあるが...
+    // 一方で、「業務的にそうでないといけない」という要件があるのであれば、その業務を優先して考えないといけない。
+    // なので、クラスの作り方のお作法の話は、厳密には「業務が同じだった場合」にこうするああするを初めて考えることができる。
     private int quantity = MAX_QUANTITY;
     private Integer salesProceeds; // null allowed: until first purchase
 
@@ -71,6 +76,7 @@ public class TicketBooth {
         }
     }
 
+    // #1on1: 元のコードを直しちゃってもOKです。
     public int buyOneDayPassportChange(Integer handedMoney) {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
@@ -117,6 +123,7 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
+    // TODO edo 戻り値があるので、JavaDocの@returnをぜひ追加してみてください by jflute (2025/09/19)
     /**
      * Buy two-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -139,6 +146,10 @@ public class TicketBooth {
         }
         return change;
     }
+    
+    // ===================================================================================
+    //                                                                           Exception
+    //                                                                           =========
 
     // ===================================================================================
     //                                                                            Accessor
