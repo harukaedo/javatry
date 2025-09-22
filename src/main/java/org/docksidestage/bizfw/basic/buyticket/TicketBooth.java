@@ -80,6 +80,7 @@ public class TicketBooth {
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
+     * @return お釣り金額
      */
 
     public void buyOneDayPassport(Integer handedMoney) {
@@ -134,7 +135,7 @@ public class TicketBooth {
     
     // ===================================================================================
     //                                                                           Exception
-    //           
+    //                                                                           =========
     public static class TicketSoldOutException extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
@@ -151,15 +152,23 @@ public class TicketBooth {
         public TicketShortMoneyException(String msg) {
             super(msg);
         }
-    }                                                               
+    }
 
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
+    /**
+     * 現在の在庫数を取得する
+     * @return 在庫数
+     */
     public int getQuantity() {
         return quantity;
     }
 
+    /**
+     * 現在の売上金額を取得する
+     * @return 売上金額（まだ購入がない場合はnull）
+     */
     public Integer getSalesProceeds() {
         return salesProceeds;
     }
