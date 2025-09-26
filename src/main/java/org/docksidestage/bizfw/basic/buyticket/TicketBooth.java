@@ -60,6 +60,7 @@ public class TicketBooth {
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
+     * @return buyOneDayPassportではチケットを返す｜buyOneDayPassportChangeではお釣りを返す
      */
 
     // ============================================================================================
@@ -83,7 +84,7 @@ public class TicketBooth {
      * @return お釣り金額
      */
 
-    public void buyOneDayPassport(Integer handedMoney) {
+    public Ticket buyOneDayPassport(Integer handedMoney) {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
@@ -96,6 +97,7 @@ public class TicketBooth {
         } else { // first purchase
             salesProceeds = handedMoney;
         }
+        return new Ticket(ONE_DAY_PRICE);
     }
 
     // #1on1: 元のコードを直しちゃってもOKです。
