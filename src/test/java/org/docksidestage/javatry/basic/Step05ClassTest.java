@@ -18,6 +18,7 @@ package org.docksidestage.javatry.basic;
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth.TicketShortMoneyException;
+import org.docksidestage.bizfw.basic.buyticket.TicketBuyResult;
 import org.docksidestage.unit.PlainTestCase;
 
 // #1on1: 命名デザイン、コメントデザイン (2025/09/05)
@@ -176,7 +177,7 @@ public class Step05ClassTest extends PlainTestCase {
         //uncomment after making the method
         TicketBooth booth = new TicketBooth();
         int money = 14000;
-        int change = booth.buyTwoDayPassport(money);
+        TicketBuyResult change = booth.buyTwoDayPassport(money);
         Integer sea = booth.getSalesProceeds() + change;
         log(sea); // should be same as money
 
@@ -232,13 +233,17 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_return_whole() {
         // uncomment after modifying the method
-        //TicketBooth booth = new TicketBooth();
-        //int handedMoney = 20000;
-        //TicketBuyResult buyResult = booth.buyTwoDayPassport(handedMoney);
-        //Ticket twoDayPassport = buyResult.getTicket();
-        //int change = buyResult.getChange();
-        //log(twoDayPassport.getDisplayPrice() + change); // should be same as money
+        TicketBooth booth = new TicketBooth();
+        int handedMoney = 20000;
+        TicketBuyResult buyResult = booth.buyTwoDayPassport(handedMoney);
+        Ticket twoDayPassport = buyResult.getTicket();
+        int change = buyResult.getChange();
+        log(twoDayPassport.getDisplayPrice() + change); // should be same as money
     }
+
+    //0926自分なりの回答
+    //TicketBuyResultを適応し、チケットとお釣りを戻すようにした
+    //getTicket(でチケットを取得し、getChange()でお釣りを取得した
 
     /**
      * Now you can use only one in spite of two-day passport, so fix Ticket to be able to handle plural days. <br>

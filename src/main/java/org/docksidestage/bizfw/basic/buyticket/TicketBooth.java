@@ -118,7 +118,7 @@ public class TicketBooth {
         return change;
     }
 
-    public int buyTwoDayPassport(Integer handedMoney) {
+    public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
         if (quantity <= 2) {
             throw new TicketSoldOutException("Sold out");
         }
@@ -132,7 +132,7 @@ public class TicketBooth {
         } else { // first purchase
             salesProceeds = TWO_DAY_PRICE;
         }
-        return change;
+        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE), change);
     }
     
     // ===================================================================================
