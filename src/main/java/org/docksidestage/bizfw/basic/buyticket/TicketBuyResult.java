@@ -17,7 +17,7 @@ public class TicketBuyResult {
      * チケット購入結果を構築します。
      * 
      * @param ticket 購入されたチケット (NotNull)
-     * @param change お釣り金額 (NotMinus)
+     * @param change お釣り金額
      */
 
     public TicketBuyResult(Ticket ticket, int change) {
@@ -37,7 +37,7 @@ public class TicketBuyResult {
     /**
      * お釣り金額を取得します。
      * 
-     * @return お釣り金額 (NotMinus)
+     * @return お釣り金額
      */
     public int getChange() {
         return change;
