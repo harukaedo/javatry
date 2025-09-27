@@ -97,7 +97,7 @@ public class TicketBooth {
         } else { // first purchase
             salesProceeds = handedMoney;
         }
-        return new Ticket(ONE_DAY_PRICE);
+        return new Ticket(ONE_DAY_PRICE, 1);
     }
 
     // #1on1: 元のコードを直しちゃってもOKです。
@@ -132,7 +132,7 @@ public class TicketBooth {
         } else { // first purchase
             salesProceeds = TWO_DAY_PRICE;
         }
-        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE), change);
+        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE, 2), change);
     }
     
     // ===================================================================================

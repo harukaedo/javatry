@@ -251,6 +251,21 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_usePluralDays() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        TicketBuyResult buyResult = booth.buyTwoDayPassport(13200);
+        Ticket twoDayPassport = buyResult.getTicket();
+        
+        // 1日目の入園、退園
+        twoDayPassport.doInPark();
+        log(twoDayPassport.isAlreadyIn()); // trueになる
+        twoDayPassport.doOutPark();
+        log(twoDayPassport.getRestDays()); // 1日使われたため、残り1日になる
+        
+        // 2日目の入園、退園
+        twoDayPassport.doInPark();
+        log(twoDayPassport.isAlreadyIn()); // trueになる
+        twoDayPassport.doOutPark();
+        log(twoDayPassport.getRestDays()); // 残りの1日が使われたため、残りが0となる
     }
 
     /**
