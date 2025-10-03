@@ -75,7 +75,7 @@ public class TicketBooth {
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // * @return お釣り金額
     // */
-    // TODO　done edo 戻り値があるので、JavaDocの@returnをぜひ追加してみてください by jflute (2025/09/19)
+    // done edo 戻り値があるので、JavaDocの@returnをぜひ追加してみてください by jflute (2025/09/19)
     /**
      * Buy two-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -100,7 +100,7 @@ public class TicketBooth {
         return new Ticket(ONE_DAY_PRICE, 1);
     }
 
-    // #1on1: 元のコードを直しちゃってもOKです。
+    // TODO edo 元のコードを直しちゃってもOKです。(OneDayの統一を) by jflute (2025/10/03)
     public int buyOneDayPassportChange(Integer handedMoney) {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");

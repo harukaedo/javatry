@@ -119,6 +119,7 @@ public class Step01VariableTest extends PlainTestCase {
         sea = land.add(new BigDecimal(1)); // seaは416インスタンス, landは415インスタンス
         sea.add(new BigDecimal(1));  // seaは417かな？ => あれ？416？ (417な一瞬出きて消える)
 
+        log("null");
         log(sea); // your answer? => 416
         //sea.add(new BigDecimal(1));はsea自体に+1しているため95になっていてseaはlandを参照するため、
         //land自体に+1して416になるという認識であっていますか？

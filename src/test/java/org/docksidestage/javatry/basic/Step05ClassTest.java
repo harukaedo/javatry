@@ -177,6 +177,8 @@ public class Step05ClassTest extends PlainTestCase {
         //uncomment after making the method
         TicketBooth booth = new TicketBooth();
         int money = 14000;
+        // TODO edo コンパイルエラーが出ています。 by jflute (2025/10/03)
+        // リファクタリングなど修正を入れたら、全体がおかしくなってないか？確認する習慣を
         TicketBuyResult change = booth.buyTwoDayPassport(money);
         Integer sea = booth.getSalesProceeds() + change;
         log(sea); // should be same as money
@@ -196,6 +198,7 @@ public class Step05ClassTest extends PlainTestCase {
     // // 別に、プルリクレビューの前にレビューしてもらっていいんだからね
     // https://jflute.hatenadiary.jp/entry/20170630/reviewbefore
 
+    // TODO edo こちらのエクササイズもどこかでやってみてください。再利用メソッドを作る by jflute (2025/10/03)
     /**
      * Recycle duplicate logics between one-day and two-day by e.g. private method in class. (And confirm result of both before and after) <br>
      * (OneDayとTwoDayで冗長なロジックがあったら、クラス内のprivateメソッドなどで再利用しましょう (修正前と修正後の実行結果を確認))
@@ -215,6 +218,7 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_return_ticket() {
         // uncomment out after modifying the method
+        // #1on1: お釣りも戻さないといけないんじゃない？というえどさんの疑念は正しい (2025/10/03)
         TicketBooth booth = new TicketBooth();
         Ticket oneDayPassport = booth.buyOneDayPassport(10000);
         log(oneDayPassport.getDisplayPrice()); // should be same as one-day price
