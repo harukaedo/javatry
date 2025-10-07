@@ -17,6 +17,7 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 /**
  * @author jflute
+ * @author harukaedo
  */
 public class TicketBooth {
 
@@ -84,24 +85,7 @@ public class TicketBooth {
      * @return お釣り金額
      */
 
-    public Ticket buyOneDayPassport(Integer handedMoney) {
-        if (quantity <= 0) {
-            throw new TicketSoldOutException("Sold out");
-        }
-        if (handedMoney < ONE_DAY_PRICE) {
-            throw new TicketShortMoneyException("Short money: " + handedMoney);
-        }
-        --quantity;
-        if (salesProceeds != null) { // second or more purchase
-            salesProceeds = salesProceeds + handedMoney;
-        } else { // first purchase
-            salesProceeds = handedMoney;
-        }
-        return new Ticket(ONE_DAY_PRICE, 1);
-    }
-
-    // TODO edo 元のコードを直しちゃってもOKです。(OneDayの統一を) by jflute (2025/10/03)
-    public int buyOneDayPassportChange(Integer handedMoney) {
+    public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
@@ -111,12 +95,30 @@ public class TicketBooth {
         --quantity;
         int change = handedMoney - ONE_DAY_PRICE;
         if (salesProceeds != null) { // second or more purchase
-            salesProceeds = salesProceeds + ONE_DAY_PRICE;
+            salesProceeds = salesProceeds + handedMoney;
         } else { // first purchase
             salesProceeds = ONE_DAY_PRICE;
         }
-        return change;
+        return new TicketBuyResult(new Ticket(ONE_DAY_PRICE, 1), change);
     }
+
+    // TODO done edo 元のコードを直しちゃってもOKです。(OneDayの統一を) by jflute (2025/10/03)
+    // public int buyOneDayPassportChange(Integer handedMoney) {
+    //     if (quantity <= 0) {
+    //         throw new TicketSoldOutException("Sold out");
+    //     }
+    //     if (handedMoney < ONE_DAY_PRICE) {
+    //         throw new TicketShortMoneyException("Short money: " + handedMoney);
+    //     }
+    //     --quantity;
+    //     int change = handedMoney - ONE_DAY_PRICE;
+    //     if (salesProceeds != null) { // second or more purchase
+    //         salesProceeds = salesProceeds + ONE_DAY_PRICE;
+    //     } else { // first purchase
+    //         salesProceeds = ONE_DAY_PRICE;
+    //     }
+    //     return change;
+    // }
 
     public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
         if (quantity <= 2) {

@@ -159,7 +159,7 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_letsFix_salesProceedsIncrease() {
         TicketBooth booth = new TicketBooth();
-        booth.buyOneDayPassportChange(10000);
+        booth.buyOneDayPassport(10000);
         Integer sea = booth.getSalesProceeds();
         log(sea); // should be same as one-day price, visual check here
     }
@@ -177,8 +177,9 @@ public class Step05ClassTest extends PlainTestCase {
         //uncomment after making the method
         TicketBooth booth = new TicketBooth();
         int money = 14000;
-        // TODO edo コンパイルエラーが出ています。 by jflute (2025/10/03)
+        // TODO done edo コンパイルエラーが出ています。 by jflute (2025/10/03)
         // リファクタリングなど修正を入れたら、全体がおかしくなってないか？確認する習慣を
+        //1007 memo: コンパイルエラーを修正しました
         TicketBuyResult change = booth.buyTwoDayPassport(money);
         Integer sea = booth.getSalesProceeds() + change.getChange();
         log(sea); // should be same as money
@@ -219,12 +220,14 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_return_ticket() {
         // uncomment out after modifying the method
         // #1on1: お釣りも戻さないといけないんじゃない？というえどさんの疑念は正しい (2025/10/03)
+        //1007 1dayだけお釣りも戻っていないので、TicketBuyResultクラスを戻り値として返すようにし,
         TicketBooth booth = new TicketBooth();
-        Ticket oneDayPassport = booth.buyOneDayPassport(10000);
-        log(oneDayPassport.getDisplayPrice()); // should be same as one-day price
-        log(oneDayPassport.isAlreadyIn()); // should be false
-        oneDayPassport.doInPark();
-        log(oneDayPassport.isAlreadyIn()); // should be true
+        TicketBuyResult oneDayPassport = booth.buyOneDayPassport(10000);
+        Ticket ticket = oneDayPassport.getTicket();
+        log(ticket.getDisplayPrice()); // should be same as one-day price
+        log(ticket.isCurrentIn()); // should be false
+        ticket.doInPark();
+        log(ticket.isCurrentIn()); // should be true
     }
 
     //0924自分なりの回答
@@ -261,13 +264,13 @@ public class Step05ClassTest extends PlainTestCase {
         
         // 1日目の入園、退園
         twoDayPassport.doInPark();
-        log(twoDayPassport.isAlreadyIn()); // trueになる
+        log(twoDayPassport.isCurrentIn()); // trueになる
         twoDayPassport.doOutPark();
         log(twoDayPassport.getRestDays()); // 1日使われたため、残り1日になる
         
         // 2日目の入園、退園
         twoDayPassport.doInPark();
-        log(twoDayPassport.isAlreadyIn()); // trueになる
+        log(twoDayPassport.isCurrentIn()); // trueになる
         twoDayPassport.doOutPark();
         log(twoDayPassport.getRestDays()); // 残りの1日が使われたため、残りが0となる
     }

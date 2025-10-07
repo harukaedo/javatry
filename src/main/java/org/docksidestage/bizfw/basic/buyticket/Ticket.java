@@ -15,9 +15,10 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
-// TODO edo author追加を by jflute (2025/10/03)
+// TODO done edo author追加を by jflute (2025/10/03)
 /**
  * @author jflute
+ * @author harukaedo
  */
 public class Ticket {
 
@@ -30,7 +31,7 @@ public class Ticket {
     // 省略しちゃうこともあるけど、publicはJavaDocの費用対効果が高い(privateに比べて)、と言える。
     // (Stringは究極の費用対効果が高いクラス)
     private final int displayPrice; // written on ticket, park guest can watch this
-    private boolean alreadyIn; // true means this ticket is unavailable
+    private boolean currentIn; // 現在入園しているかどうか
     private int restDays; // チケットの残り使用可能日数
 
     // ===================================================================================
@@ -53,18 +54,18 @@ public class Ticket {
         if (restDays <= 0) {
             throw new IllegalStateException("No remaining days: displayedPrice=" + displayPrice);
         }
-        if (alreadyIn) {
+        if (currentIn) {
             throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
         }
-        alreadyIn = true;
+        currentIn = true;
     }
 
     // TODO edo [いいね] outを作ったのGood by jflute (2025/10/03)
     public void doOutPark() {
-        if (!alreadyIn) {
+        if (!currentIn) {
             throw new IllegalStateException("Not in park by this ticket: displayedPrice=" + displayPrice);
         }
-        alreadyIn = false;
+        currentIn = false;
         restDays--; // 使用日数を減らす
     }
 
@@ -82,9 +83,10 @@ public class Ticket {
     // 呼び出し側を一覧化して、ニュアンスを変えても大丈夫かどうか？の確認をする。
     // alreadyIn という名前のままやっていくかどうか？
     // 「今入ってるかどうか？」を示すのに alreadyIn が適切かどうか？
-    // TODO edo alreadyInの名前をもうちょい適切に変えてしまいましょう (リファクタリング) by jflute (2025/10/03)
-    public boolean isAlreadyIn() {
-        return alreadyIn;
+    // TODO done edo alreadyInの名前をもうちょい適切に変えてしまいましょう (リファクタリング) by jflute (2025/10/03)
+    //1007 memo: alreadyInをcurrentInに変えて現在入園しているかどうかを表現するようにした
+    public boolean isCurrentIn() {
+        return currentIn;
     }
 
     public int getRestDays() {
