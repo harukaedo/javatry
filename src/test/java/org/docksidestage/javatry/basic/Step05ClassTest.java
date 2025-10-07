@@ -180,7 +180,7 @@ public class Step05ClassTest extends PlainTestCase {
         // TODO edo コンパイルエラーが出ています。 by jflute (2025/10/03)
         // リファクタリングなど修正を入れたら、全体がおかしくなってないか？確認する習慣を
         TicketBuyResult change = booth.buyTwoDayPassport(money);
-        Integer sea = booth.getSalesProceeds() + change;
+        Integer sea = booth.getSalesProceeds() + change.getChange();
         log(sea); // should be same as money
 
         // and show two-day passport quantity here
