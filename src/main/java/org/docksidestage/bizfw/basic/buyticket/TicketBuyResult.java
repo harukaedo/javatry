@@ -38,7 +38,7 @@ public class TicketBuyResult {
         return ticket;
     }
 
-    /**
+    /**   
      * @return お釣り金額
      */
     public int getChange() {

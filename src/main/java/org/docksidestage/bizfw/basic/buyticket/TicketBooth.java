@@ -61,7 +61,7 @@ public class TicketBooth {
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
-     * @return buyOneDayPassportではチケットを返す｜buyOneDayPassportChangeではお釣りを返す
+     * @return チケットとお釣りを返す
      */
 
     // ============================================================================================
@@ -82,23 +82,13 @@ public class TicketBooth {
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
-     * @return お釣り金額
+     * @return チケットとお釣りを返す
      */
 
     public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
-        if (quantity <= 0) {
-            throw new TicketSoldOutException("Sold out");
-        }
-        if (handedMoney < ONE_DAY_PRICE) {
-            throw new TicketShortMoneyException("Short money: " + handedMoney);
-        }
-        --quantity;
+        checkBuyTicket(handedMoney, ONE_DAY_PRICE, 1);
+        checkTicketQuantity(ONE_DAY_PRICE, 1);
         int change = handedMoney - ONE_DAY_PRICE;
-        if (salesProceeds != null) { // second or more purchase
-            salesProceeds = salesProceeds + handedMoney;
-        } else { // first purchase
-            salesProceeds = ONE_DAY_PRICE;
-        }
         return new TicketBuyResult(new Ticket(ONE_DAY_PRICE, 1), change);
     }
 
@@ -121,21 +111,54 @@ public class TicketBooth {
     // }
 
     public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
-        if (quantity <= 2) {
-            throw new TicketSoldOutException("Sold out");
-        }
-        if (handedMoney < TWO_DAY_PRICE) {
-            throw new TicketShortMoneyException("Short money: " + handedMoney);
-        }
-        quantity -= 2;
+        checkBuyTicket(handedMoney, TWO_DAY_PRICE, 2);
+        checkTicketQuantity(TWO_DAY_PRICE, 2);
         int change = handedMoney - TWO_DAY_PRICE;
-        if (salesProceeds != null) { // second or more purchase
-            salesProceeds = salesProceeds + TWO_DAY_PRICE;
-        } else { // first purchase
-            salesProceeds = TWO_DAY_PRICE;
-        }
         return new TicketBuyResult(new Ticket(TWO_DAY_PRICE, 2), change);
     }
+
+    // ===================================================================================
+    //                                                                      Private Methods
+    //                                                                      ===============
+    /**
+     * Validate purchase requirements (sold out check and money validation).
+     * @param handedMoney 手渡しされた金額
+     * @param ticketPrice チケットの価格
+     * @param ticketQuantity 欲しいチケットの枚数
+     * @throws TicketSoldOutException チケットが売り切れている場合
+     * @throws TicketShortMoneyException 買うのに金額が足りなかった場合
+     */
+    private void checkBuyTicket(Integer handedMoney, int ticketPrice, int ticketQuantity) {
+        if (quantity < ticketQuantity) {
+            throw new TicketSoldOutException("Sold out");
+        }
+        if (handedMoney < ticketPrice) {
+            throw new TicketShortMoneyException("Short money: " + handedMoney);
+        }
+    }
+
+    /**
+     * Process the purchase (update quantity and sales proceeds).
+     * @param ticketPrice チケットの価格
+     * @param quantityUsed 使用したチケットの枚数
+     */
+    private void checkTicketQuantity(int ticketPrice, int quantityUsed) {
+        quantity -= quantityUsed;
+        if (salesProceeds != null) { // second or more purchase
+            salesProceeds = salesProceeds + ticketPrice;
+        } else { // first purchase
+            salesProceeds = ticketPrice;
+        }
+    }
+
+    //1007 自分なりの回答
+    //checkBuyTicketとcheckTicketQuantityメソッドを作成し、チケットが買えるかどうかのチェックとチケットが購入されたら枚数を減らす処理を
+    //共通化した。
+    //checkBuyTicketメソッドでチケットが買えるかどうかのチェックを行う。
+    //checkTicketQuantityメソッドでチケットが購入されたら枚数を減らす処理を行う。
+    //buyOneDayPassportとbuyTwoDayPassportでcheckBuyTicketとcheckTicketQuantityメソッドを呼び出し
+    //再利用してrefactorした。
+
     
     // ===================================================================================
     //                                                                           Exception
