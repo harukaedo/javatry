@@ -27,6 +27,7 @@ public class TicketBooth {
     private static final int MAX_QUANTITY = 10;
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
     private static final int TWO_DAY_PRICE = 13200; // when 2019/06/15
+    private static final int FOUR_DAY_PRICE = 22400; 
 
     // ===================================================================================
     //                                                                           Attribute
@@ -85,6 +86,17 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
 
+    // ============================================================================================
+    //                                                                          Buy Four-day Ticket
+    //                                                                          ===================
+    /**
+     * 4Dayパスポートを買う,お釣りを返すメソッド。パークゲスト用のメソッド。
+     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @throws TicketSoldOutException When ticket in booth is sold out.
+     * @throws TicketShortMoneyException When the specified money is short for purchase.
+     * @return チケットとお釣りを返す
+     */
+
     public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
         checkBuyTicket(handedMoney, ONE_DAY_PRICE, 1);
         checkTicketQuantity(ONE_DAY_PRICE, 1);
@@ -115,6 +127,13 @@ public class TicketBooth {
         checkTicketQuantity(TWO_DAY_PRICE, 2);
         int change = handedMoney - TWO_DAY_PRICE;
         return new TicketBuyResult(new Ticket(TWO_DAY_PRICE, 2), change);
+    }
+
+    public TicketBuyResult buyFourDayPassport(Integer handedMoney) {
+        checkBuyTicket(handedMoney, FOUR_DAY_PRICE, 4);
+        checkTicketQuantity(FOUR_DAY_PRICE, 4);
+        int change = handedMoney - FOUR_DAY_PRICE;
+        return new TicketBuyResult(new Ticket(FOUR_DAY_PRICE, 4), change);
     }
 
     // ===================================================================================

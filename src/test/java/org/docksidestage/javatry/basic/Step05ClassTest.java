@@ -199,7 +199,7 @@ public class Step05ClassTest extends PlainTestCase {
     // // 別に、プルリクレビューの前にレビューしてもらっていいんだからね
     // https://jflute.hatenadiary.jp/entry/20170630/reviewbefore
 
-    // TODO edo こちらのエクササイズもどこかでやってみてください。再利用メソッドを作る by jflute (2025/10/03)
+    // TODO done edo こちらのエクササイズもどこかでやってみてください。再利用メソッドを作る by jflute (2025/10/03)
     /**
      * Recycle duplicate logics between one-day and two-day by e.g. private method in class. (And confirm result of both before and after) <br>
      * (OneDayとTwoDayで冗長なロジックがあったら、クラス内のprivateメソッドなどで再利用しましょう (修正前と修正後の実行結果を確認))
@@ -209,6 +209,14 @@ public class Step05ClassTest extends PlainTestCase {
         booth.buyOneDayPassport(10000);
         log(booth.getQuantity(), booth.getSalesProceeds()); // should be same as before-fix
     }
+
+    //1007 自分なりの回答
+    //checkBuyTicketとcheckTicketQuantityメソッドを作成し、チケットが買えるかどうかのチェックとチケットが購入されたら枚数を減らす処理を
+    //共通化した。
+    //checkBuyTicketメソッドでチケットが買えるかどうかのチェックを行う。
+    //checkTicketQuantityメソッドでチケットが購入されたら枚数を減らす処理を行う。
+    //buyOneDayPassportとbuyTwoDayPassportでcheckBuyTicketとcheckTicketQuantityメソッドを呼び出し
+    //再利用してrefactorした。
 
     // ===================================================================================
     //                                                                           Challenge
@@ -281,22 +289,28 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_whetherTicketType() {
         // uncomment when you implement this exercise
-        //TicketBooth booth = new TicketBooth();
-        //Ticket oneDayPassport = booth.buyOneDayPassport(10000);
-        //showTicketIfNeeds(oneDayPassport);
-        //TicketBuyResult buyResult = booth.buyTwoDayPassport(10000);
-        //Ticket twoDayPassport = buyResult.getTicket();
-        //showTicketIfNeeds(twoDayPassport);
+        TicketBooth booth = new TicketBooth();
+        TicketBuyResult oneDayPassport = booth.buyOneDayPassport(10000);
+        showTicketIfNeeds(oneDayPassport.getTicket());
+        TicketBuyResult buyResult = booth.buyTwoDayPassport(10000);
+        Ticket twoDayPassport = buyResult.getTicket();
+        showTicketIfNeeds(twoDayPassport);
     }
 
     // uncomment when you implement this exercise
-    //private void showTicketIfNeeds(Ticket ticket) {
-    //    if (xxxxxxxxxxxxxxxxxx) { // write determination for two-day passport
-    //        log("two-day passport");
-    //    } else {
-    //        log("other");
-    //    }
-    //}
+    private void showTicketIfNeeds(Ticket ticket) {
+       if (ticket.getRestDays() == 2) { // write determination for two-day passport
+           log("two-day passport");
+       } else if(ticket.getRestDays() == 1){
+           log("one-day passport");
+       } else {
+           log("other");
+       }
+    }
+
+    //1007 自分なりの回答
+    //TicketクラスにgetRestDaysメソッドがあるため、showTicketIfNeedsメソッドでチケットの
+    //残り使用可能日数を取得し、チケットの種別を判定した
 
     // ===================================================================================
     //                                                                           Good Luck
@@ -307,6 +321,10 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_wonder_four() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        TicketBuyResult buyResult = booth.buyFourDayPassport(22400);
+        Ticket fourDayPassport = buyResult.getTicket();
+        log(fourDayPassport.getRestDays()); // should be same as four-day passport
     }
 
     /**
