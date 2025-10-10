@@ -32,7 +32,8 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author harukaedo
+ * 
  */
 public class Step06ObjectOrientedTest extends PlainTestCase {
 
@@ -67,13 +68,13 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         if (handedMoney < oneDayPrice) {
             throw new IllegalStateException("Short money: handedMoney=" + handedMoney);
         }
-        salesProceeds = handedMoney;
+        salesProceeds = oneDayPrice; // 1010 修正：チケットの枚数になっていたため、チケットの価格に変更
 
         //
         // [ticket info]
         //
         // simulation: actually these variables should be more wide scope
-        int displayPrice = quantity;
+        int displayPrice = oneDayPrice; //1010 修正: チケットの表示価格が枚数になっていたため価格に変更
         boolean alreadyIn = false;
 
         // other processes here...
@@ -85,7 +86,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //
         // simulation: actually this process should be called by other trigger
         if (alreadyIn) {
-            throw new IllegalStateException("Already in park by this ticket: displayPrice=" + quantity);
+            throw new IllegalStateException("Already in park by this ticket: displayPrice=" + displayPrice); //1010修正: displayPriceを使用
         }
         alreadyIn = true;
 
@@ -95,12 +96,12 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         saveBuyingHistory(quantity, displayPrice, salesProceeds, alreadyIn);
     }
 
-    private void saveBuyingHistory(int quantity, Integer salesProceeds, int displayPrice, boolean alreadyIn) {
+    private void saveBuyingHistory(int quantity, int displayPrice, Integer salesProceeds, boolean alreadyIn) {
         if (alreadyIn) {
             // simulation: only logging here (normally e.g. DB insert)
-            showTicketBooth(displayPrice, salesProceeds);
-            showYourTicket(quantity, alreadyIn);
-        }
+            showTicketBooth(quantity, salesProceeds);
+            showYourTicket(displayPrice, alreadyIn);
+            //1010 修正: showTicketBoothとshowYourTicketdで定義されている引数とsaveBuyingHistory内で定義されている引数が異なっていたため修正
     }
 
     private void showTicketBooth(int quantity, Integer salesProceeds) {
