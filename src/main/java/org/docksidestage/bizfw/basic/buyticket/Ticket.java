@@ -33,6 +33,7 @@ public class Ticket {
     private final int displayPrice; // written on ticket, park guest can watch this
     private boolean currentIn; // 現在入園しているかどうか
     private int restDays; // チケットの残り使用可能日数
+    private boolean nightOnly; // 午前中は使えないようになっているか
 
     // ===================================================================================
     //                                                                         Constructor
@@ -45,6 +46,12 @@ public class Ticket {
     public Ticket(int displayPrice, int days) {
         this.displayPrice = displayPrice;
         this.restDays = days;
+    }
+
+    public Ticket(int displayPrice, int days, boolean nightOnly) {
+        this.displayPrice = displayPrice;
+        this.restDays = days;
+        this.nightOnly = nightOnly;
     }
 
     // ===================================================================================
@@ -70,6 +77,15 @@ public class Ticket {
     }
 
     // ===================================================================================
+    //                                                                             Night
+    //                                                                             ======
+    public void notNight() {
+        if (!nightOnly) {
+            throw new IllegalStateException("Not night-only by this ticket: displayedPrice=" + displayPrice);
+        }
+    }
+
+    // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
     public int getDisplayPrice() {
@@ -91,5 +107,9 @@ public class Ticket {
 
     public int getRestDays() {
         return restDays;
+    }
+
+    public boolean isNightOnly() {
+        return nightOnly;
     }
 }

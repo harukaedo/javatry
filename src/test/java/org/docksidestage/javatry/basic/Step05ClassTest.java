@@ -327,13 +327,27 @@ public class Step05ClassTest extends PlainTestCase {
         log(fourDayPassport.getRestDays()); // should be same as four-day passport
     }
 
+    //1009 自分なりの回答
+    //TicketBooth.javaにbuyFourDayPassportメソッドを生成し
+    //4日分チケット22400円がhandmoneyよりも安いかどうかを見てチケットを売る場合は４枚ずつ減らしていく。
+    //handmoneyが22400円よりも多い場合、お釣りとして返す処理を行う。
+
     /**
      * Fix it to be able to buy night-only two-day passport (price is 7400), which can be used at only night. <br>
      * (NightOnlyTwoDayPassport (金額は7400) のチケットも買えるようにしましょう。夜しか使えないようにしましょう)
      */
     public void test_class_moreFix_wonder_night() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(7400);
+        Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
+        log(nightOnlyTwoDayPassport.getRestDays()); // should be same as night-only two-day passport
     }
+
+    //1010 自分なりの回答
+    //TicketBooth.javaにbuyNightOnlyTwoDayPassportメソッドを生成し
+    //2日分チケット7400円がhandmoneyよりも安いかどうかを見てチケットを売る場合は２枚ずつ減らしていく。
+    //handmoneyが7400円よりも多い場合、お釣りとして返す処理を行う。
 
     // ===================================================================================
     //                                                                         Bonus Stage
