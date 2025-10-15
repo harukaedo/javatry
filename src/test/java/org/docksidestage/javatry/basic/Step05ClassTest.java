@@ -299,6 +299,9 @@ public class Step05ClassTest extends PlainTestCase {
 
     // uncomment when you implement this exercise
     private void showTicketIfNeeds(Ticket ticket) {
+       // TODO edo nightも紛れてしまう by jflute (2025/10/15)
+       // #1on1: 当初は問題なかったロジックが、新しいものが追加されることで影響が出るパターン。 (2025/10/15)
+       // 一行も直していないところで突然不具合が出るというやっかいなケース。
        if (ticket.getRestDays() == 2) { // write determination for two-day passport
            log("two-day passport");
        } else if(ticket.getRestDays() == 1){
@@ -342,6 +345,7 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(7400);
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
         log(nightOnlyTwoDayPassport.getRestDays()); // should be same as night-only two-day passport
+        // TODO edo doInPark()する動作確認をしてみましょう by jflute (2025/10/15)
     }
 
     //1010 自分なりの回答

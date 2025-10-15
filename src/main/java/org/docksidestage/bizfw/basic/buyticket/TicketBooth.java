@@ -25,6 +25,9 @@ public class TicketBooth {
     //                                                                          Definition
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
+    // TODO edo nightOnlyだけ定数になってるけど、やるなら他のも定数にした方が統一感がある by jflute (2025/10/15)
+    // TODO edo quantityだと、MAX_QUANTITYとの対比で、在庫数だと思ってしまう... by jflute (2025/10/15)
+    // ので、一回の購入で在庫を消費する数というニュアンスがあると良いかも。
     private static final int NIGHT_ONLY_TWO_DAY_QUANTITY = 2;
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
     private static final int TWO_DAY_PRICE = 13200; // when 2019/06/15
@@ -48,6 +51,7 @@ public class TicketBooth {
     public TicketBooth() {
     }
 
+    // TODO edo タグコメントとJavaDoc整理整頓 by jflute (2025/10/15)
     // ===================================================================================
     //                                                                          Buy Ticket
     //                                                                          ==========
@@ -101,6 +105,7 @@ public class TicketBooth {
     // ============================================================================================
     //                                                                          Buy Night-only Two-day Ticket
     //                                                                          ===================
+    // TODO edo @return, ここでも "など" ってしておいたほうがいいかなと by jflute (2025/10/15)
     /**
      * 2日間の夜だけ使えるパスポートを買う,お釣りを返すメソッド。パークゲスト用のメソッド。
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -115,7 +120,7 @@ public class TicketBooth {
         return new TicketBuyResult(new Ticket(ONE_DAY_PRICE, 1), change);
     }
 
-    // TODO done edo 元のコードを直しちゃってもOKです。(OneDayの統一を) by jflute (2025/10/03)
+    // done edo 元のコードを直しちゃってもOKです。(OneDayの統一を) by jflute (2025/10/03)
     // public int buyOneDayPassportChange(Integer handedMoney) {
     //     if (quantity <= 0) {
     //         throw new TicketSoldOutException("Sold out");
@@ -157,6 +162,17 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                      Private Methods
     //                                                                      ===============
+    // done edo [いいね] JavaDoc, 再利用のprivateは費用対効果高いのでGood (引数も多いのでありがたい) by jflute (2025/10/15)
+    // #1on1: もうちょいまとめらるかも？まとめ過ぎもよくないかも？changeはまとめてもいいかも？ by えどさん
+    // 他は引数だけで解決してるのに、changeだけそこで計算しちゃってるのが気持ち悪い by えどさん
+    // calculateChange()に出した場合の計算処理の仕様変更のシミュレーションしてみた by くぼ
+    // TODO edo せっかくなので、calculateChange() も作ってみましょう by jflute (2025/10/15)
+    // #1on1: checkという動詞のメソッド、checkは期待する結果がちょっと曖昧になる。
+    // e.g. assertという動詞のメソッドであれば、assert that S+V で正しいもの(期待する状態)を書く
+    //  assertQuantityExists(ticketQuantity);
+    //  assertEnoughMoney(handedMoney, ticketPrice);
+    // TODO edo ということで、checkという言葉以外の動詞を使ってみましょう by jflute (2025/10/15)
+    // TODO edo 一方で、JavaDocのニュアンスとメソッド名のニュアンスを統一しても良いのかなと by jflute (2025/10/15)
     /**
      * Validate purchase requirements (sold out check and money validation).
      * @param handedMoney 手渡しされた金額

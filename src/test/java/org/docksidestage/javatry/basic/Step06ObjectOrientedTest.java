@@ -27,6 +27,7 @@ import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
 import org.docksidestage.unit.PlainTestCase;
 
+// #1on1: UIデザインでオブジェクト指向に触れたことがある by えどさん // (2025/10/15)
 /**
  * The test of object-oriented. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
@@ -56,6 +57,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         int quantity = 10;
         Integer salesProceeds = null;
 
+        // TODO edo 間違い探しあと1個: その行だけ見て間違いってわかる間違いではない by jflute (2025/10/15)
+        // すでに見つけたものであれば、displayPrice = quantity; ってその行だけで間違いが表現されている。
         //
         // [buy one-day passport]
         //
@@ -90,6 +93,20 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         }
         alreadyIn = true;
 
+        // #1on1: こういったメソッドを呼び出し側の意識 (呼ばざるを得ない状況として) (2025/10/15)
+        // o int, int, int, ...みたいな引数のメソッドを呼び出すときは間違いが起きやすい
+        // o 呼び出し引数のところ改行するなりして、引数の順序を明示的に意識できるようにする by えどさん
+        //   (恒久的なものじゃなくても、一時的な確認でそういう風に見やすく変えるってのもアリ)
+        // o 書いた後に、5秒指差し確認するかどうか？
+        // o ただ、5秒指差し確認、毎回毎回やるか？だと、さすがに手間が掛かる。
+        // o 経験から、(一般的に)間違いやすいポイントを知ってる、もしくは、意識している。
+        //  → 危ないポイントでは、ガッと集中力を高める
+        // o あと、自分が間違えやすいポイントを知ってるか？ (人に寄って間違えポイントは変わるもの)
+        //  → 2回以上間違えたとき、「あっ、これが自分の間違えやすいポイントなんだ」って積み上げていく。
+        //  → (自分にとって)危ないポイントでは、ガッと集中力を高める
+        //
+        // → 技術スキルというよりは、開発スキル (ものづくりスキル)
+        //
         //
         // [final process]
         //
@@ -97,6 +114,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     }
 
     private void saveBuyingHistory(int quantity, int displayPrice, Integer salesProceeds, boolean alreadyIn) {
+        // TODO edo showYourTicket()のセミコロンのところでコンパイルエラーになってるので修正しましょう by jflute (2025/10/15)
         if (alreadyIn) {
             // simulation: only logging here (normally e.g. DB insert)
             showTicketBooth(quantity, salesProceeds);
@@ -186,6 +204,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     }
 
     private void doShowYourTicket(Ticket ticket) {
+        // TODO edo ログのタイトルが、alreadyIn のままになっている (潜在的な影響) by jflute (2025/10/15)
+        // #1on1: リファクタリング機能で修正するのはOK, ただその後、呼び出し先に潜在的な影響がないか確認する習慣を (2025/10/15)
         log("Your Ticket: displayPrice={}, alreadyIn={}", ticket.getDisplayPrice(), ticket.isCurrentIn());
     }
 

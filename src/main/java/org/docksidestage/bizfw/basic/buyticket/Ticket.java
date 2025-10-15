@@ -15,7 +15,7 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
-// TODO done edo author追加を by jflute (2025/10/03)
+// done edo author追加を by jflute (2025/10/03)
 /**
  * @author jflute
  * @author harukaedo
@@ -25,7 +25,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    // TODO edo [いいね] 横のすらすらコメントの「チケットの残り使用可能日数」がとても良い by jflute (2025/10/03)
+    // done edo [いいね] 横のすらすらコメントの「チケットの残り使用可能日数」がとても良い by jflute (2025/10/03)
     // #1on1: 厳密には、JavaDocで書いたほうが丁寧ではある。
     // publicとかだったらJavaDocは必須？ by えどさん → そういう考えでいた方がGoodです。(2025/10/03)
     // 省略しちゃうこともあるけど、publicはJavaDocの費用対効果が高い(privateに比べて)、と言える。
@@ -67,7 +67,7 @@ public class Ticket {
         currentIn = true;
     }
 
-    // TODO edo [いいね] outを作ったのGood by jflute (2025/10/03)
+    // done edo [いいね] outを作ったのGood by jflute (2025/10/03)
     public void doOutPark() {
         if (!currentIn) {
             throw new IllegalStateException("Not in park by this ticket: displayedPrice=" + displayPrice);
@@ -79,6 +79,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                             Night
     //                                                                             ======
+    // TODO edo notNight()くんを誰も呼び出していない (ロジックも含めて見直しを) by jflute (2025/10/15)
     public void notNight() {
         if (!nightOnly) {
             throw new IllegalStateException("Not night-only by this ticket: displayedPrice=" + displayPrice);
@@ -99,7 +100,7 @@ public class Ticket {
     // 呼び出し側を一覧化して、ニュアンスを変えても大丈夫かどうか？の確認をする。
     // alreadyIn という名前のままやっていくかどうか？
     // 「今入ってるかどうか？」を示すのに alreadyIn が適切かどうか？
-    // TODO done edo alreadyInの名前をもうちょい適切に変えてしまいましょう (リファクタリング) by jflute (2025/10/03)
+    // done edo alreadyInの名前をもうちょい適切に変えてしまいましょう (リファクタリング) by jflute (2025/10/03)
     //1007 memo: alreadyInをcurrentInに変えて現在入園しているかどうかを表現するようにした
     public boolean isCurrentIn() {
         return currentIn;
