@@ -204,9 +204,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     }
 
     private void doShowYourTicket(Ticket ticket) {
-        // TODO edo ログのタイトルが、alreadyIn のままになっている (潜在的な影響) by jflute (2025/10/15)
+        // TODO done edo ログのタイトルが、alreadyIn のままになっている (潜在的な影響) by jflute (2025/10/15)
         // #1on1: リファクタリング機能で修正するのはOK, ただその後、呼び出し先に潜在的な影響がないか確認する習慣を (2025/10/15)
-        log("Your Ticket: displayPrice={}, alreadyIn={}", ticket.getDisplayPrice(), ticket.isCurrentIn());
+        log("Your Ticket: displayPrice={}, currentIn={}", ticket.getDisplayPrice(), ticket.isCurrentIn());
     }
 
     // write your memo here:

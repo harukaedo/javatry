@@ -25,10 +25,17 @@ public class TicketBooth {
     //                                                                          Definition
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
-    // TODO edo nightOnlyだけ定数になってるけど、やるなら他のも定数にした方が統一感がある by jflute (2025/10/15)
-    // TODO edo quantityだと、MAX_QUANTITYとの対比で、在庫数だと思ってしまう... by jflute (2025/10/15)
+    // TODO done edo nightOnlyだけ定数になってるけど、やるなら他のも定数にした方が統一感がある by jflute (2025/10/15)
+    // 1023 修正メモ
+    // ONE_DAY_PURCHASE_QUANTITY, TWO_DAY_PURCHASE_QUANTITY, FOUR_DAY_PURCHASE_QUANTITY, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITYを定数にした
+    // TODO done edo quantityだと、MAX_QUANTITYとの対比で、在庫数だと思ってしまう... by jflute (2025/10/15)
     // ので、一回の購入で在庫を消費する数というニュアンスがあると良いかも。
-    private static final int NIGHT_ONLY_TWO_DAY_QUANTITY = 2;
+    // 1023 修正メモ
+    // HOGE_PURCHASE_QUANTITYを定数にした
+    private static final int ONE_DAY_PURCHASE_QUANTITY = 1;
+    private static final int TWO_DAY_PURCHASE_QUANTITY = 2;
+    private static final int FOUR_DAY_PURCHASE_QUANTITY = 4;
+    private static final int NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY = 2;
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
     private static final int TWO_DAY_PRICE = 13200; // when 2019/06/15
     private static final int FOUR_DAY_PRICE = 22400; 
@@ -51,10 +58,10 @@ public class TicketBooth {
     public TicketBooth() {
     }
 
-    // TODO edo タグコメントとJavaDoc整理整頓 by jflute (2025/10/15)
-    // ===================================================================================
-    //                                                                          Buy Ticket
-    //                                                                          ==========
+    // TODO done edo タグコメントとJavaDoc整理整頓 by jflute (2025/10/15)
+    // ===========================================================================================
+    //                                                                          Buy One-Day Ticket
+    //                                                                          ==================
     // you can rewrite comments for your own language by jflute
     // e.g. Japanese
     // /**
@@ -70,6 +77,12 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
+    public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
+        checkBuyTicket(handedMoney, ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
+        checkTicketQuantity(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
+        int change = calculateChange(handedMoney, ONE_DAY_PRICE);
+        return new TicketBuyResult(new Ticket(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY), change);
+    }
 
     // ============================================================================================
     //                                                                          Buy Two-day Ticket
@@ -91,6 +104,12 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
+    public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
+        validatePurchaseRequirements(handedMoney, TWO_DAY_PRICE, TWO_DAY_PURCHASE_QUANTITY);
+        ProcessPurchase(TWO_DAY_PRICE, TWO_DAY_PURCHASE_QUANTITY);
+        int change = calculateChange(handedMoney, TWO_DAY_PRICE);
+        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE, TWO_DAY_PURCHASE_QUANTITY), change);
+    }
 
     // ============================================================================================
     //                                                                          Buy Four-day Ticket
@@ -102,61 +121,29 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
+    public TicketBuyResult buyFourDayPassport(Integer handedMoney) {
+        validatePurchaseRequirements(handedMoney, FOUR_DAY_PRICE, FOUR_DAY_PURCHASE_QUANTITY);
+        ProcessPurchase(FOUR_DAY_PRICE, FOUR_DAY_PURCHASE_QUANTITY);
+        int change = calculateChange(handedMoney, FOUR_DAY_PRICE);
+        return new TicketBuyResult(new Ticket(FOUR_DAY_PRICE, FOUR_DAY_PURCHASE_QUANTITY), change);
+    }
+
     // ============================================================================================
     //                                                                          Buy Night-only Two-day Ticket
     //                                                                          ===================
-    // TODO edo @return, ここでも "など" ってしておいたほうがいいかなと by jflute (2025/10/15)
+    // TODO done edo @return, ここでも "など" ってしておいたほうがいいかなと by jflute (2025/10/15)
     /**
      * 2日間の夜だけ使えるパスポートを買う,お釣りを返すメソッド。パークゲスト用のメソッド。
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
-     * @return チケットとお釣りを返す
+     * @return チケットとお釣りなどを返す
      */
-    public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
-        checkBuyTicket(handedMoney, ONE_DAY_PRICE, 1);
-        checkTicketQuantity(ONE_DAY_PRICE, 1);
-        int change = handedMoney - ONE_DAY_PRICE;
-        return new TicketBuyResult(new Ticket(ONE_DAY_PRICE, 1), change);
-    }
-
-    // done edo 元のコードを直しちゃってもOKです。(OneDayの統一を) by jflute (2025/10/03)
-    // public int buyOneDayPassportChange(Integer handedMoney) {
-    //     if (quantity <= 0) {
-    //         throw new TicketSoldOutException("Sold out");
-    //     }
-    //     if (handedMoney < ONE_DAY_PRICE) {
-    //         throw new TicketShortMoneyException("Short money: " + handedMoney);
-    //     }
-    //     --quantity;
-    //     int change = handedMoney - ONE_DAY_PRICE;
-    //     if (salesProceeds != null) { // second or more purchase
-    //         salesProceeds = salesProceeds + ONE_DAY_PRICE;
-    //     } else { // first purchase
-    //         salesProceeds = ONE_DAY_PRICE;
-    //     }
-    //     return change;
-    // }
-
-    public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
-        checkBuyTicket(handedMoney, TWO_DAY_PRICE, 2);
-        checkTicketQuantity(TWO_DAY_PRICE, 2);
-        int change = handedMoney - TWO_DAY_PRICE;
-        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE, 2), change);
-    }
-
-    public TicketBuyResult buyFourDayPassport(Integer handedMoney) {
-        checkBuyTicket(handedMoney, FOUR_DAY_PRICE, 4);
-        checkTicketQuantity(FOUR_DAY_PRICE, 4);
-        int change = handedMoney - FOUR_DAY_PRICE;
-        return new TicketBuyResult(new Ticket(FOUR_DAY_PRICE, 4), change);
-    }
-
     public TicketBuyResult buyNightOnlyTwoDayPassport(Integer handedMoney) {
-        checkBuyTicket(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_QUANTITY);
-        checkTicketQuantity(NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_QUANTITY);
-        int change = handedMoney - NIGHT_ONLY_TWO_DAY_PRICE;
-        return new TicketBuyResult(new Ticket(NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_QUANTITY), change);
+        validatePurchaseRequirements(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY);
+        ProcessPurchase(NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY);
+        int change = calculateChange(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE);
+        return new TicketBuyResult(new Ticket(NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY), change);
     }
 
     // ===================================================================================
@@ -166,13 +153,17 @@ public class TicketBooth {
     // #1on1: もうちょいまとめらるかも？まとめ過ぎもよくないかも？changeはまとめてもいいかも？ by えどさん
     // 他は引数だけで解決してるのに、changeだけそこで計算しちゃってるのが気持ち悪い by えどさん
     // calculateChange()に出した場合の計算処理の仕様変更のシミュレーションしてみた by くぼ
-    // TODO edo せっかくなので、calculateChange() も作ってみましょう by jflute (2025/10/15)
+    // TODO done　edo せっかくなので、calculateChange() も作ってみましょう by jflute (2025/10/15)
+    // 1023 修正メモ
+    // calculateChange() メソッドを作成し、お釣り金額を計算する処理を共通化した。
     // #1on1: checkという動詞のメソッド、checkは期待する結果がちょっと曖昧になる。
     // e.g. assertという動詞のメソッドであれば、assert that S+V で正しいもの(期待する状態)を書く
     //  assertQuantityExists(ticketQuantity);
     //  assertEnoughMoney(handedMoney, ticketPrice);
-    // TODO edo ということで、checkという言葉以外の動詞を使ってみましょう by jflute (2025/10/15)
-    // TODO edo 一方で、JavaDocのニュアンスとメソッド名のニュアンスを統一しても良いのかなと by jflute (2025/10/15)
+    // TODO done edo ということで、checkという言葉以外の動詞を使ってみましょう by jflute (2025/10/15)
+    // TODO done edo 一方で、JavaDocのニュアンスとメソッド名のニュアンスを統一しても良いのかなと by jflute (2025/10/15)
+    // 1023 修正メモ
+    // validatePurchaseRequirements() メソッドとProcessPurchase() メソッドにそれぞれ名称を変更し、JavaDocのニュアンスとメソッド名のニュアンスを統一した。
     /**
      * Validate purchase requirements (sold out check and money validation).
      * @param handedMoney 手渡しされた金額
@@ -181,7 +172,7 @@ public class TicketBooth {
      * @throws TicketSoldOutException チケットが売り切れている場合
      * @throws TicketShortMoneyException 買うのに金額が足りなかった場合
      */
-    private void checkBuyTicket(Integer handedMoney, int ticketPrice, int ticketQuantity) {
+    private void validatePurchaseRequirements(Integer handedMoney, int ticketPrice, int ticketQuantity) {
         if (quantity < ticketQuantity) {
             throw new TicketSoldOutException("Sold out");
         }
@@ -195,7 +186,7 @@ public class TicketBooth {
      * @param ticketPrice チケットの価格
      * @param quantityUsed 使用したチケットの枚数
      */
-    private void checkTicketQuantity(int ticketPrice, int quantityUsed) {
+    private void ProcessPurchase(int ticketPrice, int quantityUsed) {
         quantity -= quantityUsed;
         if (salesProceeds != null) { // second or more purchase
             salesProceeds = salesProceeds + ticketPrice;
@@ -212,7 +203,20 @@ public class TicketBooth {
     //buyOneDayPassportとbuyTwoDayPassportでcheckBuyTicketとcheckTicketQuantityメソッドを呼び出し
     //再利用してrefactorした。
 
-    
+    /**
+     * Calculate the change.
+     * @param handedMoney 手渡しされた金額
+     * @param ticketPrice チケットの価格
+     * @return お釣り金額
+     */
+    private int calculateChange(int handedMoney, int ticketPrice) {
+        if (handedMoney > ticketPrice * quantity) {
+            return handedMoney - (ticketPrice * quantity);
+        } else {
+            return 0;
+        }
+    }
+
     // ===================================================================================
     //                                                                           Exception
     //                                                                           =========
