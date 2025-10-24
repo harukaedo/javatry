@@ -114,12 +114,13 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     }
 
     private void saveBuyingHistory(int quantity, int displayPrice, Integer salesProceeds, boolean alreadyIn) {
-        // TODO edo showYourTicket()のセミコロンのところでコンパイルエラーになってるので修正しましょう by jflute (2025/10/15)
+        // TODO done edo showYourTicket()のセミコロンのところでコンパイルエラーになってるので修正しましょう by jflute (2025/10/15)
         if (alreadyIn) {
             // simulation: only logging here (normally e.g. DB insert)
             showTicketBooth(quantity, salesProceeds);
             showYourTicket(displayPrice, alreadyIn);
             //1010 修正: showTicketBoothとshowYourTicketdで定義されている引数とsaveBuyingHistory内で定義されている引数が異なっていたため修正
+        }
     }
 
     private void showTicketBooth(int quantity, Integer salesProceeds) {

@@ -78,8 +78,8 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
     public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
-        checkBuyTicket(handedMoney, ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
-        checkTicketQuantity(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
+        validatePurchaseRequirements(handedMoney, ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
+        ProcessPurchase(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
         int change = calculateChange(handedMoney, ONE_DAY_PRICE);
         return new TicketBuyResult(new Ticket(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY), change);
     }
