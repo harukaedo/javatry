@@ -210,11 +210,7 @@ public class TicketBooth {
      * @return お釣り金額
      */
     private int calculateChange(int handedMoney, int ticketPrice) {
-        if (handedMoney > ticketPrice * quantity) {
-            return handedMoney - (ticketPrice * quantity);
-        } else {
-            return 0;
-        }
+        return handedMoney - ticketPrice;
     }
 
     // ===================================================================================
