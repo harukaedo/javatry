@@ -299,13 +299,22 @@ public class Step05ClassTest extends PlainTestCase {
 
     // uncomment when you implement this exercise
     private void showTicketIfNeeds(Ticket ticket) {
-       // TODO edo nightも紛れてしまう by jflute (2025/10/15)
+       // TODO done edo nightも紛れてしまう by jflute (2025/10/15)
        // #1on1: 当初は問題なかったロジックが、新しいものが追加されることで影響が出るパターン。 (2025/10/15)
        // 一行も直していないところで突然不具合が出るというやっかいなケース。
+       //1024 修正メモ
+       //TicketクラスにisNightOnlyTicketメソッドを生成し、夜専用チケットかどうかを確認するようにした
+       //showTicketIfNeedsメソッドで残り日数だけで確認するのではなく、チケットの種別を判定するようにした
        if (ticket.getRestDays() == 2) { // write determination for two-day passport
-           log("two-day passport");
+           if (ticket.isNightOnlyTicket()) {
+               log("night-only two-day passport");
+           } else {
+               log("two-day passport");
+           }
        } else if(ticket.getRestDays() == 1){
            log("one-day passport");
+       } else if(ticket.getRestDays() == 4){
+           log("four-day passport");
        } else {
            log("other");
        }
@@ -344,9 +353,20 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(7400);
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
-        log(nightOnlyTwoDayPassport.getRestDays()); // should be same as night-only two-day passport
-        // TODO edo doInPark()する動作確認をしてみましょう by jflute (2025/10/15)
+        log(nightOnlyTwoDayPassport.isNightOnlyTicket());   // 夜専用チケットかどうかの確認 trueになる
+        log(nightOnlyTwoDayPassport.getRestDays()); // 残りチケット日数が2日になる
+
+        nightOnlyTwoDayPassport.doInPark();
+        log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn()); // trueになる
+        
+        nightOnlyTwoDayPassport.doOutPark();
+        log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn()); // falseになる
+        log("Rest days: " + nightOnlyTwoDayPassport.getRestDays()); // 2日分から1日使用
     }
+        // TODO done edo doInPark()する動作確認をしてみましょう by jflute (2025/10/15)
+        //1024 修正メモ
+        //TicketクラスにisNightOnlyTicketメソッドを生成し、夜専用チケットかどうかを確認するようにした
+        //doInPark()とdoOutPark()の動作確認をして、残りチケット日数が1日になることを確認した
 
     //1010 自分なりの回答
     //TicketBooth.javaにbuyNightOnlyTwoDayPassportメソッドを生成し

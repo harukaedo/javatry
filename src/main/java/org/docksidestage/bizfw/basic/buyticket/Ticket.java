@@ -33,8 +33,7 @@ public class Ticket {
     private final int displayPrice; // written on ticket, park guest can watch this
     private boolean currentIn; // 現在入園しているかどうか
     private int restDays; // チケットの残り使用可能日数
-    private boolean nightOnly; // 午前中は使えないようになっているか
-
+    private boolean nightOnly; // 夜だけ使用可能なチケット
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
@@ -80,10 +79,12 @@ public class Ticket {
     //                                                                             Night
     //                                                                             ======
     // TODO edo notNight()くんを誰も呼び出していない (ロジックも含めて見直しを) by jflute (2025/10/15)
-    public void notNight() {
-        if (!nightOnly) {
-            throw new IllegalStateException("Not night-only by this ticket: displayedPrice=" + displayPrice);
-        }
+    /**
+     * 夜だけ使えるチケットかどうかをチェックする
+     * @return 夜専用チケットの場合true、そうでなければfalse
+     */
+    public boolean isNightOnlyTicket() {
+        return nightOnly;
     }
 
     // ===================================================================================
