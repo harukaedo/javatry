@@ -75,15 +75,16 @@ public class Ticket {
         restDays--; // 使用日数を減らす
     }
 
-    // ===================================================================================
-    //                                                                             Night
-    //                                                                             ======
-    // TODO edo notNight()くんを誰も呼び出していない (ロジックも含めて見直しを) by jflute (2025/10/15)
+
+    // ====================================================================================
+    //                                                                               Night
+    //                                                                              =======
     /**
-     * 夜だけ使えるチケットかどうかをチェックする
+     * TODO done edo notNight()くんを誰も呼び出していない (ロジックも含めて見直しを) by jflute (2025/10/15)
+     * 夜だけ使えるチケットかどうかを判定する
      * @return 夜専用チケットの場合true、そうでなければfalse
      */
-    public boolean isNightOnlyTicket() {
+    public boolean isNightOnly() {
         return nightOnly;
     }
 
@@ -109,9 +110,5 @@ public class Ticket {
 
     public int getRestDays() {
         return restDays;
-    }
-
-    public boolean isNightOnly() {
-        return nightOnly;
     }
 }

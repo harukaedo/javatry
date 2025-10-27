@@ -306,7 +306,7 @@ public class Step05ClassTest extends PlainTestCase {
        //TicketクラスにisNightOnlyTicketメソッドを生成し、夜専用チケットかどうかを確認するようにした
        //showTicketIfNeedsメソッドで残り日数だけで確認するのではなく、チケットの種別を判定するようにした
        if (ticket.getRestDays() == 2) { // write determination for two-day passport
-           if (ticket.isNightOnlyTicket()) {
+           if (ticket.isNightOnly()) {
                log("night-only two-day passport");
            } else {
                log("two-day passport");
@@ -353,7 +353,7 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(7400);
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
-        log(nightOnlyTwoDayPassport.isNightOnlyTicket());   // 夜専用チケットかどうかの確認 trueになる
+        log(nightOnlyTwoDayPassport.isNightOnly());   // 夜専用チケットかどうかの確認 trueになる
         log(nightOnlyTwoDayPassport.getRestDays()); // 残りチケット日数が2日になる
 
         nightOnlyTwoDayPassport.doInPark();

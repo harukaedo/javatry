@@ -79,7 +79,7 @@ public class TicketBooth {
      */
     public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
         validatePurchaseRequirements(handedMoney, ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
-        ProcessPurchase(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
+        processPurchase(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
         int change = calculateChange(handedMoney, ONE_DAY_PRICE);
         return new TicketBuyResult(new Ticket(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY), change);
     }
@@ -106,7 +106,7 @@ public class TicketBooth {
      */
     public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
         validatePurchaseRequirements(handedMoney, TWO_DAY_PRICE, TWO_DAY_PURCHASE_QUANTITY);
-        ProcessPurchase(TWO_DAY_PRICE, TWO_DAY_PURCHASE_QUANTITY);
+        processPurchase(TWO_DAY_PRICE, TWO_DAY_PURCHASE_QUANTITY);
         int change = calculateChange(handedMoney, TWO_DAY_PRICE);
         return new TicketBuyResult(new Ticket(TWO_DAY_PRICE, TWO_DAY_PURCHASE_QUANTITY), change);
     }
@@ -123,7 +123,7 @@ public class TicketBooth {
      */
     public TicketBuyResult buyFourDayPassport(Integer handedMoney) {
         validatePurchaseRequirements(handedMoney, FOUR_DAY_PRICE, FOUR_DAY_PURCHASE_QUANTITY);
-        ProcessPurchase(FOUR_DAY_PRICE, FOUR_DAY_PURCHASE_QUANTITY);
+        processPurchase(FOUR_DAY_PRICE, FOUR_DAY_PURCHASE_QUANTITY);
         int change = calculateChange(handedMoney, FOUR_DAY_PRICE);
         return new TicketBuyResult(new Ticket(FOUR_DAY_PRICE, FOUR_DAY_PURCHASE_QUANTITY), change);
     }
@@ -141,9 +141,9 @@ public class TicketBooth {
      */
     public TicketBuyResult buyNightOnlyTwoDayPassport(Integer handedMoney) {
         validatePurchaseRequirements(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY);
-        ProcessPurchase(NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY);
+        processPurchase(NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY);
         int change = calculateChange(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE);
-        return new TicketBuyResult(new Ticket(NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY), change);
+        return new TicketBuyResult(new Ticket(NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY, true), change);
     }
 
     // ===================================================================================
@@ -186,7 +186,7 @@ public class TicketBooth {
      * @param ticketPrice チケットの価格
      * @param quantityUsed 使用したチケットの枚数
      */
-    private void ProcessPurchase(int ticketPrice, int quantityUsed) {
+    private void processPurchase(int ticketPrice, int quantityUsed) {
         quantity -= quantityUsed;
         if (salesProceeds != null) { // second or more purchase
             salesProceeds = salesProceeds + ticketPrice;
@@ -194,14 +194,6 @@ public class TicketBooth {
             salesProceeds = ticketPrice;
         }
     }
-
-    //1007 自分なりの回答
-    //checkBuyTicketとcheckTicketQuantityメソッドを作成し、チケットが買えるかどうかのチェックとチケットが購入されたら枚数を減らす処理を
-    //共通化した。
-    //checkBuyTicketメソッドでチケットが買えるかどうかのチェックを行う。
-    //checkTicketQuantityメソッドでチケットが購入されたら枚数を減らす処理を行う。
-    //buyOneDayPassportとbuyTwoDayPassportでcheckBuyTicketとcheckTicketQuantityメソッドを呼び出し
-    //再利用してrefactorした。
 
     /**
      * Calculate the change.
