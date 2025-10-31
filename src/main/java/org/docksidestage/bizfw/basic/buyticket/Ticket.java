@@ -80,7 +80,7 @@ public class Ticket {
     //                                                                               Night
     //                                                                              =======
     /**
-     * TODO done edo notNight()くんを誰も呼び出していない (ロジックも含めて見直しを) by jflute (2025/10/15)
+     * done edo notNight()くんを誰も呼び出していない (ロジックも含めて見直しを) by jflute (2025/10/15)
      * 夜だけ使えるチケットかどうかを判定する
      * @return 夜専用チケットの場合true、そうでなければfalse
      */

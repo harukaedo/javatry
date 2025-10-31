@@ -177,7 +177,7 @@ public class Step05ClassTest extends PlainTestCase {
         //uncomment after making the method
         TicketBooth booth = new TicketBooth();
         int money = 14000;
-        // TODO done edo コンパイルエラーが出ています。 by jflute (2025/10/03)
+        // done edo コンパイルエラーが出ています。 by jflute (2025/10/03)
         // リファクタリングなど修正を入れたら、全体がおかしくなってないか？確認する習慣を
         //1007 memo: コンパイルエラーを修正しました
         TicketBuyResult change = booth.buyTwoDayPassport(money);
@@ -199,7 +199,7 @@ public class Step05ClassTest extends PlainTestCase {
     // // 別に、プルリクレビューの前にレビューしてもらっていいんだからね
     // https://jflute.hatenadiary.jp/entry/20170630/reviewbefore
 
-    // TODO done edo こちらのエクササイズもどこかでやってみてください。再利用メソッドを作る by jflute (2025/10/03)
+    // done edo こちらのエクササイズもどこかでやってみてください。再利用メソッドを作る by jflute (2025/10/03)
     /**
      * Recycle duplicate logics between one-day and two-day by e.g. private method in class. (And confirm result of both before and after) <br>
      * (OneDayとTwoDayで冗長なロジックがあったら、クラス内のprivateメソッドなどで再利用しましょう (修正前と修正後の実行結果を確認))
@@ -299,12 +299,16 @@ public class Step05ClassTest extends PlainTestCase {
 
     // uncomment when you implement this exercise
     private void showTicketIfNeeds(Ticket ticket) {
-       // TODO done edo nightも紛れてしまう by jflute (2025/10/15)
+       // done edo nightも紛れてしまう by jflute (2025/10/15)
        // #1on1: 当初は問題なかったロジックが、新しいものが追加されることで影響が出るパターン。 (2025/10/15)
        // 一行も直していないところで突然不具合が出るというやっかいなケース。
        //1024 修正メモ
        //TicketクラスにisNightOnlyTicketメソッドを生成し、夜専用チケットかどうかを確認するようにした
        //showTicketIfNeedsメソッドで残り日数だけで確認するのではなく、チケットの種別を判定するようにした
+        // TODO edo 修行++: 昼間のみの2Dayのチケットが新しく追加されたら... by jflute (2025/10/31)
+        // (hint: チケットの種類の業務の柔軟性を考えるとキリがないので、ピンポイントでTwoDayPassportを識別できるように)
+        // (hint2: 種別の判定、何かしら列挙されて固定数を持つものの判定。チケットに限らない。なんでも種別の判定...)
+        // #1on1: 一週間以内の話をした (2025/10/31)
        if (ticket.getRestDays() == 2) { // write determination for two-day passport
            if (ticket.isNightOnly()) {
                log("night-only two-day passport");
@@ -362,8 +366,9 @@ public class Step05ClassTest extends PlainTestCase {
         nightOnlyTwoDayPassport.doOutPark();
         log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn()); // falseになる
         log("Rest days: " + nightOnlyTwoDayPassport.getRestDays()); // 2日分から1日使用
+        
     }
-        // TODO done edo doInPark()する動作確認をしてみましょう by jflute (2025/10/15)
+        // done edo doInPark()する動作確認をしてみましょう by jflute (2025/10/15)
         //1024 修正メモ
         //TicketクラスにisNightOnlyTicketメソッドを生成し、夜専用チケットかどうかを確認するようにした
         //doInPark()とdoOutPark()の動作確認をして、残りチケット日数が1日になることを確認した
@@ -373,9 +378,11 @@ public class Step05ClassTest extends PlainTestCase {
     //2日分チケット7400円がhandmoneyよりも安いかどうかを見てチケットを売る場合は２枚ずつ減らしていく。
     //handmoneyが7400円よりも多い場合、お釣りとして返す処理を行う。
 
+    // TODO edo "夜しか使えないようにしましょう" をやってみましょう by jflute (2025/10/31)
     
     //1010 メモ
     //以下はFB後取り組みます
+    // TODO jflute 1on1ここまでやった (2025/10/31)
     
     // ===================================================================================
     //                                                                         Bonus Stage

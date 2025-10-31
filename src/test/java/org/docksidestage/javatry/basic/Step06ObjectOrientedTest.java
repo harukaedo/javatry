@@ -114,7 +114,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     }
 
     private void saveBuyingHistory(int quantity, int displayPrice, Integer salesProceeds, boolean alreadyIn) {
-        // TODO done edo showYourTicket()のセミコロンのところでコンパイルエラーになってるので修正しましょう by jflute (2025/10/15)
+        // done edo showYourTicket()のセミコロンのところでコンパイルエラーになってるので修正しましょう by jflute (2025/10/15)
         if (alreadyIn) {
             // simulation: only logging here (normally e.g. DB insert)
             showTicketBooth(quantity, salesProceeds);
@@ -205,7 +205,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     }
 
     private void doShowYourTicket(Ticket ticket) {
-        // TODO done edo ログのタイトルが、alreadyIn のままになっている (潜在的な影響) by jflute (2025/10/15)
+        // done edo ログのタイトルが、alreadyIn のままになっている (潜在的な影響) by jflute (2025/10/15)
         // #1on1: リファクタリング機能で修正するのはOK, ただその後、呼び出し先に潜在的な影響がないか確認する習慣を (2025/10/15)
         log("Your Ticket: displayPrice={}, currentIn={}", ticket.getDisplayPrice(), ticket.isCurrentIn());
     }

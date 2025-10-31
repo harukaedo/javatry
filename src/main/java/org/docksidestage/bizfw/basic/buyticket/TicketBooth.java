@@ -25,13 +25,14 @@ public class TicketBooth {
     //                                                                          Definition
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
-    // TODO done edo nightOnlyだけ定数になってるけど、やるなら他のも定数にした方が統一感がある by jflute (2025/10/15)
+    // done edo nightOnlyだけ定数になってるけど、やるなら他のも定数にした方が統一感がある by jflute (2025/10/15)
     // 1023 修正メモ
     // ONE_DAY_PURCHASE_QUANTITY, TWO_DAY_PURCHASE_QUANTITY, FOUR_DAY_PURCHASE_QUANTITY, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITYを定数にした
-    // TODO done edo quantityだと、MAX_QUANTITYとの対比で、在庫数だと思ってしまう... by jflute (2025/10/15)
+    // done edo quantityだと、MAX_QUANTITYとの対比で、在庫数だと思ってしまう... by jflute (2025/10/15)
     // ので、一回の購入で在庫を消費する数というニュアンスがあると良いかも。
     // 1023 修正メモ
     // HOGE_PURCHASE_QUANTITYを定数にした
+    // TODO edo せめて、QuantityとPriceを区分けするために空行を空けてみましょう by jflute (2025/10/31)
     private static final int ONE_DAY_PURCHASE_QUANTITY = 1;
     private static final int TWO_DAY_PURCHASE_QUANTITY = 2;
     private static final int FOUR_DAY_PURCHASE_QUANTITY = 4;
@@ -58,10 +59,14 @@ public class TicketBooth {
     public TicketBooth() {
     }
 
-    // TODO done edo タグコメントとJavaDoc整理整頓 by jflute (2025/10/15)
+    // #1on1: コピー修正するとき、一括置換 or 手修正だけど検索で修正漏れを発見する話 (2025/10/31)
+    // TODO edo buyメソッド、定数の利用が何回もありすぎるので、定数を変数にしてコピー時の修正箇所を減らしてみましょう by jflute (2025/10/31)
+
+    // done edo タグコメントとJavaDoc整理整頓 by jflute (2025/10/15)
+    // TODO edo タグコメント整理整頓２ (e.g. Buy Ticket, Buy Logic) by jflute (2025/10/31)
     // ===========================================================================================
-    //                                                                          Buy One-Day Ticket
-    //                                                                          ==================
+    //                                                                          Buy one-day Ticket
+    //                                                                          ==========
     // you can rewrite comments for your own language by jflute
     // e.g. Japanese
     // /**
@@ -83,7 +88,7 @@ public class TicketBooth {
         int change = calculateChange(handedMoney, ONE_DAY_PRICE);
         return new TicketBuyResult(new Ticket(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY), change);
     }
-
+    
     // ============================================================================================
     //                                                                          Buy Two-day Ticket
     //                                                                          ===================
@@ -131,7 +136,7 @@ public class TicketBooth {
     // ============================================================================================
     //                                                                          Buy Night-only Two-day Ticket
     //                                                                          ===================
-    // TODO done edo @return, ここでも "など" ってしておいたほうがいいかなと by jflute (2025/10/15)
+    // done edo @return, ここでも "など" ってしておいたほうがいいかなと by jflute (2025/10/15)
     /**
      * 2日間の夜だけ使えるパスポートを買う,お釣りを返すメソッド。パークゲスト用のメソッド。
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -147,21 +152,21 @@ public class TicketBooth {
     }
 
     // ===================================================================================
-    //                                                                      Private Methods
-    //                                                                      ===============
+    //                                                                     Private Methods
+    //                                                                     ===============
     // done edo [いいね] JavaDoc, 再利用のprivateは費用対効果高いのでGood (引数も多いのでありがたい) by jflute (2025/10/15)
     // #1on1: もうちょいまとめらるかも？まとめ過ぎもよくないかも？changeはまとめてもいいかも？ by えどさん
     // 他は引数だけで解決してるのに、changeだけそこで計算しちゃってるのが気持ち悪い by えどさん
     // calculateChange()に出した場合の計算処理の仕様変更のシミュレーションしてみた by くぼ
-    // TODO done　edo せっかくなので、calculateChange() も作ってみましょう by jflute (2025/10/15)
+    // done　edo せっかくなので、calculateChange() も作ってみましょう by jflute (2025/10/15)
     // 1023 修正メモ
     // calculateChange() メソッドを作成し、お釣り金額を計算する処理を共通化した。
     // #1on1: checkという動詞のメソッド、checkは期待する結果がちょっと曖昧になる。
     // e.g. assertという動詞のメソッドであれば、assert that S+V で正しいもの(期待する状態)を書く
     //  assertQuantityExists(ticketQuantity);
     //  assertEnoughMoney(handedMoney, ticketPrice);
-    // TODO done edo ということで、checkという言葉以外の動詞を使ってみましょう by jflute (2025/10/15)
-    // TODO done edo 一方で、JavaDocのニュアンスとメソッド名のニュアンスを統一しても良いのかなと by jflute (2025/10/15)
+    // done edo ということで、checkという言葉以外の動詞を使ってみましょう by jflute (2025/10/15)
+    // done edo 一方で、JavaDocのニュアンスとメソッド名のニュアンスを統一しても良いのかなと by jflute (2025/10/15)
     // 1023 修正メモ
     // validatePurchaseRequirements() メソッドとProcessPurchase() メソッドにそれぞれ名称を変更し、JavaDocのニュアンスとメソッド名のニュアンスを統一した。
     /**
@@ -204,6 +209,12 @@ public class TicketBooth {
     private int calculateChange(int handedMoney, int ticketPrice) {
         return handedMoney - ticketPrice;
     }
+
+    // #1on1: privateメソッドの種類
+    //
+    // o 切り出して見通しをよくするためだけのprivateメソッド
+    // o 特定業務の中だけで再利用するためのprivateメソッド
+    // o クラス全体で再利用するためのprivateメソッド
 
     // ===================================================================================
     //                                                                           Exception
