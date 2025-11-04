@@ -309,19 +309,24 @@ public class Step05ClassTest extends PlainTestCase {
         // (hint: チケットの種類の業務の柔軟性を考えるとキリがないので、ピンポイントでTwoDayPassportを識別できるように)
         // (hint2: 種別の判定、何かしら列挙されて固定数を持つものの判定。チケットに限らない。なんでも種別の判定...)
         // #1on1: 一週間以内の話をした (2025/10/31)
+        //1104　インデントがおかしくて赤くなってしまっていたので少し修正
        if (ticket.getRestDays() == 2) { // write determination for two-day passport
-           if (ticket.isNightOnly()) {
-               log("night-only two-day passport");
-           } else {
-               log("two-day passport");
-           }
-       } else if(ticket.getRestDays() == 1){
-           log("one-day passport");
-       } else if(ticket.getRestDays() == 4){
-           log("four-day passport");
-       } else {
-           log("other");
-       }
+        if (ticket.isDayTimeOnly()) {
+            log("day-time only two-day passport");
+        } else {
+            if (ticket.isNightOnly()) {
+                log("night-only two-day passport");
+            } else {
+                log("two-day passport");
+            }
+        }
+        } else if(ticket.getRestDays() == 1){
+            log("one-day passport");
+        } else if(ticket.getRestDays() == 4){
+            log("four-day passport");
+        } else {
+            log("other");
+        }
     }
 
     //1007 自分なりの回答
@@ -353,20 +358,23 @@ public class Step05ClassTest extends PlainTestCase {
      * (NightOnlyTwoDayPassport (金額は7400) のチケットも買えるようにしましょう。夜しか使えないようにしましょう)
      */
     public void test_class_moreFix_wonder_night() {
-        // your confirmation code here
+        // your confirmation code her
         TicketBooth booth = new TicketBooth();
         TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(7400);
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
-        log(nightOnlyTwoDayPassport.isNightOnly());   // 夜専用チケットかどうかの確認 trueになる
-        log(nightOnlyTwoDayPassport.getRestDays()); // 残りチケット日数が2日になる
+        if (nightOnlyTwoDayPassport.isNightOnly()) {
+            log("this ticket is night-only two-day passport");
+            log(nightOnlyTwoDayPassport.isNightOnly());   // 夜専用チケットかどうかの確認 trueになる
+            log(nightOnlyTwoDayPassport.getRestDays()); // 残りチケット日数が2日になる
 
-        nightOnlyTwoDayPassport.doInPark();
-        log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn()); // trueになる
-        
-        nightOnlyTwoDayPassport.doOutPark();
-        log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn()); // falseになる
-        log("Rest days: " + nightOnlyTwoDayPassport.getRestDays()); // 2日分から1日使用
-        
+            nightOnlyTwoDayPassport.doInPark();
+            log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn());
+            nightOnlyTwoDayPassport.doOutPark();
+            log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn());
+            log("Rest days: " + nightOnlyTwoDayPassport.getRestDays()); // 2日分から1日使用   
+        } else {
+            log("This ticket can only be used at night. ");
+        }
     }
         // done edo doInPark()する動作確認をしてみましょう by jflute (2025/10/15)
         //1024 修正メモ
@@ -379,10 +387,13 @@ public class Step05ClassTest extends PlainTestCase {
     //handmoneyが7400円よりも多い場合、お釣りとして返す処理を行う。
 
     // TODO edo "夜しか使えないようにしましょう" をやってみましょう by jflute (2025/10/31)
-    
-    //1010 メモ
+
+    //1104 修正メモ
+    //if文で夜専用チケットかどうかを確認するようにし、夜専用チケットの場合はdoInPark()とdoOutPark()の動作確認をして、残りチケット日数が1日になることを確認した
+    //夜のチケットでない場合は、logで"This ticket can only be used at night. "と表示されるようにした
+
     //以下はFB後取り組みます
-    // TODO jflute 1on1ここまでやった (2025/10/31)
+    // TODO done jflute 1on1ここまでやった (2025/10/31)
     
     // ===================================================================================
     //                                                                         Bonus Stage

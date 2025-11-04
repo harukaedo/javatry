@@ -57,7 +57,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         int quantity = 10;
         Integer salesProceeds = null;
 
-        // TODO edo 間違い探しあと1個: その行だけ見て間違いってわかる間違いではない by jflute (2025/10/15)
+        // TODO done edo 間違い探しあと1個: その行だけ見て間違いってわかる間違いではない by jflute (2025/10/15)
+        //1104 修正メモ：--quantityがお金過不足チェック前に発生していて、handmoneyが不足の場合でも減ってしまって
+        //ロジックがおかしくなっていたので順番を修正。
         // すでに見つけたものであれば、displayPrice = quantity; ってその行だけで間違いが表現されている。
         //
         // [buy one-day passport]
@@ -67,10 +69,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         if (quantity <= 0) {
             throw new IllegalStateException("Sold out");
         }
-        --quantity;
         if (handedMoney < oneDayPrice) {
             throw new IllegalStateException("Short money: handedMoney=" + handedMoney);
         }
+        --quantity; //1104 修正: お金のチェックを先に行ってから在庫を減らす
         salesProceeds = oneDayPrice; // 1010 修正：チケットの枚数になっていたため、チケットの価格に変更
 
         //

@@ -323,7 +323,7 @@ public class Step02IfForTest extends PlainTestCase {
     //     List<String> stageList = prepareStageList();
     //     // #1on1: mutableなオブジェクトを連れてきて回避 (2025/09/19)
     //     // e.g. StringBuilder sb = new StringBuilder();
-    //     // TODO edo 修行#: boolean[] found 無しで実現してみましょう by jflute (2025/09/19)
+    //     // TODO done edo 修行#: boolean[] found 無しで実現してみましょう by jflute (2025/09/19)
     //     // found変数を削除、そして、これ以上変数は追加しない。(マッチ棒問題みたいな)
     //     final String[] sea = {null};
     //     final boolean[] found = {false};

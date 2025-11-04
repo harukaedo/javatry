@@ -32,15 +32,21 @@ public class TicketBooth {
     // ので、一回の購入で在庫を消費する数というニュアンスがあると良いかも。
     // 1023 修正メモ
     // HOGE_PURCHASE_QUANTITYを定数にした
-    // TODO edo せめて、QuantityとPriceを区分けするために空行を空けてみましょう by jflute (2025/10/31)
+    // TODO done edo せめて、QuantityとPriceを区分けするために空行を空けてみましょう by jflute (2025/10/31)
+    //1104修正メモ QuantityとPriceを区分けするために空行を空け,コメントを追加して見やすくした
+    //Quantityを定義
     private static final int ONE_DAY_PURCHASE_QUANTITY = 1;
     private static final int TWO_DAY_PURCHASE_QUANTITY = 2;
     private static final int FOUR_DAY_PURCHASE_QUANTITY = 4;
     private static final int NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY = 2;
+    private static final int DAY_TIME_ONLY_TWO_DAY_PURCHASE_QUANTITY = 2;
+
+    //Priceを定義
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
     private static final int TWO_DAY_PRICE = 13200; // when 2019/06/15
     private static final int FOUR_DAY_PRICE = 22400; 
     private static final int NIGHT_ONLY_TWO_DAY_PRICE = 7400;
+    private static final int DAY_TIME_ONLY_TWO_DAY_PRICE = 7400;
 
     // ===================================================================================
     //                                                                           Attribute
@@ -60,13 +66,17 @@ public class TicketBooth {
     }
 
     // #1on1: コピー修正するとき、一括置換 or 手修正だけど検索で修正漏れを発見する話 (2025/10/31)
-    // TODO edo buyメソッド、定数の利用が何回もありすぎるので、定数を変数にしてコピー時の修正箇所を減らしてみましょう by jflute (2025/10/31)
+    // TODO done edo buyメソッド、定数の利用が何回もありすぎるので、定数を変数にしてコピー時の修正箇所を減らしてみましょう by jflute (2025/10/31)
+    //1104 修正メモ それぞれのquantityとticket priceをint型のquantityとpriceと定義し、修正な必要な箇所を減らした。
 
     // done edo タグコメントとJavaDoc整理整頓 by jflute (2025/10/15)
-    // TODO edo タグコメント整理整頓２ (e.g. Buy Ticket, Buy Logic) by jflute (2025/10/31)
+    // TODO done edo タグコメント整理整頓２ (e.g. Buy Ticket, Buy Logic) by jflute (2025/10/31)
+    // 1104 修正メモ OnedayやTwodayなどを大見出しで分けるのではなく、全てをBuy Ticketとして囲って
+    // 日付はそれぞれコメントでわかるようにした。private　メソッドに関しても後から要件が増えた際いに追加しやすいように
+    // Buy Ticket Logicとし、小見出しを追加して管理しやすいようにした
     // ===========================================================================================
-    //                                                                          Buy one-day Ticket
-    //                                                                          ==========
+    //                                                                                  Buy Ticket
+    //                                                                          ==================
     // you can rewrite comments for your own language by jflute
     // e.g. Japanese
     // /**
@@ -83,15 +93,14 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
     public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
-        validatePurchaseRequirements(handedMoney, ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
-        processPurchase(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY);
-        int change = calculateChange(handedMoney, ONE_DAY_PRICE);
-        return new TicketBuyResult(new Ticket(ONE_DAY_PRICE, ONE_DAY_PURCHASE_QUANTITY), change);
+        int quantity = ONE_DAY_PURCHASE_QUANTITY;
+        int price = ONE_DAY_PRICE;
+        validatePurchaseRequirements(handedMoney, price, quantity);
+        processPurchase(price, quantity);
+        int change = calculateChange(handedMoney, price);
+        return new TicketBuyResult(new Ticket(price, quantity), change);
     }
     
-    // ============================================================================================
-    //                                                                          Buy Two-day Ticket
-    //                                                                          ===================
     // you can rewrite comments for your own language by jflute
     // e.g. Japanese
     // /**
@@ -110,15 +119,14 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
     public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
-        validatePurchaseRequirements(handedMoney, TWO_DAY_PRICE, TWO_DAY_PURCHASE_QUANTITY);
-        processPurchase(TWO_DAY_PRICE, TWO_DAY_PURCHASE_QUANTITY);
-        int change = calculateChange(handedMoney, TWO_DAY_PRICE);
-        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE, TWO_DAY_PURCHASE_QUANTITY), change);
+        int quantity = TWO_DAY_PURCHASE_QUANTITY;
+        int price = TWO_DAY_PRICE;
+        validatePurchaseRequirements(handedMoney, price, quantity);
+        processPurchase(price, quantity);
+        int change = calculateChange(handedMoney, price);
+        return new TicketBuyResult(new Ticket(price, quantity), change);
     }
 
-    // ============================================================================================
-    //                                                                          Buy Four-day Ticket
-    //                                                                          ===================
     /**
      * 4Dayパスポートを買う,お釣りを返すメソッド。パークゲスト用のメソッド。
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -127,15 +135,14 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
     public TicketBuyResult buyFourDayPassport(Integer handedMoney) {
-        validatePurchaseRequirements(handedMoney, FOUR_DAY_PRICE, FOUR_DAY_PURCHASE_QUANTITY);
-        processPurchase(FOUR_DAY_PRICE, FOUR_DAY_PURCHASE_QUANTITY);
-        int change = calculateChange(handedMoney, FOUR_DAY_PRICE);
-        return new TicketBuyResult(new Ticket(FOUR_DAY_PRICE, FOUR_DAY_PURCHASE_QUANTITY), change);
+        int quantity = FOUR_DAY_PURCHASE_QUANTITY;
+        int price = FOUR_DAY_PRICE;
+        validatePurchaseRequirements(handedMoney, price, quantity);
+        processPurchase(price, quantity);
+        int change = calculateChange(handedMoney, price);
+        return new TicketBuyResult(new Ticket(price, quantity), change);
     }
 
-    // ============================================================================================
-    //                                                                          Buy Night-only Two-day Ticket
-    //                                                                          ===================
     // done edo @return, ここでも "など" ってしておいたほうがいいかなと by jflute (2025/10/15)
     /**
      * 2日間の夜だけ使えるパスポートを買う,お釣りを返すメソッド。パークゲスト用のメソッド。
@@ -145,15 +152,37 @@ public class TicketBooth {
      * @return チケットとお釣りなどを返す
      */
     public TicketBuyResult buyNightOnlyTwoDayPassport(Integer handedMoney) {
-        validatePurchaseRequirements(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY);
-        processPurchase(NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY);
-        int change = calculateChange(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE);
-        return new TicketBuyResult(new Ticket(NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY, true), change);
+        int quantity = NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY;
+        int price = NIGHT_ONLY_TWO_DAY_PRICE;
+        validatePurchaseRequirements(handedMoney, price, quantity);
+        processPurchase(price, quantity);
+        int change = calculateChange(handedMoney, price);
+        return new TicketBuyResult(new Ticket(price, quantity, true, false), change);
+    }
+
+    //1104　お昼のみ使えるチケット購入のメソッドも修行問題により追加しました
+    /**
+     * 2日間のお昼だけ使えるパスポートを買う,お釣りを返すメソッド。パークゲスト用のメソッド。
+     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @throws TicketSoldOutException When ticket in booth is sold out.
+     * @throws TicketShortMoneyException When the specified money is short for purchase.
+     * @return チケットとお釣りなどを返す
+     */
+    public TicketBuyResult buyDayTimeOnlyTwoDayPassport(Integer handedMoney) {
+        int quantity = DAY_TIME_ONLY_TWO_DAY_PURCHASE_QUANTITY;
+        int price = DAY_TIME_ONLY_TWO_DAY_PRICE;
+        validatePurchaseRequirements(handedMoney, price, quantity);
+        processPurchase(price, quantity);
+        int change = calculateChange(handedMoney, price);
+        return new TicketBuyResult(new Ticket(price, quantity, false, true), change);
     }
 
     // ===================================================================================
     //                                                                     Private Methods
     //                                                                     ===============
+    // --------------------------------------------------------------
+    //                                               Buy Ticket Logic
+    //                          -------------------------------------
     // done edo [いいね] JavaDoc, 再利用のprivateは費用対効果高いのでGood (引数も多いのでありがたい) by jflute (2025/10/15)
     // #1on1: もうちょいまとめらるかも？まとめ過ぎもよくないかも？changeはまとめてもいいかも？ by えどさん
     // 他は引数だけで解決してるのに、changeだけそこで計算しちゃってるのが気持ち悪い by えどさん

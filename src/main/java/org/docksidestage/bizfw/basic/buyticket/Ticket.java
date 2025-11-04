@@ -34,6 +34,7 @@ public class Ticket {
     private boolean currentIn; // 現在入園しているかどうか
     private int restDays; // チケットの残り使用可能日数
     private boolean nightOnly; // 夜だけ使用可能なチケット
+    private boolean dayTimeOnly; // お昼だけ使用可能なチケット
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
@@ -47,10 +48,11 @@ public class Ticket {
         this.restDays = days;
     }
 
-    public Ticket(int displayPrice, int days, boolean nightOnly) {
+    public Ticket(int displayPrice, int days, boolean nightOnly, boolean dayTimeOnly) {
         this.displayPrice = displayPrice;
         this.restDays = days;
         this.nightOnly = nightOnly;
+        this.dayTimeOnly = dayTimeOnly;
     }
 
     // ===================================================================================
@@ -76,9 +78,12 @@ public class Ticket {
     }
 
 
-    // ====================================================================================
-    //                                                                               Night
-    //                                                                              =======
+    // ========================================================================================
+    //                                                                               Time logic
+    //                                                                              ===========
+    //-----------------------------------------
+    //                                    Night
+    //----------------------------------------
     /**
      * done edo notNight()くんを誰も呼び出していない (ロジックも含めて見直しを) by jflute (2025/10/15)
      * 夜だけ使えるチケットかどうかを判定する
@@ -86,6 +91,17 @@ public class Ticket {
      */
     public boolean isNightOnly() {
         return nightOnly;
+    }
+
+    //-----------------------------------------
+    //                                    Day Time
+    //----------------------------------------
+    /**
+     * お昼だけ使えるチケットかどうかを判定する
+     * @return お昼専用チケットの場合true、そうでなければfalse
+     */
+    public boolean isDayTimeOnly() {
+        return dayTimeOnly;
     }
 
     // ===================================================================================
