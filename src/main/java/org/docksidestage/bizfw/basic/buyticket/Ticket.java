@@ -39,13 +39,11 @@ public class Ticket {
     //                                                                         Constructor
     //                                                                         ===========
     public Ticket(int displayPrice) {
-        this.displayPrice = displayPrice;
-        this.restDays = 1;
+        this(displayPrice, 1);
     }
 
     public Ticket(int displayPrice, int days) {
-        this.displayPrice = displayPrice;
-        this.restDays = days;
+        this(displayPrice, days, false, false);
     }
 
     public Ticket(int displayPrice, int days, boolean nightOnly, boolean dayTimeOnly) {
@@ -53,6 +51,39 @@ public class Ticket {
         this.restDays = days;
         this.nightOnly = nightOnly;
         this.dayTimeOnly = dayTimeOnly;
+    }
+
+    // ===================================================================================
+    //                                                                  Ticket type method
+    //                                                                         ===========
+    /**
+     * 通常チケット（昼夜問わず使える）
+     * @param displayPrice チケットの表示価格
+     * @param days 使用可能日数
+     * @return 生成されたチケット
+     */
+    public static Ticket creatNormalTicket(int displayPrice, int days) {
+        return new Ticket(displayPrice, days, false, false);
+    }
+
+    /**
+     * 夜専用チケット
+     * @param displayPrice チケットの表示価格
+     * @param days 使用可能日数
+     * @return 生成されたチケット
+     */
+    public static Ticket creatNightOnlyTicket(int displayPrice, int days) {
+        return new Ticket(displayPrice, days, true, false);
+    }
+
+    /**
+     * 昼専用チケット
+     * @param displayPrice チケットの表示価格
+     * @param days 使用可能日数
+     * @return 生成されたチケット
+     */
+    public static Ticket creatDayTimeOnlyTicket(int displayPrice, int days) {
+        return new Ticket(displayPrice, days, false, true);
     }
 
     // ===================================================================================

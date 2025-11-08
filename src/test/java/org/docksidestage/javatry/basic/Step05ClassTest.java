@@ -305,7 +305,7 @@ public class Step05ClassTest extends PlainTestCase {
        //1024 修正メモ
        //TicketクラスにisNightOnlyTicketメソッドを生成し、夜専用チケットかどうかを確認するようにした
        //showTicketIfNeedsメソッドで残り日数だけで確認するのではなく、チケットの種別を判定するようにした
-        // TODO edo 修行++: 昼間のみの2Dayのチケットが新しく追加されたら... by jflute (2025/10/31)
+        // TODO done edo 修行++: 昼間のみの2Dayのチケットが新しく追加されたら... by jflute (2025/10/31)
         // (hint: チケットの種類の業務の柔軟性を考えるとキリがないので、ピンポイントでTwoDayPassportを識別できるように)
         // (hint2: 種別の判定、何かしら列挙されて固定数を持つものの判定。チケットに限らない。なんでも種別の判定...)
         // #1on1: 一週間以内の話をした (2025/10/31)
@@ -386,7 +386,7 @@ public class Step05ClassTest extends PlainTestCase {
     //2日分チケット7400円がhandmoneyよりも安いかどうかを見てチケットを売る場合は２枚ずつ減らしていく。
     //handmoneyが7400円よりも多い場合、お釣りとして返す処理を行う。
 
-    // TODO edo "夜しか使えないようにしましょう" をやってみましょう by jflute (2025/10/31)
+    // TODO done edo "夜しか使えないようにしましょう" をやってみましょう by jflute (2025/10/31)
 
     //1104 修正メモ
     //if文で夜専用チケットかどうかを確認するようにし、夜専用チケットの場合はdoInPark()とdoOutPark()の動作確認をして、残りチケット日数が1日になることを確認した
@@ -402,8 +402,35 @@ public class Step05ClassTest extends PlainTestCase {
      * Refactor if you want to fix (e.g. is it well-balanced name of method and variable?). <br>
      * (その他、気になるところがあったらリファクタリングしてみましょう (例えば、バランスの良いメソッド名や変数名になっていますか？))
      */
+    //1107 修正メモ
+    //①TicketクラスにcreatNormalTicket、creatNightOnlyTicket、creatDayTimeOnlyTicketメソッドを生成し、
+    //通常チケット、夜専用チケット、昼専用チケットを生成するようにした
+    //TicketBooth.javaでそれぞれチケットを購入するメソッドにチケットの種別を渡すようにすることで、
+    //new Ticket(price, quantity, true, false) のように昼と夜どちらがtrueでfalseがわかりにくくなっているものを
+    //Ticket.createNightOnlyTicket(price, quantity)とすることで明示的にしわかりやすくした
+    //②Ticket.javaのコンストラクタをthisを使って呼び出すようにし、コンストラクタの中身を簡潔にした
     public void test_class_moreFix_yourRefactoring() {
         // your confirmation code here
+        // ①Ticket type methodが正しく動作することを確認
+        // ②TicketBoothでチケットを購入するメソッドにチケットの種別を渡すことで、正しい種別で作成されることを確認
+
+        // 1. Ticket type methodの確認
+        Ticket normal = Ticket.creatNormalTicket(7400, 1);
+        log(normal.isNightOnly(), normal.isDayTimeOnly()); // 両方falseになる
+        
+        Ticket nightOnly = Ticket.creatNightOnlyTicket(7400, 2);
+        log(nightOnly.isNightOnly(), nightOnly.isDayTimeOnly()); // isNightOnlyがtrueになりisDayTimeOnlyがfalseになる
+        
+        Ticket dayTimeOnly = Ticket.creatDayTimeOnlyTicket(7400, 2);
+        log(dayTimeOnly.isNightOnly(), dayTimeOnly.isDayTimeOnly()); // isNightOnlyがfalseになりisDayTimeOnlyがtrueになる
+        
+        // 2. TicketBoothから購入したチケットが正しい種別で作成されることを確認
+        TicketBooth booth = new TicketBooth();
+        Ticket oneDay = booth.buyOneDayPassport(10000).getTicket();
+        log(oneDay.isNightOnly(), oneDay.isDayTimeOnly()); // 両方falseになる
+        
+        Ticket nightOnlyFromBooth = booth.buyNightOnlyTwoDayPassport(8000).getTicket();
+        log(nightOnlyFromBooth.isNightOnly(), nightOnlyFromBooth.isDayTimeOnly()); // isNightOnlyがtrueになりisDayTimeOnlyがfalseになる
     }
 
     /**

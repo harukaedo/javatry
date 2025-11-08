@@ -98,7 +98,7 @@ public class TicketBooth {
         validatePurchaseRequirements(handedMoney, price, quantity);
         processPurchase(price, quantity);
         int change = calculateChange(handedMoney, price);
-        return new TicketBuyResult(new Ticket(price, quantity), change);
+        return new TicketBuyResult(Ticket.creatNormalTicket(price, quantity), change);
     }
     
     // you can rewrite comments for your own language by jflute
@@ -124,7 +124,7 @@ public class TicketBooth {
         validatePurchaseRequirements(handedMoney, price, quantity);
         processPurchase(price, quantity);
         int change = calculateChange(handedMoney, price);
-        return new TicketBuyResult(new Ticket(price, quantity), change);
+        return new TicketBuyResult(Ticket.creatNormalTicket(price, quantity), change);
     }
 
     /**
@@ -140,7 +140,7 @@ public class TicketBooth {
         validatePurchaseRequirements(handedMoney, price, quantity);
         processPurchase(price, quantity);
         int change = calculateChange(handedMoney, price);
-        return new TicketBuyResult(new Ticket(price, quantity), change);
+        return new TicketBuyResult(Ticket.creatNormalTicket(price, quantity), change);
     }
 
     // done edo @return, ここでも "など" ってしておいたほうがいいかなと by jflute (2025/10/15)
@@ -157,7 +157,7 @@ public class TicketBooth {
         validatePurchaseRequirements(handedMoney, price, quantity);
         processPurchase(price, quantity);
         int change = calculateChange(handedMoney, price);
-        return new TicketBuyResult(new Ticket(price, quantity, true, false), change);
+        return new TicketBuyResult(Ticket.creatNightOnlyTicket(price, quantity), change);
     }
 
     //1104　お昼のみ使えるチケット購入のメソッドも修行問題により追加しました
@@ -174,7 +174,7 @@ public class TicketBooth {
         validatePurchaseRequirements(handedMoney, price, quantity);
         processPurchase(price, quantity);
         int change = calculateChange(handedMoney, price);
-        return new TicketBuyResult(new Ticket(price, quantity, false, true), change);
+        return new TicketBuyResult(Ticket.creatDayTimeOnlyTicket(price, quantity), change);
     }
 
     // ===================================================================================
