@@ -438,7 +438,21 @@ public class Step05ClassTest extends PlainTestCase {
      * (Ticketクラスのpublicなクラス/コンストラクター/メソッドに、気の利いたJavaDocコメントを本気で書いてみましょう)
      */
     public void test_class_moreFix_yourSuperJavaDoc() {
-        // your confirmation code here
+        // your confirmation code here     
+        // コンストラクタとTicket type method
+        Ticket oneDay = new Ticket(7400);
+        log(oneDay.getDisplayPrice(), oneDay.getRestDays()); // 7400, 1
+        
+        Ticket normal = Ticket.creatNormalTicket(7400, 1);
+        Ticket night = Ticket.creatNightOnlyTicket(7400, 2);
+        log(normal.isNightOnly(), night.isNightOnly()); // false, true
+        
+        // doInPark()とdoOutPark()
+        Ticket ticket = new Ticket(13200, 2);
+        ticket.doInPark();
+        log(ticket.isCurrentIn(), ticket.getRestDays()); // true, 2
+        ticket.doOutPark();
+        log(ticket.isCurrentIn(), ticket.getRestDays()); // false, 1
     }
 
     // ===================================================================================

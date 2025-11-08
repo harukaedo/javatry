@@ -17,6 +17,9 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 // done edo author追加を by jflute (2025/10/03)
 /**
+ * テーマパークの入園チケットを表すクラス。
+ * チケットの価格、残り使用可能日数、入園状態などを管理する。
+ *
  * @author jflute
  * @author harukaedo
  */
@@ -38,14 +41,30 @@ public class Ticket {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
+    /**
+     * 1日券を生成する。
+     * @param displayPrice チケットに表示される価格
+     */
     public Ticket(int displayPrice) {
         this(displayPrice, 1);
     }
 
+    /**
+     * 複数日券を生成する。
+     * @param displayPrice チケットに表示される価格
+     * @param days 使用可能日数
+     */
     public Ticket(int displayPrice, int days) {
         this(displayPrice, days, false, false);
     }
 
+    /**
+     * 時間帯制限付き複数日券を生成する。
+     * @param displayPrice チケットに表示される価格
+     * @param days 使用可能日数
+     * @param nightOnly 夜間のみ使用可能な場合true
+     * @param dayTimeOnly 昼間のみ使用可能な場合true
+     */
     public Ticket(int displayPrice, int days, boolean nightOnly, boolean dayTimeOnly) {
         this.displayPrice = displayPrice;
         this.restDays = days;
@@ -89,6 +108,12 @@ public class Ticket {
     // ===================================================================================
     //                                                                             In Park
     //                                                                             =======
+    /**
+     * パークに入園する。
+     * 残り使用可能日数がない場合や、既に入園済みの場合は例外をスローする。
+     *
+     * @throws IllegalStateException 残り使用可能日数がない、または既に入園済みの場合
+     */
     public void doInPark() {
         if (restDays <= 0) {
             throw new IllegalStateException("No remaining days: displayedPrice=" + displayPrice);
@@ -100,6 +125,13 @@ public class Ticket {
     }
 
     // done edo [いいね] outを作ったのGood by jflute (2025/10/03)
+    /**
+     * パークから退園する。
+     * 退園時に残り使用可能日数を1日減らす。
+     * 入園していない状態で呼び出すと例外をスローする。
+     *
+     * @throws IllegalStateException 入園していない場合
+     */
     public void doOutPark() {
         if (!currentIn) {
             throw new IllegalStateException("Not in park by this ticket: displayedPrice=" + displayPrice);
@@ -107,7 +139,6 @@ public class Ticket {
         currentIn = false;
         restDays--; // 使用日数を減らす
     }
-
 
     // ========================================================================================
     //                                                                               Time logic
@@ -138,6 +169,9 @@ public class Ticket {
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
+    /**
+     * @return 表示価格
+     */
     public int getDisplayPrice() {
         return displayPrice;
     }
@@ -151,10 +185,16 @@ public class Ticket {
     // 「今入ってるかどうか？」を示すのに alreadyIn が適切かどうか？
     // done edo alreadyInの名前をもうちょい適切に変えてしまいましょう (リファクタリング) by jflute (2025/10/03)
     //1007 memo: alreadyInをcurrentInに変えて現在入園しているかどうかを表現するようにした
+    /**
+     * @return 入園中の場合true、退園済みまたは未入園の場合false
+     */
     public boolean isCurrentIn() {
         return currentIn;
     }
 
+    /**
+     * @return 残り使用可能日数
+     */
     public int getRestDays() {
         return restDays;
     }
