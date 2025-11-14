@@ -32,7 +32,7 @@ public class TicketBooth {
     // ので、一回の購入で在庫を消費する数というニュアンスがあると良いかも。
     // 1023 修正メモ
     // HOGE_PURCHASE_QUANTITYを定数にした
-    // TODO done edo せめて、QuantityとPriceを区分けするために空行を空けてみましょう by jflute (2025/10/31)
+    // done edo せめて、QuantityとPriceを区分けするために空行を空けてみましょう by jflute (2025/10/31)
     //1104修正メモ QuantityとPriceを区分けするために空行を空け,コメントを追加して見やすくした
     //Quantityを定義
     private static final int ONE_DAY_PURCHASE_QUANTITY = 1;
@@ -66,11 +66,11 @@ public class TicketBooth {
     }
 
     // #1on1: コピー修正するとき、一括置換 or 手修正だけど検索で修正漏れを発見する話 (2025/10/31)
-    // TODO done edo buyメソッド、定数の利用が何回もありすぎるので、定数を変数にしてコピー時の修正箇所を減らしてみましょう by jflute (2025/10/31)
+    // done edo buyメソッド、定数の利用が何回もありすぎるので、定数を変数にしてコピー時の修正箇所を減らしてみましょう by jflute (2025/10/31)
     //1104 修正メモ それぞれのquantityとticket priceをint型のquantityとpriceと定義し、修正な必要な箇所を減らした。
 
     // done edo タグコメントとJavaDoc整理整頓 by jflute (2025/10/15)
-    // TODO done edo タグコメント整理整頓２ (e.g. Buy Ticket, Buy Logic) by jflute (2025/10/31)
+    // done edo タグコメント整理整頓２ (e.g. Buy Ticket, Buy Logic) by jflute (2025/10/31)
     // 1104 修正メモ OnedayやTwodayなどを大見出しで分けるのではなく、全てをBuy Ticketとして囲って
     // 日付はそれぞれコメントでわかるようにした。private　メソッドに関しても後から要件が増えた際いに追加しやすいように
     // Buy Ticket Logicとし、小見出しを追加して管理しやすいようにした
@@ -93,6 +93,10 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
     public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
+        // TODO edo 定数を変数で一箇所にしたことで、後半の4行にチケット種別依存がなくなった (汎用的になった) by jflute (2025/11/14)
+        // なので、OneDayもTwoDayもFourDayも...(一部ちょっと違うところあるかもだけど)、ある程度再利用できるかなと。
+        // 現状は、個別の処理は再利用できている。流れが再利用できていない。
+        // (何か追加処理を挟むってなった場合に、それぞれ追加するってなるのであれば流れが冗長してると言える)
         int quantity = ONE_DAY_PURCHASE_QUANTITY;
         int price = ONE_DAY_PRICE;
         validatePurchaseRequirements(handedMoney, price, quantity);

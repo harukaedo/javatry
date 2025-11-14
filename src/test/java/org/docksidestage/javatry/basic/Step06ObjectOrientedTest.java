@@ -57,7 +57,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         int quantity = 10;
         Integer salesProceeds = null;
 
-        // TODO done edo 間違い探しあと1個: その行だけ見て間違いってわかる間違いではない by jflute (2025/10/15)
+        // done edo 間違い探しあと1個: その行だけ見て間違いってわかる間違いではない by jflute (2025/10/15)
         //1104 修正メモ：--quantityがお金過不足チェック前に発生していて、handmoneyが不足の場合でも減ってしまって
         //ロジックがおかしくなっていたので順番を修正。
         // すでに見つけたものであれば、displayPrice = quantity; ってその行だけで間違いが表現されている。
@@ -212,6 +212,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         log("Your Ticket: displayPrice={}, currentIn={}", ticket.getDisplayPrice(), ticket.isCurrentIn());
     }
 
+    // TODO jflute 今度1on1にオブジェクトとは？ (2025/11/14)
     // write your memo here:
     // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
     // what is object?

@@ -323,8 +323,9 @@ public class Step02IfForTest extends PlainTestCase {
     //     List<String> stageList = prepareStageList();
     //     // #1on1: mutableなオブジェクトを連れてきて回避 (2025/09/19)
     //     // e.g. StringBuilder sb = new StringBuilder();
-    //     // TODO done edo 修行#: boolean[] found 無しで実現してみましょう by jflute (2025/09/19)
+    //     // done edo 修行#: boolean[] found 無しで実現してみましょう by jflute (2025/09/19)
     //     // found変数を削除、そして、これ以上変数は追加しない。(マッチ棒問題みたいな)
+    //     // 次の下のとぅどぅにつながる...
     //     final String[] sea = {null};
     //     final boolean[] found = {false};
 
@@ -352,16 +353,32 @@ public class Step02IfForTest extends PlainTestCase {
     //log(sb.toString());でsbの内容をログに出力する。
     public void challenge_refactor_foreach_to_forEach_answer() {
         List<String> stageList = prepareStageList();
+
         StringBuilder sb = new StringBuilder();
-        
+        boolean[] found = {false};
+
         stageList.forEach(stage -> {
+            if (found[0]) {
+                return;
+            }
             if (stage.startsWith("br")) {
                 return;
             }
             sb.setLength(0);
             sb.append(stage);
+            // done edo ループの最後でreturnしても動きは変わらない by jflute (2025/11/14)
+            //if (stage.contains("ga")) {
+            //    return;
+            //}
+            // TODO えどさん 修行++++++: ふたたび、booleanなしチャレンジ by jflute (2025/11/14)
+            // StringBuilderを使ったやり方はGood, setLength(0)でappendすることで置き換えを表現している。
+            // なので、後は「最初のgaが来たら、それ以降はずっと空ループしたい」をどうにかしたいところ。
+            // これが、前の実装で boolean[] found を使って空ループしててそれはそれでOK。
+            // 一方で、チャレンジとして、boolean[]変数なしで実現してみましょう。
+            // hint1: StringBuilderだけでboolean[]の役割ができる。判定を代替わりできるはず。
+            // (StringBuilderのメソッドは調べる必要はあるけど、StringBuilderで何ができればいいのか？を考える)
             if (stage.contains("ga")) {
-                return;
+                found[0] = true;
             }
         });
         log(sb.toString());

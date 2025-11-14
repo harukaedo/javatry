@@ -305,21 +305,23 @@ public class Step05ClassTest extends PlainTestCase {
        //1024 修正メモ
        //TicketクラスにisNightOnlyTicketメソッドを生成し、夜専用チケットかどうかを確認するようにした
        //showTicketIfNeedsメソッドで残り日数だけで確認するのではなく、チケットの種別を判定するようにした
-        // TODO done edo 修行++: 昼間のみの2Dayのチケットが新しく追加されたら... by jflute (2025/10/31)
+        // done edo 修行++: 昼間のみの2Dayのチケットが新しく追加されたら... by jflute (2025/10/31)
         // (hint: チケットの種類の業務の柔軟性を考えるとキリがないので、ピンポイントでTwoDayPassportを識別できるように)
         // (hint2: 種別の判定、何かしら列挙されて固定数を持つものの判定。チケットに限らない。なんでも種別の判定...)
         // #1on1: 一週間以内の話をした (2025/10/31)
+        // TODO edo 修行#: 今の実装はこれはこれで頑張ってくださいましたが...どんな種別が来ても正確に判定できるように by jflute (2025/11/14)
+        // hint1: 識別子 e.g. えどはるか(かに座)　えどはるか(みずがめ座) => キリがない (ので、マイナンバー!?)
         //1104　インデントがおかしくて赤くなってしまっていたので少し修正
        if (ticket.getRestDays() == 2) { // write determination for two-day passport
-        if (ticket.isDayTimeOnly()) {
-            log("day-time only two-day passport");
-        } else {
-            if (ticket.isNightOnly()) {
-                log("night-only two-day passport");
-            } else {
-                log("two-day passport");
-            }
-        }
+           if (ticket.isDayTimeOnly()) {
+               log("day-time only two-day passport");
+           } else {
+               if (ticket.isNightOnly()) {
+                   log("night-only two-day passport");
+               } else {
+                   log("two-day passport");
+               }
+           }
         } else if(ticket.getRestDays() == 1){
             log("one-day passport");
         } else if(ticket.getRestDays() == 4){
@@ -362,7 +364,9 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(7400);
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
-        if (nightOnlyTwoDayPassport.isNightOnly()) {
+        // TODO edo 修行++: このifだと今夜かは問わないので、テストの実行が昼でもうまくいっちゃう by jflute (2025/11/14)
+        // UnitTestを昼に実行したら落ちるようにしたい。
+        if (nightOnlyTwoDayPassport.isNightOnly()) { // チケット種別がnightOnly系だったら (今夜かは問わない)
             log("this ticket is night-only two-day passport");
             log(nightOnlyTwoDayPassport.isNightOnly());   // 夜専用チケットかどうかの確認 trueになる
             log(nightOnlyTwoDayPassport.getRestDays()); // 残りチケット日数が2日になる
@@ -386,14 +390,14 @@ public class Step05ClassTest extends PlainTestCase {
     //2日分チケット7400円がhandmoneyよりも安いかどうかを見てチケットを売る場合は２枚ずつ減らしていく。
     //handmoneyが7400円よりも多い場合、お釣りとして返す処理を行う。
 
-    // TODO done edo "夜しか使えないようにしましょう" をやってみましょう by jflute (2025/10/31)
+    // done edo "夜しか使えないようにしましょう" をやってみましょう by jflute (2025/10/31)
 
     //1104 修正メモ
     //if文で夜専用チケットかどうかを確認するようにし、夜専用チケットの場合はdoInPark()とdoOutPark()の動作確認をして、残りチケット日数が1日になることを確認した
     //夜のチケットでない場合は、logで"This ticket can only be used at night. "と表示されるようにした
 
     //以下はFB後取り組みます
-    // TODO done jflute 1on1ここまでやった (2025/10/31)
+    // done jflute 1on1ここまでやった (2025/10/31)
     
     // ===================================================================================
     //                                                                         Bonus Stage
