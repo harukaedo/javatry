@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import java.util.function.BiFunction;
+
 /**
  * @author jflute
  * @author harukaedo
@@ -93,16 +95,7 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
     public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
-        // TODO edo 定数を変数で一箇所にしたことで、後半の4行にチケット種別依存がなくなった (汎用的になった) by jflute (2025/11/14)
-        // なので、OneDayもTwoDayもFourDayも...(一部ちょっと違うところあるかもだけど)、ある程度再利用できるかなと。
-        // 現状は、個別の処理は再利用できている。流れが再利用できていない。
-        // (何か追加処理を挟むってなった場合に、それぞれ追加するってなるのであれば流れが冗長してると言える)
-        int quantity = ONE_DAY_PURCHASE_QUANTITY;
-        int price = ONE_DAY_PRICE;
-        validatePurchaseRequirements(handedMoney, price, quantity);
-        processPurchase(price, quantity);
-        int change = calculateChange(handedMoney, price);
-        return new TicketBuyResult(Ticket.creatNormalTicket(price, quantity), change);
+        return buyTicket(handedMoney, ONE_DAY_PURCHASE_QUANTITY, ONE_DAY_PRICE, Ticket::creatNormalTicket);
     }
     
     // you can rewrite comments for your own language by jflute
@@ -123,12 +116,7 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
     public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
-        int quantity = TWO_DAY_PURCHASE_QUANTITY;
-        int price = TWO_DAY_PRICE;
-        validatePurchaseRequirements(handedMoney, price, quantity);
-        processPurchase(price, quantity);
-        int change = calculateChange(handedMoney, price);
-        return new TicketBuyResult(Ticket.creatNormalTicket(price, quantity), change);
+        return buyTicket(handedMoney, TWO_DAY_PURCHASE_QUANTITY, TWO_DAY_PRICE, Ticket::creatNormalTicket);
     }
 
     /**
@@ -139,12 +127,7 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
     public TicketBuyResult buyFourDayPassport(Integer handedMoney) {
-        int quantity = FOUR_DAY_PURCHASE_QUANTITY;
-        int price = FOUR_DAY_PRICE;
-        validatePurchaseRequirements(handedMoney, price, quantity);
-        processPurchase(price, quantity);
-        int change = calculateChange(handedMoney, price);
-        return new TicketBuyResult(Ticket.creatNormalTicket(price, quantity), change);
+        return buyTicket(handedMoney, FOUR_DAY_PURCHASE_QUANTITY, FOUR_DAY_PRICE, Ticket::creatNormalTicket);
     }
 
     // done edo @return, ここでも "など" ってしておいたほうがいいかなと by jflute (2025/10/15)
@@ -156,12 +139,7 @@ public class TicketBooth {
      * @return チケットとお釣りなどを返す
      */
     public TicketBuyResult buyNightOnlyTwoDayPassport(Integer handedMoney) {
-        int quantity = NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY;
-        int price = NIGHT_ONLY_TWO_DAY_PRICE;
-        validatePurchaseRequirements(handedMoney, price, quantity);
-        processPurchase(price, quantity);
-        int change = calculateChange(handedMoney, price);
-        return new TicketBuyResult(Ticket.creatNightOnlyTicket(price, quantity), change);
+        return buyTicket(handedMoney, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY, NIGHT_ONLY_TWO_DAY_PRICE, Ticket::creatNightOnlyTicket);
     }
 
     //1104　お昼のみ使えるチケット購入のメソッドも修行問題により追加しました
@@ -173,12 +151,7 @@ public class TicketBooth {
      * @return チケットとお釣りなどを返す
      */
     public TicketBuyResult buyDayTimeOnlyTwoDayPassport(Integer handedMoney) {
-        int quantity = DAY_TIME_ONLY_TWO_DAY_PURCHASE_QUANTITY;
-        int price = DAY_TIME_ONLY_TWO_DAY_PRICE;
-        validatePurchaseRequirements(handedMoney, price, quantity);
-        processPurchase(price, quantity);
-        int change = calculateChange(handedMoney, price);
-        return new TicketBuyResult(Ticket.creatDayTimeOnlyTicket(price, quantity), change);
+        return buyTicket(handedMoney, DAY_TIME_ONLY_TWO_DAY_PURCHASE_QUANTITY, DAY_TIME_ONLY_TWO_DAY_PRICE, Ticket::creatDayTimeOnlyTicket);
     }
 
     // ===================================================================================
@@ -249,6 +222,26 @@ public class TicketBooth {
     // o 特定業務の中だけで再利用するためのprivateメソッド
     // o クラス全体で再利用するためのprivateメソッド
 
+    //1117refactorメモ BiFunctionを使ってチケット作成関数を渡すようにした
+    //Ticket::creatNormalTicket, Ticket::creatNightOnlyTicket, Ticket::creatDayTimeOnlyTicketを渡すようにした
+    //ticketの購入を一気に共通化した
+    /**
+     * Buy ticket with common purchase flow.
+     * @param handedMoney 手渡しされた金額
+     * @param purchaseQuantity 購入するチケットの枚数
+     * @param ticketPrice チケットの価格
+     * @param ticketCreator チケット作成関数（価格と枚数を受け取り、Ticketを返す）
+     * @return 購入されたチケットとお釣り金額
+     */
+    private TicketBuyResult buyTicket(Integer handedMoney, int purchaseQuantity, int ticketPrice, 
+            BiFunction<Integer, Integer, Ticket> ticketCreator) {
+        validatePurchaseRequirements(handedMoney, ticketPrice, purchaseQuantity);
+        processPurchase(ticketPrice, purchaseQuantity);
+        int change = calculateChange(handedMoney, ticketPrice);
+        Ticket ticket = ticketCreator.apply(ticketPrice, purchaseQuantity);
+        return new TicketBuyResult(ticket, change);
+    }
+    
     // ===================================================================================
     //                                                                           Exception
     //                                                                           =========
