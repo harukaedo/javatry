@@ -38,6 +38,7 @@ public class Ticket {
     private int restDays; // チケットの残り使用可能日数
     private boolean nightOnly; // 夜だけ使用可能なチケット
     private boolean dayTimeOnly; // お昼だけ使用可能なチケット
+    private final TicketType ticketType; // チケットの種別識別子
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
@@ -46,7 +47,7 @@ public class Ticket {
      * @param displayPrice チケットに表示される価格
      */
     public Ticket(int displayPrice) {
-        this(displayPrice, 1);
+        this(displayPrice, 1, false, false, TicketType.ONE_DAY);
     }
 
     /**
@@ -55,7 +56,7 @@ public class Ticket {
      * @param days 使用可能日数
      */
     public Ticket(int displayPrice, int days) {
-        this(displayPrice, days, false, false);
+        this(displayPrice, days, false, false, inferTicketType(days, false, false));
     }
 
     /**
@@ -66,10 +67,48 @@ public class Ticket {
      * @param dayTimeOnly 昼間のみ使用可能な場合true
      */
     public Ticket(int displayPrice, int days, boolean nightOnly, boolean dayTimeOnly) {
+        this(displayPrice, days, nightOnly, dayTimeOnly, inferTicketType(days, nightOnly, dayTimeOnly));
+    }
+
+    /**
+     * チケットを生成する（識別子指定版）。
+     * @param displayPrice チケットに表示される価格
+     * @param days 使用可能日数
+     * @param nightOnly 夜間のみ使用可能な場合true
+     * @param dayTimeOnly 昼間のみ使用可能な場合true
+     * @param ticketType チケットの種別識別子
+     */
+    public Ticket(int displayPrice, int days, boolean nightOnly, boolean dayTimeOnly, TicketType ticketType) {
         this.displayPrice = displayPrice;
         this.restDays = days;
         this.nightOnly = nightOnly;
         this.dayTimeOnly = dayTimeOnly;
+        this.ticketType = ticketType;
+    }
+
+    /**
+     * 日数と時間帯制限からチケット種別を推測する。デフォルトは1日券
+     * @param days 使用可能日数
+     * @param nightOnly 夜間のみ使用可能な場合true
+     * @param dayTimeOnly 昼間のみ使用可能な場合true
+     * @return 推測されたチケット種別
+     */
+    private static TicketType inferTicketType(int days, boolean nightOnly, boolean dayTimeOnly) {
+        if (days == 1) {
+            return TicketType.ONE_DAY;
+        } else if (days == 2) {
+            if (nightOnly) {
+                return TicketType.NIGHT_ONLY_TWO_DAY;
+            } else if (dayTimeOnly) {
+                return TicketType.DAY_TIME_ONLY_TWO_DAY;
+            } else {
+                return TicketType.TWO_DAY;
+            }
+        } else if (days == 4) {
+            return TicketType.FOUR_DAY;
+        } else {
+            return TicketType.ONE_DAY;
+        }
     }
 
     // ===================================================================================
@@ -82,7 +121,8 @@ public class Ticket {
      * @return 生成されたチケット
      */
     public static Ticket creatNormalTicket(int displayPrice, int days) {
-        return new Ticket(displayPrice, days, false, false);
+        TicketType type = inferTicketType(days, false, false);
+        return new Ticket(displayPrice, days, false, false, type);
     }
 
     /**
@@ -92,7 +132,8 @@ public class Ticket {
      * @return 生成されたチケット
      */
     public static Ticket creatNightOnlyTicket(int displayPrice, int days) {
-        return new Ticket(displayPrice, days, true, false);
+        TicketType type = inferTicketType(days, true, false);
+        return new Ticket(displayPrice, days, true, false, type);
     }
 
     /**
@@ -102,7 +143,8 @@ public class Ticket {
      * @return 生成されたチケット
      */
     public static Ticket creatDayTimeOnlyTicket(int displayPrice, int days) {
-        return new Ticket(displayPrice, days, false, true);
+        TicketType type = inferTicketType(days, false, true);
+        return new Ticket(displayPrice, days, false, true, type);
     }
 
     // ===================================================================================
@@ -237,5 +279,12 @@ public class Ticket {
      */
     public int getRestDays() {
         return restDays;
+    }
+
+    /**
+     * @return チケットの種別識別子
+     */
+    public TicketType getTicketType() {
+        return ticketType;
     }
 }

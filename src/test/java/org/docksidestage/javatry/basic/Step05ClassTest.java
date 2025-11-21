@@ -19,6 +19,7 @@ import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth.TicketShortMoneyException;
 import org.docksidestage.bizfw.basic.buyticket.TicketBuyResult;
+import org.docksidestage.bizfw.basic.buyticket.TicketType;
 import org.docksidestage.unit.PlainTestCase;
 
 // #1on1: 命名デザイン、コメントデザイン (2025/09/05)
@@ -309,25 +310,34 @@ public class Step05ClassTest extends PlainTestCase {
         // (hint: チケットの種類の業務の柔軟性を考えるとキリがないので、ピンポイントでTwoDayPassportを識別できるように)
         // (hint2: 種別の判定、何かしら列挙されて固定数を持つものの判定。チケットに限らない。なんでも種別の判定...)
         // #1on1: 一週間以内の話をした (2025/10/31)
-        // TODO edo 修行#: 今の実装はこれはこれで頑張ってくださいましたが...どんな種別が来ても正確に判定できるように by jflute (2025/11/14)
+        // TODO done edo 修行#: 識別子を使ってチケット種別を正確に判定できるように修正 by harukaedo (2025/11/14)
         // hint1: 識別子 e.g. えどはるか(かに座)　えどはるか(みずがめ座) => キリがない (ので、マイナンバー!?)
+        // 1121修正メモ：
+        // TicketTypeを新たに作り、enum定義しました
+        // TicketクラスにgetTicketTypeメソッドを生成し、チケットの種別を取得するようにした
+        // showTicketIfNeedsメソッドでチケットの種別を判定するようにした
         //1104　インデントがおかしくて赤くなってしまっていたので少し修正
-       if (ticket.getRestDays() == 2) { // write determination for two-day passport
-           if (ticket.isDayTimeOnly()) {
-               log("day-time only two-day passport");
-           } else {
-               if (ticket.isNightOnly()) {
-                   log("night-only two-day passport");
-               } else {
-                   log("two-day passport");
-               }
-           }
-        } else if(ticket.getRestDays() == 1){
-            log("one-day passport");
-        } else if(ticket.getRestDays() == 4){
-            log("four-day passport");
-        } else {
-            log("other");
+        // 識別子（TicketType）を使ってチケット種別を正確に判定
+        TicketType ticketType = ticket.getTicketType();
+        switch (ticketType) {
+            case ONE_DAY:
+                log("one-day passport");
+                break;
+            case TWO_DAY:
+                log("two-day passport");
+                break;
+            case FOUR_DAY:
+                log("four-day passport");
+                break;
+            case NIGHT_ONLY_TWO_DAY:
+                log("night-only two-day passport");
+                break;
+            case DAY_TIME_ONLY_TWO_DAY:
+                log("day-time only two-day passport");
+                break;
+            default:
+                log("other");
+                break;
         }
     }
 
