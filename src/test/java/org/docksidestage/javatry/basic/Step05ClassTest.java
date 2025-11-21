@@ -234,7 +234,7 @@ public class Step05ClassTest extends PlainTestCase {
         Ticket ticket = oneDayPassport.getTicket();
         log(ticket.getDisplayPrice()); // should be same as one-day price
         log(ticket.isCurrentIn()); // should be false
-        ticket.doInPark();
+        ticket.doInPark(10); // 営業時間内（10時）で入園
         log(ticket.isCurrentIn()); // should be true
     }
 
@@ -269,15 +269,15 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         TicketBuyResult buyResult = booth.buyTwoDayPassport(13200);
         Ticket twoDayPassport = buyResult.getTicket();
-        
+
         // 1日目の入園、退園
-        twoDayPassport.doInPark();
+        twoDayPassport.doInPark(13); // 営業時間内（13時）で入園
         log(twoDayPassport.isCurrentIn()); // trueになる
         twoDayPassport.doOutPark();
         log(twoDayPassport.getRestDays()); // 1日使われたため、残り1日になる
-        
+
         // 2日目の入園、退園
-        twoDayPassport.doInPark();
+        twoDayPassport.doInPark(18); // 営業時間内（18時）で入園
         log(twoDayPassport.isCurrentIn()); // trueになる
         twoDayPassport.doOutPark();
         log(twoDayPassport.getRestDays()); // 残りの1日が使われたため、残りが0となる
@@ -364,21 +364,17 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(7400);
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
-        // TODO edo 修行++: このifだと今夜かは問わないので、テストの実行が昼でもうまくいっちゃう by jflute (2025/11/14)
-        // UnitTestを昼に実行したら落ちるようにしたい。
-        if (nightOnlyTwoDayPassport.isNightOnly()) { // チケット種別がnightOnly系だったら (今夜かは問わない)
-            log("this ticket is night-only two-day passport");
-            log(nightOnlyTwoDayPassport.isNightOnly());   // 夜専用チケットかどうかの確認 trueになる
-            log(nightOnlyTwoDayPassport.getRestDays()); // 残りチケット日数が2日になる
 
-            nightOnlyTwoDayPassport.doInPark();
-            log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn());
-            nightOnlyTwoDayPassport.doOutPark();
-            log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn());
-            log("Rest days: " + nightOnlyTwoDayPassport.getRestDays()); // 2日分から1日使用   
-        } else {
-            log("This ticket can only be used at night. ");
-        }
+        log("this ticket is night-only two-day passport");
+        log(nightOnlyTwoDayPassport.isNightOnly());   // 夜専用チケットかどうかの確認 trueになる
+        log(nightOnlyTwoDayPassport.getRestDays()); // 残りチケット日数が2日になる
+
+        // 夜の時間帯（16-21時）で入園
+        nightOnlyTwoDayPassport.doInPark(17); // 17時に入園
+        log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn());
+        nightOnlyTwoDayPassport.doOutPark();
+        log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn());
+        log("Rest days: " + nightOnlyTwoDayPassport.getRestDays()); // 2日分から1日使用
     }
         // done edo doInPark()する動作確認をしてみましょう by jflute (2025/10/15)
         //1024 修正メモ
@@ -398,7 +394,59 @@ public class Step05ClassTest extends PlainTestCase {
 
     //以下はFB後取り組みます
     // done jflute 1on1ここまでやった (2025/10/31)
-    
+
+    /**
+     * Test night-only ticket time restriction (should fail during daytime). <br>
+     * (夜専用チケットの時間帯制限をテスト（昼間は入園できない）)
+     */
+    public void test_class_moreFix_wonder_night_timeRestriction() {
+        TicketBooth booth = new TicketBooth();
+        TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(7400);
+        Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
+
+        // TODO done edo 修行++: このifだと今夜かは問わないので、テストの実行が昼でもうまくいっちゃう by jflute (2025/11/14)
+        // UnitTestを昼に実行したら落ちるようにしたい。
+        //1117 修正メモ：Ticketクラスにテーマパークの営業時間を定義し、夜の時間帯や昼の時間帯も定義した
+        //夜の時間帯外（18時未満）は入園できないことを確認
+        //夜の時間帯（18-21時）は入園できることを確認
+
+        try {
+            nightOnlyTwoDayPassport.doInPark(14); // 14時に入園を試みる
+            fail("Night-only ticket should not be usable before 16:00");
+        } catch (IllegalStateException e) {
+            log("Expected exception: " + e.getMessage());
+        }
+
+        // 夜の時間帯（16-21時）は入園できることを確認
+        nightOnlyTwoDayPassport.doInPark(17); // 17時に入園
+        log("Successfully entered at night: " + nightOnlyTwoDayPassport.isCurrentIn());
+    }
+
+    /**
+     * Test daytime-only ticket time restriction (should fail at night). <br>
+     * (昼専用チケットの時間帯制限をテスト（夜は入園できない）)
+     */
+        //1117 修正メモ：Ticketクラスにテーマパークの営業時間を定義し、夜の時間帯や昼の時間帯も定義した
+        //昼の時間帯外（16時以降）は入園できないことを確認
+        //昼の時間帯（11-16時）は入園できることを確認
+    public void test_class_moreFix_wonder_daytime_timeRestriction() {
+        TicketBooth booth = new TicketBooth();
+        TicketBuyResult buyResult = booth.buyDayTimeOnlyTwoDayPassport(7400);
+        Ticket dayTimeOnlyTwoDayPassport = buyResult.getTicket();
+
+        // 昼の時間帯外（16時以降）は入園できないことを確認
+        try {
+            dayTimeOnlyTwoDayPassport.doInPark(17); // 17時に入園を試みる
+            fail("Daytime-only ticket should not be usable after 18:00");
+        } catch (IllegalStateException e) {
+            log("Expected exception: " + e.getMessage());
+        }
+
+        // 昼の時間帯（11-16時）は入園できることを確認
+        dayTimeOnlyTwoDayPassport.doInPark(13); // 13時に入園
+        log("Successfully entered during daytime: " + dayTimeOnlyTwoDayPassport.isCurrentIn());
+    }
+
     // ===================================================================================
     //                                                                         Bonus Stage
     //                                                                         ===========
@@ -453,7 +501,7 @@ public class Step05ClassTest extends PlainTestCase {
         
         // doInPark()とdoOutPark()
         Ticket ticket = new Ticket(13200, 2);
-        ticket.doInPark();
+        ticket.doInPark(12); // 営業時間内（12時）で入園
         log(ticket.isCurrentIn(), ticket.getRestDays()); // true, 2
         ticket.doOutPark();
         log(ticket.isCurrentIn(), ticket.getRestDays()); // false, 1

@@ -107,21 +107,61 @@ public class Ticket {
 
     // ===================================================================================
     //                                                                             In Park
-    //                                                                             =======
+    //                                                                            =======
+    private static final int PARK_OPEN_HOUR = 9; // パークの開始時刻
+    private static final int PARK_CLOSE_HOUR = 21; // パークの閉鎖時刻
+    private static final int DAY_TICKET_START_HOUR = 11; // 昼チケットの開始時刻
+    private static final int NIGHT_TICKET_START_HOUR = 16; // 夜チケットの開始時刻
+
     /**
      * パークに入園する。
-     * 残り使用可能日数がない場合や、既に入園済みの場合は例外をスローする。
+     * 残り使用可能日数がない場合や、既に入園済みの場合、時間帯が合わない場合は例外をスローする。
      *
-     * @throws IllegalStateException 残り使用可能日数がない、または既に入園済みの場合
+     * @param currentHour 現在の時刻（0-23の範囲）
+     * @throws IllegalStateException 残り使用可能日数がない、既に入園済み、または時間帯が合わない場合
      */
-    public void doInPark() {
+    public void doInPark(int currentHour) {
         if (restDays <= 0) {
             throw new IllegalStateException("No remaining days: displayedPrice=" + displayPrice);
         }
         if (currentIn) {
             throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
         }
+        validateTimeRestriction(currentHour);
         currentIn = true;
+    }
+
+    /**
+     * 時間帯制限をチェックする。
+     * 通常チケット: 9-21時まで入園可能
+     * 昼専用チケット: 11-16時まで入園可能
+     * 夜専用チケット: 16-21時まで入園可能
+     *
+     * @param currentHour 現在の時刻（0-23の範囲で設定）
+     * @throws IllegalStateException 時間帯が合わない場合、または営業時間外の場合
+     */
+    private void validateTimeRestriction(int currentHour) {
+        // 営業時間外チェック（全チケット共通）
+        if (currentHour < PARK_OPEN_HOUR || currentHour > PARK_CLOSE_HOUR) {
+            throw new IllegalStateException("Park is closed at this hour: currentHour=" + currentHour
+                    + " (Open: " + PARK_OPEN_HOUR + "-" + PARK_CLOSE_HOUR + ")");
+        }
+
+        // 昼専用チケットの時間帯チェック（11-16時）
+        if (dayTimeOnly) {
+            if (currentHour < DAY_TICKET_START_HOUR || currentHour >= NIGHT_TICKET_START_HOUR) {
+                throw new IllegalStateException("Daytime-only ticket can only be used between "
+                        + DAY_TICKET_START_HOUR + " and " + NIGHT_TICKET_START_HOUR + ": currentHour=" + currentHour);
+            }
+        }
+
+        // 夜専用チケットの時間帯チェック（16-21時）
+        if (nightOnly) {
+            if (currentHour < NIGHT_TICKET_START_HOUR) {
+                throw new IllegalStateException("Night-only ticket can only be used from "
+                        + NIGHT_TICKET_START_HOUR + " onwards: currentHour=" + currentHour);
+            }
+        }
     }
 
     // done edo [いいね] outを作ったのGood by jflute (2025/10/03)
