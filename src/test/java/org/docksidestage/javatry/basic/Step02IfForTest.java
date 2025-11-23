@@ -384,6 +384,30 @@ public class Step02IfForTest extends PlainTestCase {
         log(sb.toString());
     }
 
+    //1121 修正メモ：
+    //"broadway" -> startsWith("br") = true → スキップ、sb=""のまま
+    //"dockside" -> sb=""でcontains("ga") = false → スキップされずにappend、sb="dockside"
+    //"hangar" -> sb="dockside"でcontains("ga") = false → スキップされずにappend、sb="hangar"
+    //"magiclamp" -> sb="hangar"でcontains("ga") = true → スキップ、sb="hangar"のまま
+    //最終的にlog(sb.toString())で"hangar"が出力される
+    public void test_iffor_refactor_foreach_to_forEach2() {
+        List<String> stageList = prepareStageList();
+
+        StringBuilder sb = new StringBuilder();
+        stageList.forEach(stage -> {
+            if (sb.toString().contains("ga")){
+                return;
+            }
+
+            if (stage.startsWith("br")) {
+                return;
+            }
+            sb.setLength(0);
+            sb.append(stage);
+        });
+        log(sb.toString());
+    }
+
     /**
      * Make your original exercise as question style about if-for statement. <br>
      * (if文for文についてあなたのオリジナルの質問形式のエクササイズを作ってみましょう)
