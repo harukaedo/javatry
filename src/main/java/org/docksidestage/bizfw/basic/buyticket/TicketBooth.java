@@ -43,6 +43,8 @@ public class TicketBooth {
     private static final int NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY = 2;
     private static final int DAY_TIME_ONLY_TWO_DAY_PURCHASE_QUANTITY = 2;
 
+    // TODO edo TicketTypeのenumの文法を利用して、PRICEの定義を一元管理してみましょう。 by jflute (2025/11/28)
+    // (チケット種別とPRICEは、必ず1:1になる関係性なので)
     //Priceを定義
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
     private static final int TWO_DAY_PRICE = 13200; // when 2019/06/15
@@ -95,6 +97,10 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
     public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
+        // TODO edo ここで売るチケット種別は、「OneDayパスポート」といい切れるのでは？ by jflute (2025/11/28)
+        // (今だと、わざわざ中で infer して、TicketType.ONE_DAYを導出しているけど、
+        // もうここで TicketType.ONE_DAY ベタッと指定しても良い領域ではある)
+        // ということで、publicメソッド内で1:1に対応する TicketType を直接指定する方式にしてみましょう。
         return buyTicket(handedMoney, ONE_DAY_PURCHASE_QUANTITY, ONE_DAY_PRICE, Ticket::creatNormalTicket);
     }
     
@@ -222,6 +228,13 @@ public class TicketBooth {
     // o 特定業務の中だけで再利用するためのprivateメソッド
     // o クラス全体で再利用するためのprivateメソッド
 
+    // TODO edo privateメソッド名、buy始まりだとメソッド一覧で紛れて視認性がちょい悪なので... by jflute (2025/11/28)
+    // e.g. doBuyTicket(), internalBuyTicket() みたいな名前を付けるテクニックがある。
+    // ぜひ、renameしてみてください。VSCodeでrenameのショートカットあると思うのでぜひ。
+    //  command+P :: ファイル検索 (">" を打てばコマンド検索になる)
+    //  shift+command+P :: コマンド検索 (単にファイル検索テキストボックスに ">" が追加されるだけ)
+    // そこで、Rename Symbol で rename のリファクタリング機能になる。
+    
     //1117refactorメモ BiFunctionを使ってチケット作成関数を渡すようにした
     //Ticket::creatNormalTicket, Ticket::creatNightOnlyTicket, Ticket::creatDayTimeOnlyTicketを渡すようにした
     //ticketの購入を一気に共通化した

@@ -370,7 +370,7 @@ public class Step02IfForTest extends PlainTestCase {
             //if (stage.contains("ga")) {
             //    return;
             //}
-            // TODO えどさん 修行++++++: ふたたび、booleanなしチャレンジ by jflute (2025/11/14)
+            // done えどさん 修行++++++: ふたたび、booleanなしチャレンジ by jflute (2025/11/14)
             // StringBuilderを使ったやり方はGood, setLength(0)でappendすることで置き換えを表現している。
             // なので、後は「最初のgaが来たら、それ以降はずっと空ループしたい」をどうにかしたいところ。
             // これが、前の実装で boolean[] found を使って空ループしててそれはそれでOK。
@@ -383,6 +383,15 @@ public class Step02IfForTest extends PlainTestCase {
         });
         log(sb.toString());
     }
+
+    // #1on1: 文章に出してみたら思いついた、という話素晴らしい (2025/11/28)
+    // 整理整頓の手段を知っておくこと、整理整頓をしようとするかどうか？
+    //
+    // // ホワイトボードを買ってこよう
+    // https://jflute.hatenadiary.jp/entry/20110607/1307440686
+    //
+    // えどさんは、紙のノート派、ボールペン貸す側の偉い人。
+    // つまり、えどさんは偉い人。
 
     //1121 修正メモ：
     //"broadway" -> startsWith("br") = true → スキップ、sb=""のまま

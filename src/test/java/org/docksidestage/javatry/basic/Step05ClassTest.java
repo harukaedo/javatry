@@ -320,7 +320,7 @@ public class Step05ClassTest extends PlainTestCase {
         // (hint: チケットの種類の業務の柔軟性を考えるとキリがないので、ピンポイントでTwoDayPassportを識別できるように)
         // (hint2: 種別の判定、何かしら列挙されて固定数を持つものの判定。チケットに限らない。なんでも種別の判定...)
         // #1on1: 一週間以内の話をした (2025/10/31)
-        // TODO done edo 修行#: 識別子を使ってチケット種別を正確に判定できるように修正 by harukaedo (2025/11/14)
+        // done edo 修行#: 識別子を使ってチケット種別を正確に判定できるように修正 by harukaedo (2025/11/14)
         // hint1: 識別子 e.g. えどはるか(かに座)　えどはるか(みずがめ座) => キリがない (ので、マイナンバー!?)
         // 1121修正メモ：
         // TicketTypeを新たに作り、enum定義しました
@@ -329,6 +329,12 @@ public class Step05ClassTest extends PlainTestCase {
         //1104　インデントがおかしくて赤くなってしまっていたので少し修正
         // 識別子（TicketType）を使ってチケット種別を正確に判定
         TicketType ticketType = ticket.getTicketType();
+        
+        // 一応、元のコードの感じでやるとこう:
+        if (ticketType.equals(TicketType.TWO_DAY)) {
+            log("two-day passport");
+        }
+        
         switch (ticketType) {
             case ONE_DAY:
                 log("one-day passport");
