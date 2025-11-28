@@ -290,7 +290,7 @@ public class Step05ClassTest extends PlainTestCase {
         assertEquals(TicketType.TWO_DAY, twoDayPassport.getTicketType());
 
         // 2日目の入園、退園
-        twoDayPassport.doInPark(18); // 営業時間内（18時）で入園
+        twoDayPassport.doInPark(16); // 営業時間内（16時）で入園
         log(twoDayPassport.isCurrentIn()); // trueになる
         twoDayPassport.doOutPark();
         log(twoDayPassport.getRestDays()); // 残りの1日が使われたため、残りが0となる
@@ -427,8 +427,8 @@ public class Step05ClassTest extends PlainTestCase {
         // TODO done edo 修行++: このifだと今夜かは問わないので、テストの実行が昼でもうまくいっちゃう by jflute (2025/11/14)
         // UnitTestを昼に実行したら落ちるようにしたい。
         //1117 修正メモ：Ticketクラスにテーマパークの営業時間を定義し、夜の時間帯や昼の時間帯も定義した
-        //夜の時間帯外（18時未満）は入園できないことを確認
-        //夜の時間帯（18-21時）は入園できることを確認
+        //夜の時間帯外（16時未満）は入園できないことを確認
+        //夜の時間帯（16-21時）は入園できることを確認
 
         try {
             nightOnlyTwoDayPassport.doInPark(14); // 14時に入園を試みる
