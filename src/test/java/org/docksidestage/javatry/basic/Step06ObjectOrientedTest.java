@@ -156,7 +156,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //
         // if step05 has been finished, you can use this code by jflute (2019/06/15)
         //Ticket ticket = booth.buyOneDayPassport(10000);
-        booth.buyOneDayPassport(10000); // as temporary, remove if you finished step05
+        booth.doBuyOneDayPassport(10000); // as temporary, remove if you finished step05
         Ticket ticket = Ticket.creatNormalTicket(7400, 1); // also here
 
         // *buyOneDayPassport() has this process:

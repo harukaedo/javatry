@@ -53,14 +53,63 @@ package org.docksidestage.bizfw.basic.buyticket;
  */
 public enum TicketType {
     /** 1日券 */
-    ONE_DAY,
+    ONE_DAY(1, 7400, 1),
     /** 2日券 */
-    TWO_DAY,
+    TWO_DAY(2, 13200, 2),
     /** 4日券 */
-    FOUR_DAY,
+    FOUR_DAY(4, 22400, 4),
     /** 夜専用2日券 */
-    NIGHT_ONLY_TWO_DAY,
+    NIGHT_ONLY_TWO_DAY(2, 7400, 2),
     /** 昼専用2日券 */
-    DAY_TIME_ONLY_TWO_DAY
+    DAY_TIME_ONLY_TWO_DAY(2, 7400, 2);
+
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    /** 使用可能日数 */
+    private final int days;
+    /** チケットの価格 */
+    private final int price;
+    /** 購入時に在庫を消費する枚数 */
+    private final int purchaseQuantity;
+
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
+    /**
+     * チケット種別を生成する。
+     * @param days 使用可能日数
+     * @param price チケットの価格
+     * @param purchaseQuantity 購入時に在庫を消費する枚数
+     */
+    private TicketType(int days, int price, int purchaseQuantity) {
+        this.days = days;
+        this.price = price;
+        this.purchaseQuantity = purchaseQuantity;
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    /**
+     * @return 使用可能日数
+     */
+    public int getDays() {
+        return days;
+    }
+
+    /**
+     * @return チケットの価格
+     */
+    public int getPrice() {
+        return price;
+    }
+
+    /**
+     * @return 購入時に在庫を消費する枚数
+     */
+    public int getPurchaseQuantity() {
+        return purchaseQuantity;
+    }
 }
 

@@ -36,21 +36,6 @@ public class TicketBooth {
     // HOGE_PURCHASE_QUANTITYを定数にした
     // done edo せめて、QuantityとPriceを区分けするために空行を空けてみましょう by jflute (2025/10/31)
     //1104修正メモ QuantityとPriceを区分けするために空行を空け,コメントを追加して見やすくした
-    //Quantityを定義
-    private static final int ONE_DAY_PURCHASE_QUANTITY = 1;
-    private static final int TWO_DAY_PURCHASE_QUANTITY = 2;
-    private static final int FOUR_DAY_PURCHASE_QUANTITY = 4;
-    private static final int NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY = 2;
-    private static final int DAY_TIME_ONLY_TWO_DAY_PURCHASE_QUANTITY = 2;
-
-    // TODO edo TicketTypeのenumの文法を利用して、PRICEの定義を一元管理してみましょう。 by jflute (2025/11/28)
-    // (チケット種別とPRICEは、必ず1:1になる関係性なので)
-    //Priceを定義
-    private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
-    private static final int TWO_DAY_PRICE = 13200; // when 2019/06/15
-    private static final int FOUR_DAY_PRICE = 22400; 
-    private static final int NIGHT_ONLY_TWO_DAY_PRICE = 7400;
-    private static final int DAY_TIME_ONLY_TWO_DAY_PRICE = 7400;
 
     // ===================================================================================
     //                                                                           Attribute
@@ -96,12 +81,13 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
-    public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
-        // TODO edo ここで売るチケット種別は、「OneDayパスポート」といい切れるのでは？ by jflute (2025/11/28)
+    public TicketBuyResult doBuyOneDayPassport(Integer handedMoney) {
+        // TODO done edo ここで売るチケット種別は、「OneDayパスポート」といい切れるのでは？ by jflute (2025/11/28)
         // (今だと、わざわざ中で infer して、TicketType.ONE_DAYを導出しているけど、
         // もうここで TicketType.ONE_DAY ベタッと指定しても良い領域ではある)
         // ということで、publicメソッド内で1:1に対応する TicketType を直接指定する方式にしてみましょう。
-        return buyTicket(handedMoney, ONE_DAY_PURCHASE_QUANTITY, ONE_DAY_PRICE, Ticket::creatNormalTicket);
+        //1201修正メモ TicketType.ONE_DAYを直接指定する方式にした
+        return doBuyTicket(handedMoney, TicketType.ONE_DAY, Ticket::creatNormalTicket);
     }
     
     // you can rewrite comments for your own language by jflute
@@ -121,8 +107,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
-    public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
-        return buyTicket(handedMoney, TWO_DAY_PURCHASE_QUANTITY, TWO_DAY_PRICE, Ticket::creatNormalTicket);
+    public TicketBuyResult doBuyTwoDayPassport(Integer handedMoney) {
+        return doBuyTicket(handedMoney, TicketType.TWO_DAY, Ticket::creatNormalTicket);
     }
 
     /**
@@ -132,8 +118,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
-    public TicketBuyResult buyFourDayPassport(Integer handedMoney) {
-        return buyTicket(handedMoney, FOUR_DAY_PURCHASE_QUANTITY, FOUR_DAY_PRICE, Ticket::creatNormalTicket);
+    public TicketBuyResult doBuyFourDayPassport(Integer handedMoney) {
+        return doBuyTicket(handedMoney, TicketType.FOUR_DAY, Ticket::creatNormalTicket);
     }
 
     // done edo @return, ここでも "など" ってしておいたほうがいいかなと by jflute (2025/10/15)
@@ -144,8 +130,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りなどを返す
      */
-    public TicketBuyResult buyNightOnlyTwoDayPassport(Integer handedMoney) {
-        return buyTicket(handedMoney, NIGHT_ONLY_TWO_DAY_PURCHASE_QUANTITY, NIGHT_ONLY_TWO_DAY_PRICE, Ticket::creatNightOnlyTicket);
+    public TicketBuyResult doBuyNightOnlyTwoDayPassport(Integer handedMoney) {
+        return doBuyTicket(handedMoney, TicketType.NIGHT_ONLY_TWO_DAY, Ticket::creatNightOnlyTicket);
     }
 
     //1104　お昼のみ使えるチケット購入のメソッドも修行問題により追加しました
@@ -156,8 +142,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りなどを返す
      */
-    public TicketBuyResult buyDayTimeOnlyTwoDayPassport(Integer handedMoney) {
-        return buyTicket(handedMoney, DAY_TIME_ONLY_TWO_DAY_PURCHASE_QUANTITY, DAY_TIME_ONLY_TWO_DAY_PRICE, Ticket::creatDayTimeOnlyTicket);
+    public TicketBuyResult doBuyDayTimeOnlyTwoDayPassport(Integer handedMoney) {
+        return doBuyTicket(handedMoney, TicketType.DAY_TIME_ONLY_TWO_DAY, Ticket::creatDayTimeOnlyTicket);
     }
 
     // ===================================================================================
@@ -228,30 +214,34 @@ public class TicketBooth {
     // o 特定業務の中だけで再利用するためのprivateメソッド
     // o クラス全体で再利用するためのprivateメソッド
 
-    // TODO edo privateメソッド名、buy始まりだとメソッド一覧で紛れて視認性がちょい悪なので... by jflute (2025/11/28)
+    // TODO done edo privateメソッド名、... by jflute (2025/11/28)
     // e.g. doBuyTicket(), internalBuyTicket() みたいな名前を付けるテクニックがある。
     // ぜひ、renameしてみてください。VSCodeでrenameのショートカットあると思うのでぜひ。
     //  command+P :: ファイル検索 (">" を打てばコマンド検索になる)
     //  shift+command+P :: コマンド検索 (単にファイル検索テキストボックスに ">" が追加されるだけ)
     // そこで、Rename Symbol で rename のリファクタリング機能になる。
-    
+    //1201修正メモ doBuyTicket()に修正した
+    //合わせて、各Ticket Typeのメソッド名をdoBuyhogehogeTicket()に修正した
+
     //1117refactorメモ BiFunctionを使ってチケット作成関数を渡すようにした
     //Ticket::creatNormalTicket, Ticket::creatNightOnlyTicket, Ticket::creatDayTimeOnlyTicketを渡すようにした
     //ticketの購入を一気に共通化した
+
     /**
      * Buy ticket with common purchase flow.
      * @param handedMoney 手渡しされた金額
-     * @param purchaseQuantity 購入するチケットの枚数
-     * @param ticketPrice チケットの価格
+     * @param ticketType チケットの種別
      * @param ticketCreator チケット作成関数（価格と枚数を受け取り、Ticketを返す）
      * @return 購入されたチケットとお釣り金額
      */
-    private TicketBuyResult buyTicket(Integer handedMoney, int purchaseQuantity, int ticketPrice, 
+    private TicketBuyResult doBuyTicket(Integer handedMoney, TicketType ticketType, 
             BiFunction<Integer, Integer, Ticket> ticketCreator) {
+        int ticketPrice = ticketType.getPrice();
+        int purchaseQuantity = ticketType.getPurchaseQuantity();
         validatePurchaseRequirements(handedMoney, ticketPrice, purchaseQuantity);
         processPurchase(ticketPrice, purchaseQuantity);
         int change = calculateChange(handedMoney, ticketPrice);
-        Ticket ticket = ticketCreator.apply(ticketPrice, purchaseQuantity);
+        Ticket ticket = ticketCreator.apply(ticketPrice, ticketType.getDays());
         return new TicketBuyResult(ticket, change);
     }
     
