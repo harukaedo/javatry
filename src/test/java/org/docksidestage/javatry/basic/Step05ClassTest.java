@@ -515,19 +515,19 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_yourSuperJavaDoc() {
         // your confirmation code here     
         // コンストラクタとTicket type method
-        Ticket oneDay = new Ticket(7400);
-        log(oneDay.getDisplayPrice(), oneDay.getRestDays()); // 7400, 1
-        
-        Ticket normal = Ticket.creatNormalTicket(7400, 1);
-        Ticket night = Ticket.creatNightOnlyTicket(7400, 2);
-        log(normal.isNightOnly(), night.isNightOnly()); // false, true
-        
-        // doInPark()とdoOutPark()
-        Ticket ticket = new Ticket(13200, 2);
-        ticket.doInPark(12); // 営業時間内（12時）で入園
-        log(ticket.isCurrentIn(), ticket.getRestDays()); // true, 2
-        ticket.doOutPark();
-        log(ticket.isCurrentIn(), ticket.getRestDays()); // false, 1
+        Ticket oneDay = Ticket.creatNormalTicket(7400, 1);
+        if (oneDay.getTicketType() == TicketType.ONE_DAY) {
+            log("one-day passport");
+        }
+        if (oneDay.getTicketType() == TicketType.NIGHT_ONLY_TWO_DAY) {
+            log("night-only two-day passport");
+        }
+        if (oneDay.getTicketType() == TicketType.DAY_TIME_ONLY_TWO_DAY) {
+            log("day-time only two-day passport");
+        }
+        if (oneDay.getTicketType() == TicketType.FOUR_DAY) {
+            log("four-day passport");
+        }
     }
 
     // ===================================================================================

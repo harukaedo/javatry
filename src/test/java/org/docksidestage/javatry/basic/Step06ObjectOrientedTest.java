@@ -157,7 +157,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // if step05 has been finished, you can use this code by jflute (2019/06/15)
         //Ticket ticket = booth.buyOneDayPassport(10000);
         booth.buyOneDayPassport(10000); // as temporary, remove if you finished step05
-        Ticket ticket = new Ticket(7400); // also here
+        Ticket ticket = Ticket.creatNormalTicket(7400, 1); // also here
 
         // *buyOneDayPassport() has this process:
         //if (quantity <= 0) {
@@ -216,7 +216,11 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     // write your memo here:
     // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
     // what is object?
-    //
+    //1128　事前1on1前事前準備
+    //オブジェクトとは、プログラム内で扱うデータや動作すべてを指す概念ではないかと思う。
+    //私の大好きなりんごで例えてみると..
+    //りんごというクラスにふじというインスタンスや王林というインスタンスが存在している。
+    //インスタンスはクラスによって作られたオブジェクトでもある。
     // _/_/_/_/_/_/_/_/_/_/
 
     // ===================================================================================

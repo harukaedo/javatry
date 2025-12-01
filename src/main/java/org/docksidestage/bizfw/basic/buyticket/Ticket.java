@@ -42,38 +42,11 @@ public class Ticket {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    // TODO edo mainコードで必要としているConstructorだけにしましょう。 by jflute (2025/11/28)
+    // TODO done edo mainコードで必要としているConstructorだけにしましょう。 by jflute (2025/11/28)
+    //1201修正メモ enum版のTicketコンストラクターのみにしました。
     // (もしくは、何かそれがわかるように区別を付ける)
     /**
-     * 1日券を生成する。
-     * @param displayPrice チケットに表示される価格
-     */
-    public Ticket(int displayPrice) {
-        this(displayPrice, 1, false, false, TicketType.ONE_DAY);
-    }
-
-    /**
-     * 複数日券を生成する。
-     * @param displayPrice チケットに表示される価格
-     * @param days 使用可能日数
-     */
-    public Ticket(int displayPrice, int days) {
-        this(displayPrice, days, false, false, inferTicketType(days, false, false));
-    }
-
-    /**
-     * 時間帯制限付き複数日券を生成する。
-     * @param displayPrice チケットに表示される価格
-     * @param days 使用可能日数
-     * @param nightOnly 夜間のみ使用可能な場合true
-     * @param dayTimeOnly 昼間のみ使用可能な場合true
-     */
-    public Ticket(int displayPrice, int days, boolean nightOnly, boolean dayTimeOnly) {
-        this(displayPrice, days, nightOnly, dayTimeOnly, inferTicketType(days, nightOnly, dayTimeOnly));
-    }
-
-    /**
-     * チケットを生成する（識別子指定版）。
+     * チケットを生成する（識別子指定版）
      * @param displayPrice チケットに表示される価格
      * @param days 使用可能日数
      * @param nightOnly 夜間のみ使用可能な場合true
