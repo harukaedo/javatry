@@ -235,30 +235,45 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Dog dog = new Dog();
         BarkedSound sound = dog.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan
         int land = dog.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7
     }
+    //1206自分なりの回答
+    //Dogクラスでbarkメソッドを呼び出すと、getBarkWordメソッドが呼び出され、"wan"が返される。
+    //DogはAnimalを継承しているため、Animalコンストラクタが呼び出しされてanimal.bark()の処理が実行される。
+    //初期値が10で各メソッドでhitPointが1ずつ減っていくため、最終的に7になる。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_2nd_asAbstract() {
         Animal animal = new Dog();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7
     }
+    //1206自分なりの回答
+    //Animal animal = new Dog();でDogクラスのインスタンスをAnimal型の変数に代入している。
+    //Dogクラスでbarkメソッドを呼び出すと、getBarkWordメソッドが呼び出され、"wan"が返される。
+    //DogはAnimalを継承しているため、Animalコンストラクタが呼び出しされてanimal.bark()の処理が実行される。
+    //初期値が10で各メソッドでhitPointが1ずつ減っていくため、最終的に7になる。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_3rd_fromMethod() {
         Animal animal = createAnyAnimal();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7
     }
+    //1206自分なりの回答
+    //createAnyAnimalメソッドでDogクラスのインスタンスを返す。
+    //Animal animal = createAnyAnimal();でDogクラスのインスタンスをAnimal型の変数に代入している。
+    //Dogクラスでbarkメソッドを呼び出すと、getBarkWordメソッドが呼び出され、"wan"が返される。
+    //DogはAnimalを継承しているため、Animalコンストラクタが呼び出しされてanimal.bark()の処理が実行される。
+    //初期値が10で各メソッドでhitPointが1ずつ減っていくため、最終的に7になる。
 
     private Animal createAnyAnimal() {
         return new Dog();
