@@ -74,6 +74,7 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
+    // TODO edo publicの方はdoBuyじゃなくてbuyでOK by jflute (2025/12/12)
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -82,11 +83,13 @@ public class TicketBooth {
      * @return チケットとお釣りを返す
      */
     public TicketBuyResult doBuyOneDayPassport(Integer handedMoney) {
-        // TODO done edo ここで売るチケット種別は、「OneDayパスポート」といい切れるのでは？ by jflute (2025/11/28)
+        // done edo ここで売るチケット種別は、「OneDayパスポート」といい切れるのでは？ by jflute (2025/11/28)
         // (今だと、わざわざ中で infer して、TicketType.ONE_DAYを導出しているけど、
         // もうここで TicketType.ONE_DAY ベタッと指定しても良い領域ではある)
         // ということで、publicメソッド内で1:1に対応する TicketType を直接指定する方式にしてみましょう。
         //1201修正メモ TicketType.ONE_DAYを直接指定する方式にした
+        // TODO edo もうここではチケット種別をピンポイントで指定している世界なので... by jflute (2025/12/12)
+        // creat...Ticket() の中で infer する必要がないはず。(特定されているはずだから)
         return doBuyTicket(handedMoney, TicketType.ONE_DAY, Ticket::creatNormalTicket);
     }
     
@@ -214,7 +217,9 @@ public class TicketBooth {
     // o 特定業務の中だけで再利用するためのprivateメソッド
     // o クラス全体で再利用するためのprivateメソッド
 
-    // TODO done edo privateメソッド名、... by jflute (2025/11/28)
+    // done edo privateメソッド名、... by jflute (2025/11/28)
+    // (追記: publicメソッドのbuyとメソッド一覧のときとか紛れてしまうので、
+    // 区別しやすいようにprivateメソッドの方は先頭文字を変えるテクニック)
     // e.g. doBuyTicket(), internalBuyTicket() みたいな名前を付けるテクニックがある。
     // ぜひ、renameしてみてください。VSCodeでrenameのショートカットあると思うのでぜひ。
     //  command+P :: ファイル検索 (">" を打てばコマンド検索になる)

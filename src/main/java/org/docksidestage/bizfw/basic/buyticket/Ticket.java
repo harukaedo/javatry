@@ -33,18 +33,37 @@ public class Ticket {
     // publicとかだったらJavaDocは必須？ by えどさん → そういう考えでいた方がGoodです。(2025/10/03)
     // 省略しちゃうこともあるけど、publicはJavaDocの費用対効果が高い(privateに比べて)、と言える。
     // (Stringは究極の費用対効果が高いクラス)
+    // TODO edo 固定情報と(変化する)状態情報を区別するために、final付けられるところは付けておきましょう by jflute (2025/12/12)
+    // TODO edo 変数の定義順序、変数のカテゴリを意識して並べたり、空行でカテゴリを見た目強調したり by jflute (2025/12/12)
+    // (さらに、タイトルコメントを付けてあげたりするのもアリ)
+    // (DBFlute の LikeSearchOption のインスタンス変数のタグコメントの例も)
     private final int displayPrice; // written on ticket, park guest can watch this
     private boolean currentIn; // 現在入園しているかどうか
     private int restDays; // チケットの残り使用可能日数
     private boolean nightOnly; // 夜だけ使用可能なチケット
     private boolean dayTimeOnly; // お昼だけ使用可能なチケット
     private final TicketType ticketType; // チケットの種別識別子
+
+// e.g. jfluteの例:
+//// チケット基本情報
+//private final TicketType ticketType; // チケットの種別識別子
+//private final int displayPrice; // written on ticket, park guest can watch this
+//
+//// 時間帯情報
+//private final boolean nightOnly; // 夜だけ使用可能なチケット
+//private final boolean dayTimeOnly; // お昼だけ使用可能なチケット
+//
+//// 入園状態を制御
+//private boolean currentIn; // 現在入園しているかどうか
+//private int restDays; // チケットの残り使用可能日数
+    
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    // TODO done edo mainコードで必要としているConstructorだけにしましょう。 by jflute (2025/11/28)
+    // done edo mainコードで必要としているConstructorだけにしましょう。 by jflute (2025/11/28)
     //1201修正メモ enum版のTicketコンストラクターのみにしました。
     // (もしくは、何かそれがわかるように区別を付ける)
+    // TODO edo 引数、TicketTypeを指定してるなら、displayPriceとdaysなくてもOK by jflute (2025/12/12)
     /**
      * チケットを生成する（識別子指定版）
      * @param displayPrice チケットに表示される価格
@@ -61,6 +80,8 @@ public class Ticket {
         this.ticketType = ticketType;
     }
 
+    // TODO edo infer, TicketBoothのとぅどぅの修正したら要らなくなっちゃうかもだけど... by jflute (2025/12/12)
+    // 思い出のために、コメントアウトで残しておいてください。
     /**
      * 日数と時間帯制限からチケット種別を推測する。デフォルトは1日券
      * @param days 使用可能日数
