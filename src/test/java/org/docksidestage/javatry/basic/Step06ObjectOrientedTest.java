@@ -306,30 +306,42 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     private void doAnimalSeaLand_for_4th(Animal animal) {
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7
     }
+    //1220自分なりの回答
+    //doAnimalSeaLand_for_4thメソッドでAnimal型の変数を引数に取り、barkメソッドを呼び出す。
+    //barkメソッドでは、getBarkWordメソッドが呼び出され、"wan"が返される。
+    //getHitPointメソッドでは、hitPointが1ずつ減っていくため、最終的に7になる。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_5th_overrideWithSuper() {
         Animal animal = new Cat();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => nya-
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 5
     }
+    //1220自分なりの回答
+    //doAnimalSeaLand_for_5thメソッドでAnimal型の変数を引数に取り、barkメソッドを呼び出す。
+    //barkメソッドでは、getBarkWordメソッドが呼び出され、"nya-"が返される。
+    //getHitPointメソッドでは、CatクラスでhitPointが偶数の場合は1ずつ減っていくため、8,6の時のみ減り最終的に5になる。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_6th_overriddenWithoutSuper() {
         Animal animal = new Zombie();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => uooo
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => -1
     }
+    //1220自分なりの回答
+    //doAnimalSeaLand_for_6thメソッドでAnimal型の変数を引数に取り、barkメソッドを呼び出す。
+    //barkメソッドでは、getBarkWordメソッドが呼び出され、"uooo"が返される。
+    //getHitPointメソッドでは、ZombieクラスでhitPointが-1になるため、最終的に-1になる。
 
     /**
      * What is happy if you can assign Dog or Cat instance to Animal variable? <br>
@@ -339,7 +351,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // write your memo here:
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // what is happy?
-        //
+        //同じメソッドを使って、異なるclassのインスタンスを扱えるようになる。
+        //抽象的なメソッドを作ることで拡張性が高くなり汎用的に使える。
         // _/_/_/_/_/_/_/_/_/_/
     }
 
