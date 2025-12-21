@@ -33,14 +33,22 @@ public class Ticket {
     // publicとかだったらJavaDocは必須？ by えどさん → そういう考えでいた方がGoodです。(2025/10/03)
     // 省略しちゃうこともあるけど、publicはJavaDocの費用対効果が高い(privateに比べて)、と言える。
     // (Stringは究極の費用対効果が高いクラス)
-    // TODO edo 固定情報と(変化する)状態情報を区別するために、final付けられるところは付けておきましょう by jflute (2025/12/12)
-    // TODO edo 変数の定義順序、変数のカテゴリを意識して並べたり、空行でカテゴリを見た目強調したり by jflute (2025/12/12)
+    // TODO done edo 固定情報と(変化する)状態情報を区別するために、final付けられるところは付けておきましょう by jflute (2025/12/12)
+    // TODO done edo 変数の定義順序、変数のカテゴリを意識して並べたり、空行でカテゴリを見た目強調したり by jflute (2025/12/12)
     // (さらに、タイトルコメントを付けてあげたりするのもアリ)
     // (DBFlute の LikeSearchOption のインスタンス変数のタグコメントの例も)
+    //1220修正メモ：Ticket informationとCurrent informationを分けて管理しやすいようにした
+    //----------------------------------------------
+    //                            Ticket Information
+    //----------------------------------------------
+    private final TicketType ticketType; // チケットの種別識別子
     private final int displayPrice; // written on ticket, park guest can watch this
+    
+    //----------------------------------------------
+    //                            Current Information
+    //----------------------------------------------
     private boolean currentIn; // 現在入園しているかどうか
     private int restDays; // チケットの残り使用可能日数
-    private final TicketType ticketType; // チケットの種別識別子
 
 // e.g. jfluteの例:
 //// チケット基本情報
