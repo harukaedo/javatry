@@ -40,8 +40,6 @@ public class Ticket {
     private final int displayPrice; // written on ticket, park guest can watch this
     private boolean currentIn; // 現在入園しているかどうか
     private int restDays; // チケットの残り使用可能日数
-    private boolean nightOnly; // 夜だけ使用可能なチケット
-    private boolean dayTimeOnly; // お昼だけ使用可能なチケット
     private final TicketType ticketType; // チケットの種別識別子
 
 // e.g. jfluteの例:
@@ -63,84 +61,71 @@ public class Ticket {
     // done edo mainコードで必要としているConstructorだけにしましょう。 by jflute (2025/11/28)
     //1201修正メモ enum版のTicketコンストラクターのみにしました。
     // (もしくは、何かそれがわかるように区別を付ける)
-    // TODO edo 引数、TicketTypeを指定してるなら、displayPriceとdaysなくてもOK by jflute (2025/12/12)
+    // TODO done edo 引数、TicketTypeを指定してるなら、displayPriceとdaysなくてもOK by jflute (2025/12/12)
+    //1220修正メモ: 引数をTicketTypeのみにして、displayPriceとdaysを削除した。displayPriceとdaysはTicketTypeに含まれいるgetPrice()とgetDays()メソッドで取得できる
     /**
      * チケットを生成する（識別子指定版）
-     * @param displayPrice チケットに表示される価格
-     * @param days 使用可能日数
-     * @param nightOnly 夜間のみ使用可能な場合true
-     * @param dayTimeOnly 昼間のみ使用可能な場合true
      * @param ticketType チケットの種別識別子
      */
-    public Ticket(int displayPrice, int days, boolean nightOnly, boolean dayTimeOnly, TicketType ticketType) {
-        this.displayPrice = displayPrice;
-        this.restDays = days;
-        this.nightOnly = nightOnly;
-        this.dayTimeOnly = dayTimeOnly;
+    public Ticket(TicketType ticketType) {
         this.ticketType = ticketType;
+        this.displayPrice = ticketType.getPrice();
+        this.restDays = ticketType.getDays();
     }
 
-    // TODO edo infer, TicketBoothのとぅどぅの修正したら要らなくなっちゃうかもだけど... by jflute (2025/12/12)
+    // TODO done edo infer, TicketBoothのとぅどぅの修正したら要らなくなっちゃうかもだけど... by jflute (2025/12/12)
     // 思い出のために、コメントアウトで残しておいてください。
-    /**
-     * 日数と時間帯制限からチケット種別を推測する。デフォルトは1日券
-     * @param days 使用可能日数
-     * @param nightOnly 夜間のみ使用可能な場合true
-     * @param dayTimeOnly 昼間のみ使用可能な場合true
-     * @return 推測されたチケット種別
-     */
-    private static TicketType inferTicketType(int days, boolean nightOnly, boolean dayTimeOnly) {
-        if (days == 1) {
-            return TicketType.ONE_DAY;
-        } else if (days == 2) {
-            if (nightOnly) {
-                return TicketType.NIGHT_ONLY_TWO_DAY;
-            } else if (dayTimeOnly) {
-                return TicketType.DAY_TIME_ONLY_TWO_DAY;
-            } else {
-                return TicketType.TWO_DAY;
-            }
-        } else if (days == 4) {
-            return TicketType.FOUR_DAY;
-        } else {
-            return TicketType.ONE_DAY;
-        }
-    }
+    //1220修正メモ：inferメソッドを削除しました。TicketTypeを直接指定する方式にした
+    // /**
+    //  * 日数と時間帯制限からチケット種別を推測する。デフォルトは1日券
+    //  * @param days 使用可能日数
+    //  * @param nightOnly 夜間のみ使用可能な場合true
+    //  * @param dayTimeOnly 昼間のみ使用可能な場合true
+    //  * @return 推測されたチケット種別
+    //  */
+    // private static TicketType inferTicketType(int days, boolean nightOnly, boolean dayTimeOnly) {
+    //     if (days == 1) {
+    //         return TicketType.ONE_DAY;
+    //     } else if (days == 2) {
+    //         if (nightOnly) {
+    //             return TicketType.NIGHT_ONLY_TWO_DAY;
+    //         } else if (dayTimeOnly) {
+    //             return TicketType.DAY_TIME_ONLY_TWO_DAY;
+    //         } else {
+    //             return TicketType.TWO_DAY;
+    //         }
+    //     } else if (days == 4) {
+    //         return TicketType.FOUR_DAY;
+    //     } else {
+    //         return TicketType.ONE_DAY;
+    //     }
+    // }
 
     // ===================================================================================
     //                                                                  Ticket type method
     //                                                                         ===========
     /**
      * 通常チケット（昼夜問わず使える）
-     * @param displayPrice チケットの表示価格
-     * @param days 使用可能日数
      * @return 生成されたチケット
      */
-    public static Ticket creatNormalTicket(int displayPrice, int days) {
-        TicketType type = inferTicketType(days, false, false);
-        return new Ticket(displayPrice, days, false, false, type);
+    public static Ticket creatNormalTicket() {
+        return new Ticket(TicketType.ONE_DAY);
     }
 
     /**
-     * 夜専用チケット
-     * @param displayPrice チケットの表示価格
-     * @param days 使用可能日数
+     * 夜2日券専用チケット
      * @return 生成されたチケット
      */
-    public static Ticket creatNightOnlyTicket(int displayPrice, int days) {
-        TicketType type = inferTicketType(days, true, false);
-        return new Ticket(displayPrice, days, true, false, type);
+    public static Ticket creatNightOnlyTicket() {
+        return new Ticket(TicketType.NIGHT_ONLY_TWO_DAY);
     }
 
     /**
-     * 昼専用チケット
-     * @param displayPrice チケットの表示価格
-     * @param days 使用可能日数
+     * 昼2日券専用チケット
      * @return 生成されたチケット
      */
-    public static Ticket creatDayTimeOnlyTicket(int displayPrice, int days) {
-        TicketType type = inferTicketType(days, false, true);
-        return new Ticket(displayPrice, days, false, true, type);
+    public static Ticket creatDayTimeOnlyTicket() {
+        return new Ticket(TicketType.DAY_TIME_ONLY_TWO_DAY);
     }
 
     // ===================================================================================
@@ -186,7 +171,7 @@ public class Ticket {
         }
 
         // 昼専用チケットの時間帯チェック（11-16時）
-        if (dayTimeOnly) {
+        if (ticketType.isDayTimeOnly()) {
             if (currentHour < DAY_TICKET_START_HOUR || currentHour >= NIGHT_TICKET_START_HOUR) {
                 throw new IllegalStateException("Daytime-only ticket can only be used between "
                         + DAY_TICKET_START_HOUR + " and " + NIGHT_TICKET_START_HOUR + ": currentHour=" + currentHour);
@@ -194,7 +179,7 @@ public class Ticket {
         }
 
         // 夜専用チケットの時間帯チェック（16-21時）
-        if (nightOnly) {
+        if (ticketType.isNightOnly()) {
             if (currentHour < NIGHT_TICKET_START_HOUR) {
                 throw new IllegalStateException("Night-only ticket can only be used from "
                         + NIGHT_TICKET_START_HOUR + " onwards: currentHour=" + currentHour);
@@ -230,7 +215,7 @@ public class Ticket {
      * @return 夜専用チケットの場合true、そうでなければfalse
      */
     public boolean isNightOnly() {
-        return nightOnly;
+        return ticketType.isNightOnly();
     }
 
     //-----------------------------------------
@@ -241,7 +226,7 @@ public class Ticket {
      * @return お昼専用チケットの場合true、そうでなければfalse
      */
     public boolean isDayTimeOnly() {
-        return dayTimeOnly;
+        return ticketType.isDayTimeOnly();
     }
 
     // ===================================================================================

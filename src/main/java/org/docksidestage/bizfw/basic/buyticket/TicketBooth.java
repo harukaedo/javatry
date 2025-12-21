@@ -15,8 +15,6 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
-import java.util.function.BiFunction;
-
 /**
  * @author jflute
  * @author harukaedo
@@ -74,7 +72,8 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
-    // TODO edo publicの方はdoBuyじゃなくてbuyでOK by jflute (2025/12/12)
+    // TODO done edo publicの方はdoBuyじゃなくてbuyでOK by jflute (2025/12/12)
+    //1220 修正メモ：privateのみdoをつけてpublicとprivate見分けやすくした
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -82,15 +81,16 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
-    public TicketBuyResult doBuyOneDayPassport(Integer handedMoney) {
+    public TicketBuyResult BuyOneDayPassport(Integer handedMoney) {
         // done edo ここで売るチケット種別は、「OneDayパスポート」といい切れるのでは？ by jflute (2025/11/28)
         // (今だと、わざわざ中で infer して、TicketType.ONE_DAYを導出しているけど、
         // もうここで TicketType.ONE_DAY ベタッと指定しても良い領域ではある)
         // ということで、publicメソッド内で1:1に対応する TicketType を直接指定する方式にしてみましょう。
         //1201修正メモ TicketType.ONE_DAYを直接指定する方式にした
-        // TODO edo もうここではチケット種別をピンポイントで指定している世界なので... by jflute (2025/12/12)
+        // TODO done edo もうここではチケット種別をピンポイントで指定している世界なので... by jflute (2025/12/12)
         // creat...Ticket() の中で infer する必要がないはず。(特定されているはずだから)
-        return doBuyTicket(handedMoney, TicketType.ONE_DAY, Ticket::creatNormalTicket);
+        // 1220修正メモ：TicketTypeを直接指定する方式にした.inferメソッドをコメントアウトした
+        return doBuyTicket(handedMoney, TicketType.ONE_DAY);
     }
     
     // you can rewrite comments for your own language by jflute
@@ -110,8 +110,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
-    public TicketBuyResult doBuyTwoDayPassport(Integer handedMoney) {
-        return doBuyTicket(handedMoney, TicketType.TWO_DAY, Ticket::creatNormalTicket);
+    public TicketBuyResult BuyTwoDayPassport(Integer handedMoney) {
+        return doBuyTicket(handedMoney, TicketType.TWO_DAY);
     }
 
     /**
@@ -121,8 +121,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
-    public TicketBuyResult doBuyFourDayPassport(Integer handedMoney) {
-        return doBuyTicket(handedMoney, TicketType.FOUR_DAY, Ticket::creatNormalTicket);
+    public TicketBuyResult BuyFourDayPassport(Integer handedMoney) {
+        return doBuyTicket(handedMoney, TicketType.FOUR_DAY);
     }
 
     // done edo @return, ここでも "など" ってしておいたほうがいいかなと by jflute (2025/10/15)
@@ -133,8 +133,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りなどを返す
      */
-    public TicketBuyResult doBuyNightOnlyTwoDayPassport(Integer handedMoney) {
-        return doBuyTicket(handedMoney, TicketType.NIGHT_ONLY_TWO_DAY, Ticket::creatNightOnlyTicket);
+    public TicketBuyResult BuyNightOnlyTwoDayPassport(Integer handedMoney) {
+        return doBuyTicket(handedMoney, TicketType.NIGHT_ONLY_TWO_DAY);
     }
 
     //1104　お昼のみ使えるチケット購入のメソッドも修行問題により追加しました
@@ -145,8 +145,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りなどを返す
      */
-    public TicketBuyResult doBuyDayTimeOnlyTwoDayPassport(Integer handedMoney) {
-        return doBuyTicket(handedMoney, TicketType.DAY_TIME_ONLY_TWO_DAY, Ticket::creatDayTimeOnlyTicket);
+    public TicketBuyResult BuyDayTimeOnlyTwoDayPassport(Integer handedMoney) {
+        return doBuyTicket(handedMoney, TicketType.DAY_TIME_ONLY_TWO_DAY);
     }
 
     // ===================================================================================
@@ -239,15 +239,12 @@ public class TicketBooth {
      * @param ticketCreator チケット作成関数（価格と枚数を受け取り、Ticketを返す）
      * @return 購入されたチケットとお釣り金額
      */
-    private TicketBuyResult doBuyTicket(Integer handedMoney, TicketType ticketType, 
-            BiFunction<Integer, Integer, Ticket> ticketCreator) {
-        int ticketPrice = ticketType.getPrice();
+    private TicketBuyResult doBuyTicket(Integer handedMoney, TicketType ticketType) {
         int purchaseQuantity = ticketType.getPurchaseQuantity();
-        validatePurchaseRequirements(handedMoney, ticketPrice, purchaseQuantity);
-        processPurchase(ticketPrice, purchaseQuantity);
-        int change = calculateChange(handedMoney, ticketPrice);
-        Ticket ticket = ticketCreator.apply(ticketPrice, ticketType.getDays());
-        return new TicketBuyResult(ticket, change);
+        validatePurchaseRequirements(handedMoney, ticketType.getPrice(), purchaseQuantity);
+        processPurchase(ticketType.getPrice(), purchaseQuantity);
+        int change = calculateChange(handedMoney, ticketType.getPrice());
+        return new TicketBuyResult(new Ticket(ticketType), change);
     }
     
     // ===================================================================================

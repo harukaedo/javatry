@@ -53,15 +53,15 @@ package org.docksidestage.bizfw.basic.buyticket;
  */
 public enum TicketType {
     /** 1日券 */
-    ONE_DAY(1, 7400, 1),
+    ONE_DAY(1, 7400, 1, false, false),
     /** 2日券 */
-    TWO_DAY(2, 13200, 2),
+    TWO_DAY(2, 13200, 2, false, false),
     /** 4日券 */
-    FOUR_DAY(4, 22400, 4),
+    FOUR_DAY(4, 22400, 4, false, false),
     /** 夜専用2日券 */
-    NIGHT_ONLY_TWO_DAY(2, 7400, 2),
+    NIGHT_ONLY_TWO_DAY(2, 7400, 2, true, false),
     /** 昼専用2日券 */
-    DAY_TIME_ONLY_TWO_DAY(2, 7400, 2);
+    DAY_TIME_ONLY_TWO_DAY(2, 7400, 2, false, true);
 
     // ===================================================================================
     //                                                                           Attribute
@@ -72,6 +72,10 @@ public enum TicketType {
     private final int price;
     /** 購入時に在庫を消費する枚数 */
     private final int purchaseQuantity;
+    /** 夜だけ使用可能なチケット */
+    private final boolean nightOnly;
+    /** お昼だけ使用可能なチケット */
+    private final boolean dayTimeOnly;
 
     // ===================================================================================
     //                                                                         Constructor
@@ -81,11 +85,15 @@ public enum TicketType {
      * @param days 使用可能日数
      * @param price チケットの価格
      * @param purchaseQuantity 購入時に在庫を消費する枚数
+     * @param nightOnly 夜だけ使用可能なチケットかどうか
+     * @param dayTimeOnly お昼だけ使用可能なチケットかどうか
      */
-    private TicketType(int days, int price, int purchaseQuantity) {
+    private TicketType(int days, int price, int purchaseQuantity, boolean nightOnly, boolean dayTimeOnly) {
         this.days = days;
         this.price = price;
         this.purchaseQuantity = purchaseQuantity;
+        this.nightOnly = nightOnly;
+        this.dayTimeOnly = dayTimeOnly;
     }
 
     // ===================================================================================
@@ -111,5 +119,18 @@ public enum TicketType {
     public int getPurchaseQuantity() {
         return purchaseQuantity;
     }
-}
 
+    /**
+     * @return 夜だけ使用可能なチケットかどうか
+     */
+    public boolean isNightOnly() {
+        return nightOnly;
+    }
+
+    /**
+     * @return お昼だけ使用可能なチケットかどうか
+     */
+    public boolean isDayTimeOnly() {
+        return dayTimeOnly;
+    }
+}
