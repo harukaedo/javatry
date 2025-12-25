@@ -33,8 +33,8 @@ public class Ticket {
     // publicとかだったらJavaDocは必須？ by えどさん → そういう考えでいた方がGoodです。(2025/10/03)
     // 省略しちゃうこともあるけど、publicはJavaDocの費用対効果が高い(privateに比べて)、と言える。
     // (Stringは究極の費用対効果が高いクラス)
-    // TODO done edo 固定情報と(変化する)状態情報を区別するために、final付けられるところは付けておきましょう by jflute (2025/12/12)
-    // TODO done edo 変数の定義順序、変数のカテゴリを意識して並べたり、空行でカテゴリを見た目強調したり by jflute (2025/12/12)
+    // done edo 固定情報と(変化する)状態情報を区別するために、final付けられるところは付けておきましょう by jflute (2025/12/12)
+    // done edo 変数の定義順序、変数のカテゴリを意識して並べたり、空行でカテゴリを見た目強調したり by jflute (2025/12/12)
     // (さらに、タイトルコメントを付けてあげたりするのもアリ)
     // (DBFlute の LikeSearchOption のインスタンス変数のタグコメントの例も)
     //1220修正メモ：Ticket informationとCurrent informationを分けて管理しやすいようにした
@@ -69,7 +69,7 @@ public class Ticket {
     // done edo mainコードで必要としているConstructorだけにしましょう。 by jflute (2025/11/28)
     //1201修正メモ enum版のTicketコンストラクターのみにしました。
     // (もしくは、何かそれがわかるように区別を付ける)
-    // TODO done edo 引数、TicketTypeを指定してるなら、displayPriceとdaysなくてもOK by jflute (2025/12/12)
+    // done edo 引数、TicketTypeを指定してるなら、displayPriceとdaysなくてもOK by jflute (2025/12/12)
     //1220修正メモ: 引数をTicketTypeのみにして、displayPriceとdaysを削除した。displayPriceとdaysはTicketTypeに含まれいるgetPrice()とgetDays()メソッドで取得できる
     /**
      * チケットを生成する（識別子指定版）
@@ -81,7 +81,7 @@ public class Ticket {
         this.restDays = ticketType.getDays();
     }
 
-    // TODO done edo infer, TicketBoothのとぅどぅの修正したら要らなくなっちゃうかもだけど... by jflute (2025/12/12)
+    // done edo infer, TicketBoothのとぅどぅの修正したら要らなくなっちゃうかもだけど... by jflute (2025/12/12)
     // 思い出のために、コメントアウトで残しておいてください。
     //1220修正メモ：inferメソッドを削除しました。TicketTypeを直接指定する方式にした
     // /**
@@ -112,6 +112,9 @@ public class Ticket {
     // ===================================================================================
     //                                                                  Ticket type method
     //                                                                         ===========
+    // TODO edo すでに現状としては、TicketのnewはdoBuy内で統一されているから... by jflute (2025/12/25)
+    // ここのstaticのFactoryメソッドたちは、テストとかそういうところでしか使われていない。
+    // なので基本的にはもう消しても良いもの。思い出でコメントアウトしてもいいかも。
     /**
      * 通常チケット（昼夜問わず使える）
      * @return 生成されたチケット
@@ -139,6 +142,8 @@ public class Ticket {
     // ===================================================================================
     //                                                                             In Park
     //                                                                            =======
+    // TODO edo 近くに置きたい気持ちわかるけど、オーソドックスにはクラスの先頭の方で定数定義 by jflute (2025/12/25)
+    // #1on1: 閉鎖はちょっとかわいそうかも。でも門のあけしめでは閉鎖という言葉も合ってる (2025/12/25)
     private static final int PARK_OPEN_HOUR = 9; // パークの開始時刻
     private static final int PARK_CLOSE_HOUR = 21; // パークの閉鎖時刻
     private static final int DAY_TICKET_START_HOUR = 11; // 昼チケットの開始時刻
@@ -172,6 +177,15 @@ public class Ticket {
      * @throws IllegalStateException 時間帯が合わない場合、または営業時間外の場合
      */
     private void validateTimeRestriction(int currentHour) {
+        // #1on1: 21時10分は入園できてはいけないので、そのときは currentHour は22じゃないいけない想定ロジック (2025/12/25)
+        // つまり、呼び出し側は現在日時を取得した時に21時を1分1秒でも過ぎてたら切り上げで22を導出するようにすべし。
+        // 一方で、8時50分も入園できていはいけないが、今の論理で言うと9を引数で渡すことになるので、
+        // 8時50分で9が来ちゃって入園できてしまう。
+        // 切り捨てするとbegin側のロジックはOKだけど、end側のロジックがダメになっちゃう。
+        // 逆に、切り上げだとend側のロジックはOKだけど、begin側のロジックがダメになっちゃう。
+        // (一方で一方で、DayTimeOnlyの方は、両方切り捨てだと辻褄合う。NightOnlyも切り捨て)
+        // TODO edo ↑の矛盾を調整してみてください by jflute (2025/12/25)
+
         // 営業時間外チェック（全チケット共通）
         if (currentHour < PARK_OPEN_HOUR || currentHour > PARK_CLOSE_HOUR) {
             throw new IllegalStateException("Park is closed at this hour: currentHour=" + currentHour
@@ -211,6 +225,7 @@ public class Ticket {
         restDays--; // 使用日数を減らす
     }
 
+    // TODO edo もう使わなくなってしまった (by えどさん) by jflute (2025/12/25)
     // ========================================================================================
     //                                                                               Time logic
     //                                                                              ===========

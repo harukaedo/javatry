@@ -264,6 +264,15 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_2nd_asAbstract() {
+        // #1on1: is-aの関係、犬は動物である(o)、動物は犬である(x)、目覚まし時計は動物である(x)
+        // dog.ote()はベルけど、animal.ote(); は呼べない
+        // インスタンスはあくまでDogでote()を持ってるけど、animal扱いなので呼べない。
+        //
+        // #1on1: 日常でポリモーフィズムを使ってるか？ (2025/12/25)
+        // ぼくらは抽象度をコントロールして会話している。
+        // 抽象度の高い概念の言葉でスムーズに会話が成り立ったりしている。
+        // (特に事務的な関係性の人と会話するときは)
+        //
         Animal animal = new Dog();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
@@ -277,6 +286,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     //DogはAnimalを継承しているため、Animalコンストラクタが呼び出しされてanimal.bark()の処理が実行される。
     //初期値が10で各メソッドでhitPointが1ずつ減っていくため、最終的に7になる。
 
+    // TODO jflute 次回1on1, ポリモーフィズムのプログラム上のメリット追っていく (2025/12/25)
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_3rd_fromMethod() {
         Animal animal = createAnyAnimal();

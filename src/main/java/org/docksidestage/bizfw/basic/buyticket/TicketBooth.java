@@ -72,8 +72,11 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
-    // TODO done edo publicの方はdoBuyじゃなくてbuyでOK by jflute (2025/12/12)
+    //  done edo publicの方はdoBuyじゃなくてbuyでOK by jflute (2025/12/12)
     //1220 修正メモ：privateのみdoをつけてpublicとprivate見分けやすくした
+    // TODO edo Javaだと、メソッドの先頭は小文字が慣習になっている。 by jflute (2025/12/25)
+    // #1on1: TypeScriptは関数名は基本小文字っぽいのでJavaとほぼ同じ。 (2025/12/25)
+    // C#は、メソッドの先頭は大文字。Go言語は大文字でpublicになる規約ベースでプログラムに影響する。
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -87,7 +90,7 @@ public class TicketBooth {
         // もうここで TicketType.ONE_DAY ベタッと指定しても良い領域ではある)
         // ということで、publicメソッド内で1:1に対応する TicketType を直接指定する方式にしてみましょう。
         //1201修正メモ TicketType.ONE_DAYを直接指定する方式にした
-        // TODO done edo もうここではチケット種別をピンポイントで指定している世界なので... by jflute (2025/12/12)
+        // done edo もうここではチケット種別をピンポイントで指定している世界なので... by jflute (2025/12/12)
         // creat...Ticket() の中で infer する必要がないはず。(特定されているはずだから)
         // 1220修正メモ：TicketTypeを直接指定する方式にした.inferメソッドをコメントアウトした
         return doBuyTicket(handedMoney, TicketType.ONE_DAY);
@@ -232,6 +235,7 @@ public class TicketBooth {
     //Ticket::creatNormalTicket, Ticket::creatNightOnlyTicket, Ticket::creatDayTimeOnlyTicketを渡すようにした
     //ticketの購入を一気に共通化した
 
+    // TODO edo リファクタリング前のticketCreatorが残ってる by jflute (2025/12/25)
     /**
      * Buy ticket with common purchase flow.
      * @param handedMoney 手渡しされた金額
@@ -240,6 +244,8 @@ public class TicketBooth {
      * @return 購入されたチケットとお釣り金額
      */
     private TicketBuyResult doBuyTicket(Integer handedMoney, TicketType ticketType) {
+        // TODO edo getPrice()も変数抽出して、重要な処理の行をスッキリさせましょう by jflute (2025/12/25)
+        // (ぜひ、VSCodeで変数抽出のショートカット探してみてください)
         int purchaseQuantity = ticketType.getPurchaseQuantity();
         validatePurchaseRequirements(handedMoney, ticketType.getPrice(), purchaseQuantity);
         processPurchase(ticketType.getPrice(), purchaseQuantity);
