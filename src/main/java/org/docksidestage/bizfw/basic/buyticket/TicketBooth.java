@@ -74,9 +74,10 @@ public class TicketBooth {
     // */
     //  done edo publicの方はdoBuyじゃなくてbuyでOK by jflute (2025/12/12)
     //1220 修正メモ：privateのみdoをつけてpublicとprivate見分けやすくした
-    // TODO edo Javaだと、メソッドの先頭は小文字が慣習になっている。 by jflute (2025/12/25)
+    // TODO done edo Javaだと、メソッドの先頭は小文字が慣習になっている。 by jflute (2025/12/25)
     // #1on1: TypeScriptは関数名は基本小文字っぽいのでJavaとほぼ同じ。 (2025/12/25)
     // C#は、メソッドの先頭は大文字。Go言語は大文字でpublicになる規約ベースでプログラムに影響する。
+    //0106 修正メモ：メソッドの先頭を小文字に修正し、Buyからbuyに変更。参照しているところも併せて修正した
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -84,7 +85,7 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
-    public TicketBuyResult BuyOneDayPassport(Integer handedMoney) {
+    public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
         // done edo ここで売るチケット種別は、「OneDayパスポート」といい切れるのでは？ by jflute (2025/11/28)
         // (今だと、わざわざ中で infer して、TicketType.ONE_DAYを導出しているけど、
         // もうここで TicketType.ONE_DAY ベタッと指定しても良い領域ではある)
@@ -113,7 +114,7 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
-    public TicketBuyResult BuyTwoDayPassport(Integer handedMoney) {
+    public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
         return doBuyTicket(handedMoney, TicketType.TWO_DAY);
     }
 
@@ -124,7 +125,7 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りを返す
      */
-    public TicketBuyResult BuyFourDayPassport(Integer handedMoney) {
+    public TicketBuyResult buyFourDayPassport(Integer handedMoney) {
         return doBuyTicket(handedMoney, TicketType.FOUR_DAY);
     }
 
@@ -136,7 +137,7 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りなどを返す
      */
-    public TicketBuyResult BuyNightOnlyTwoDayPassport(Integer handedMoney) {
+    public TicketBuyResult buyNightOnlyTwoDayPassport(Integer handedMoney) {
         return doBuyTicket(handedMoney, TicketType.NIGHT_ONLY_TWO_DAY);
     }
 
@@ -148,7 +149,7 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @return チケットとお釣りなどを返す
      */
-    public TicketBuyResult BuyDayTimeOnlyTwoDayPassport(Integer handedMoney) {
+    public TicketBuyResult buyDayTimeOnlyTwoDayPassport(Integer handedMoney) {
         return doBuyTicket(handedMoney, TicketType.DAY_TIME_ONLY_TWO_DAY);
     }
 
@@ -235,12 +236,12 @@ public class TicketBooth {
     //Ticket::creatNormalTicket, Ticket::creatNightOnlyTicket, Ticket::creatDayTimeOnlyTicketを渡すようにした
     //ticketの購入を一気に共通化した
 
-    // TODO edo リファクタリング前のticketCreatorが残ってる by jflute (2025/12/25)
+    // TODO done edo リファクタリング前のticketCreatorが残ってる by jflute (2025/12/25)
+    //0106 修正メモ：ticketCreatorを削除し,不要なJava docを削除した
     /**
      * Buy ticket with common purchase flow.
      * @param handedMoney 手渡しされた金額
      * @param ticketType チケットの種別
-     * @param ticketCreator チケット作成関数（価格と枚数を受け取り、Ticketを返す）
      * @return 購入されたチケットとお釣り金額
      */
     private TicketBuyResult doBuyTicket(Integer handedMoney, TicketType ticketType) {

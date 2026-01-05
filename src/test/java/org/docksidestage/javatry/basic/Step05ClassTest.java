@@ -62,7 +62,7 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_howToUse_basic() {
         TicketBooth booth = createBooth();
-        booth.BuyOneDayPassport(7400);
+        booth.buyOneDayPassport(7400);
         int sea = booth.getQuantity();
         log(sea); // your answer? =>9
     }
@@ -74,7 +74,7 @@ public class Step05ClassTest extends PlainTestCase {
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_overpay() {
         TicketBooth booth = createBooth();
-        booth.BuyOneDayPassport(10000);
+        booth.buyOneDayPassport(10000);
         Integer sea = booth.getSalesProceeds();
         log(sea); // your answer? => 10000
     }
@@ -124,7 +124,7 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = createBooth();
         int handedMoney = 7399;
         try {
-            booth.BuyOneDayPassport(handedMoney);
+            booth.buyOneDayPassport(handedMoney);
             fail("always exception but none");
         } catch (TicketShortMoneyException continued) {
             log("Failed to buy one-day passport: money=" + handedMoney, continued);
@@ -171,7 +171,7 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_letsFix_salesProceedsIncrease() {
         TicketBooth booth = createBooth();
-        booth.  BuyOneDayPassport(10000);
+        booth.buyOneDayPassport(10000);
         Integer sea = booth.getSalesProceeds();
         log(sea); // should be same as one-day price, visual check here
     }
@@ -190,7 +190,7 @@ public class Step05ClassTest extends PlainTestCase {
         // done edo コンパイルエラーが出ています。 by jflute (2025/10/03)
         // リファクタリングなど修正を入れたら、全体がおかしくなってないか？確認する習慣を
         //1007 memo: コンパイルエラーを修正しました
-        TicketBuyResult change = booth.BuyTwoDayPassport(money);
+        TicketBuyResult change = booth.buyTwoDayPassport(money);
         Integer sea = booth.getSalesProceeds() + change.getChange();
         log(sea); // should be same as money
 
@@ -216,7 +216,7 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_letsFix_refactor_recycle() {
         TicketBooth booth = createBooth();
-        booth.BuyOneDayPassport(10000);
+        booth.buyOneDayPassport(10000);
         log(booth.getQuantity(), booth.getSalesProceeds()); // should be same as before-fix
     }
 
@@ -240,12 +240,12 @@ public class Step05ClassTest extends PlainTestCase {
         // #1on1: お釣りも戻さないといけないんじゃない？というえどさんの疑念は正しい (2025/10/03)
         //1007 1dayだけお釣りも戻っていないので、TicketBuyResultクラスを戻り値として返すようにし,
         TicketBooth booth = createBooth();
-        TicketBuyResult oneDayPassport = booth.BuyOneDayPassport(10000);
+        TicketBuyResult oneDayPassport = booth.buyOneDayPassport(10000);
         Ticket ticket = oneDayPassport.getTicket();
         assertEquals(TicketType.ONE_DAY, ticket.getTicketType()); // TicketTypeで確認
         log(ticket.getDisplayPrice()); // should be same as one-day price
         log(ticket.isCurrentIn()); // should be false
-        ticket.doInPark(10); // 営業時間内（10時）で入園
+        ticket.doInPark(10, 0); // 営業時間内（10時0分）で入園
         log(ticket.isCurrentIn()); // should be true
     }
 
@@ -260,7 +260,7 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_return_whole() {
         TicketBooth booth = createBooth();
         int handedMoney = 20000;
-        TicketBuyResult buyResult = booth.BuyTwoDayPassport(handedMoney);
+        TicketBuyResult buyResult = booth.buyTwoDayPassport(handedMoney);
         Ticket twoDayPassport = buyResult.getTicket();
         assertEquals(TicketType.TWO_DAY, twoDayPassport.getTicketType()); // TicketTypeで確認
         int change = buyResult.getChange();
@@ -277,12 +277,12 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_usePluralDays() {
         TicketBooth booth = createBooth();
-        TicketBuyResult buyResult = booth.BuyTwoDayPassport(13200);
+        TicketBuyResult buyResult = booth.buyTwoDayPassport(13200);
         Ticket twoDayPassport = buyResult.getTicket();
         assertEquals(TicketType.TWO_DAY, twoDayPassport.getTicketType()); // TicketTypeで確認
 
         // 1日目の入園、退園
-        twoDayPassport.doInPark(13); // 営業時間内（13時）で入園
+        twoDayPassport.doInPark(13, 0); // 営業時間内（13時0分）で入園
         log(twoDayPassport.isCurrentIn()); // trueになる
         twoDayPassport.doOutPark();
         log(twoDayPassport.getRestDays()); // 1日使われたため、残り1日になる
@@ -290,7 +290,7 @@ public class Step05ClassTest extends PlainTestCase {
         assertEquals(TicketType.TWO_DAY, twoDayPassport.getTicketType());
 
         // 2日目の入園、退園
-        twoDayPassport.doInPark(16); // 営業時間内（16時）で入園
+        twoDayPassport.doInPark(16, 0); // 営業時間内（16時0分）で入園
         log(twoDayPassport.isCurrentIn()); // trueになる
         twoDayPassport.doOutPark();
         log(twoDayPassport.getRestDays()); // 残りの1日が使われたため、残りが0となる
@@ -304,8 +304,8 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_whetherTicketType() {
         TicketBooth booth = createBooth();
-        showTicketIfNeeds(booth.BuyOneDayPassport(10000).getTicket());
-        showTicketIfNeeds(booth.BuyTwoDayPassport(10000).getTicket());
+        showTicketIfNeeds(booth.buyOneDayPassport(10000).getTicket());
+        showTicketIfNeeds(booth.buyTwoDayPassport(10000).getTicket());
     }
 
     // uncomment when you implement this exercise
@@ -370,7 +370,7 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_wonder_four() {
         TicketBooth booth = createBooth();
-        TicketBuyResult buyResult = booth.BuyFourDayPassport(22400);
+        TicketBuyResult buyResult = booth.buyFourDayPassport(22400);
         Ticket fourDayPassport = buyResult.getTicket();
         log(fourDayPassport.getRestDays()); // should be same as four-day passport
         assertEquals(TicketType.FOUR_DAY, fourDayPassport.getTicketType()); // TicketTypeで確認
@@ -387,15 +387,15 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_wonder_night() {
         TicketBooth booth = createBooth();
-        TicketBuyResult buyResult = booth.BuyNightOnlyTwoDayPassport(7400);
+        TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(7400);
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
 
         log("this ticket is night-only two-day passport");
         assertEquals(TicketType.NIGHT_ONLY_TWO_DAY, nightOnlyTwoDayPassport.getTicketType()); // TicketTypeで確認
         log(nightOnlyTwoDayPassport.getRestDays()); // 残りチケット日数が2日になる
 
-        // 夜の時間帯（16-21時）で入園
-        nightOnlyTwoDayPassport.doInPark(17); // 17時に入園
+        // 夜の時間帯（16:00-21:00）で入園
+        nightOnlyTwoDayPassport.doInPark(17, 0); // 17時0分に入園
         log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn());
         nightOnlyTwoDayPassport.doOutPark();
         log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn());
@@ -426,25 +426,25 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_wonder_night_timeRestriction() {
         TicketBooth booth = createBooth();
-        TicketBuyResult buyResult = booth.BuyNightOnlyTwoDayPassport(7400);
+        TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(7400);
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
         assertEquals(TicketType.NIGHT_ONLY_TWO_DAY, nightOnlyTwoDayPassport.getTicketType()); // TicketTypeで確認
 
         // TODO done edo 修行++: このifだと今夜かは問わないので、テストの実行が昼でもうまくいっちゃう by jflute (2025/11/14)
         // UnitTestを昼に実行したら落ちるようにしたい。
         //1117 修正メモ：Ticketクラスにテーマパークの営業時間を定義し、夜の時間帯や昼の時間帯も定義した
-        //夜の時間帯外（16時未満）は入園できないことを確認
-        //夜の時間帯（16-21時）は入園できることを確認
+        //夜の時間帯外（16:00未満）は入園できないことを確認
+        //夜の時間帯（16:00-21:00）は入園できることを確認
 
         try {
-            nightOnlyTwoDayPassport.doInPark(14); // 14時に入園を試みる
+            nightOnlyTwoDayPassport.doInPark(14, 0); // 14時0分に入園を試みる
             fail("Night-only ticket should not be usable before 16:00");
         } catch (IllegalStateException e) {
             log("Expected exception: " + e.getMessage());
         }
 
-        // 夜の時間帯（16-21時）は入園できることを確認
-        nightOnlyTwoDayPassport.doInPark(17); // 17時に入園
+        // 夜の時間帯（16:00-21:00）は入園できることを確認
+        nightOnlyTwoDayPassport.doInPark(17, 0); // 17時0分に入園
         log("Successfully entered at night: " + nightOnlyTwoDayPassport.isCurrentIn());
     }
 
@@ -453,24 +453,24 @@ public class Step05ClassTest extends PlainTestCase {
      * (昼専用チケットの時間帯制限をテスト（夜は入園できない）)
      */
         //1117 修正メモ：Ticketクラスにテーマパークの営業時間を定義し、夜の時間帯や昼の時間帯も定義した
-        //昼の時間帯外（16時以降）は入園できないことを確認
-        //昼の時間帯（11-16時）は入園できることを確認
+        //昼の時間帯外（16:00以降）は入園できないことを確認
+        //昼の時間帯（11:00-16:00）は入園できることを確認
     public void test_class_moreFix_wonder_daytime_timeRestriction() {
         TicketBooth booth = createBooth();
-        TicketBuyResult buyResult = booth.BuyDayTimeOnlyTwoDayPassport(7400);
+        TicketBuyResult buyResult = booth.buyDayTimeOnlyTwoDayPassport(7400);
         Ticket dayTimeOnlyTwoDayPassport = buyResult.getTicket();
         assertEquals(TicketType.DAY_TIME_ONLY_TWO_DAY, dayTimeOnlyTwoDayPassport.getTicketType()); // TicketTypeで確認
 
-        // 昼の時間帯外（16時以降）は入園できないことを確認
+        // 昼の時間帯外（16:00以降）は入園できないことを確認
         try {
-            dayTimeOnlyTwoDayPassport.doInPark(17); // 17時に入園を試みる
+            dayTimeOnlyTwoDayPassport.doInPark(17, 0); // 17時0分に入園チャレンジ
             fail("Daytime-only ticket should not be usable after 16:00");
         } catch (IllegalStateException e) {
             log("Expected exception: " + e.getMessage());
         }
 
-        // 昼の時間帯（11-16時）は入園できることを確認
-        dayTimeOnlyTwoDayPassport.doInPark(13); // 13時に入園
+        // 昼の時間帯（11:00-16:00）は入園できることを確認
+        dayTimeOnlyTwoDayPassport.doInPark(13, 0); // 13時0分チャレンジ
         log("Successfully entered during daytime: " + dayTimeOnlyTwoDayPassport.isCurrentIn());
     }
 
@@ -489,23 +489,22 @@ public class Step05ClassTest extends PlainTestCase {
     //Ticket.createNightOnlyTicket(price, quantity)とすることで明示的にしわかりやすくした
     //②Ticket.javaのコンストラクタをthisを使って呼び出すようにし、コンストラクタの中身を簡潔にした
     public void test_class_moreFix_yourRefactoring() {
-        // 1. Ticket type methodの確認（TicketTypeで判定）
-        Ticket normal = Ticket.creatNormalTicket();
-        assertEquals(TicketType.ONE_DAY, normal.getTicketType());
+        // 1. コンストラクタから直接作成したチケットの確認
+        Ticket normalTicket = new Ticket(TicketType.ONE_DAY);
+        log("normalTicket: " + normalTicket.getTicketType()); // 期待値：ONE_DAY
+        Ticket nightOnlyTicket = new Ticket(TicketType.NIGHT_ONLY_TWO_DAY);
+        log("nightOnlyTicket: " + nightOnlyTicket.getTicketType()); // 期待値：NIGHT_ONLY_TWO_DAY
         
-        Ticket nightOnly = Ticket.creatNightOnlyTicket();
-        assertEquals(TicketType.NIGHT_ONLY_TWO_DAY, nightOnly.getTicketType());
+        Ticket dayTimeOnlyTicket = new Ticket(TicketType.DAY_TIME_ONLY_TWO_DAY);
+        log("dayTimeOnlyTicket: " + dayTimeOnlyTicket.getTicketType()); // 期待値：DAY_TIME_ONLY_TWO_DAY
         
-        Ticket dayTimeOnly = Ticket.creatDayTimeOnlyTicket();
-        assertEquals(TicketType.DAY_TIME_ONLY_TWO_DAY, dayTimeOnly.getTicketType());
-        
-        // 2. TicketBoothから購入したチケットが正しい種別で作成されることを確認（TicketTypeで判定）
+        // 2. TicketBoothから購入したチケットの確認
         TicketBooth booth = createBooth();
-        Ticket oneDay = booth.BuyOneDayPassport(10000).getTicket();
-        assertEquals(TicketType.ONE_DAY, oneDay.getTicketType());
+        Ticket oneDay = booth.buyOneDayPassport(10000).getTicket();
+        log("oneDay from booth: " + oneDay.getTicketType()); // 期待値：ONE_DAY
         
-        Ticket nightOnlyFromBooth = booth.BuyNightOnlyTwoDayPassport(8000).getTicket();
-        assertEquals(TicketType.NIGHT_ONLY_TWO_DAY, nightOnlyFromBooth.getTicketType());
+        Ticket nightOnlyFromBooth = booth.buyNightOnlyTwoDayPassport(8000).getTicket();
+        log("nightOnlyFromBooth: " + nightOnlyFromBooth.getTicketType()); // 期待値：NIGHT_ONLY_TWO_DAY
     }
 
     /**
@@ -513,21 +512,29 @@ public class Step05ClassTest extends PlainTestCase {
      * (Ticketクラスのpublicなクラス/コンストラクター/メソッドに、気の利いたJavaDocコメントを本気で書いてみましょう)
      */
     public void test_class_moreFix_yourSuperJavaDoc() {
-        // your confirmation code here     
-        // コンストラクタとTicket type method
-        Ticket oneDay = Ticket.creatNormalTicket();
-        if (oneDay.getTicketType() == TicketType.ONE_DAY) {
-            log("one-day passport");
-        }
-        if (oneDay.getTicketType() == TicketType.NIGHT_ONLY_TWO_DAY) {
-            log("night-only two-day passport");
-        }
-        if (oneDay.getTicketType() == TicketType.DAY_TIME_ONLY_TWO_DAY) {
-            log("day-time only two-day passport");
-        }
-        if (oneDay.getTicketType() == TicketType.FOUR_DAY) {
-            log("four-day passport");
-        }
+        // JavaDocの確認：各publicメソッドの動作確認
+        Ticket oneDay = new Ticket(TicketType.ONE_DAY);
+        
+        // getTicketType()の確認
+        log("TicketType: " + oneDay.getTicketType()); // 期待値：ONE_DAY
+        
+        // getDisplayPrice()の確認
+        log("DisplayPrice: " + oneDay.getDisplayPrice()); // 期待値：7400
+        
+        // getRestDays()の確認
+        log("RestDays: " + oneDay.getRestDays()); // 期待値：1
+        
+        // isCurrentIn()の確認（入園前）
+        log("CurrentIn (before): " + oneDay.isCurrentIn()); // 期待値：false
+        
+        // doInPark()の確認
+        oneDay.doInPark(10, 0);
+        log("CurrentIn (after doInPark): " + oneDay.isCurrentIn()); // 期待値：true
+        
+        // doOutPark()の確認
+        oneDay.doOutPark();
+        log("CurrentIn (after doOutPark): " + oneDay.isCurrentIn()); // 期待値：false
+        log("RestDays (after use): " + oneDay.getRestDays()); // 期待値：0
     }
 
     // ===================================================================================

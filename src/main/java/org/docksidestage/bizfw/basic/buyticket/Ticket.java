@@ -39,6 +39,16 @@ public class Ticket {
     // (DBFlute の LikeSearchOption のインスタンス変数のタグコメントの例も)
     //1220修正メモ：Ticket informationとCurrent informationを分けて管理しやすいようにした
     //----------------------------------------------
+    //                             Park Information
+    //----------------------------------------------
+    // TODO done edo 近くに置きたい気持ちわかるけど、オーソドックスにはクラスの先頭の方で定数定義 by jflute (2025/12/25)
+    // #1on1: 閉鎖はちょっとかわいそうかも。でも門のあけしめでは閉鎖という言葉も合ってる (2025/12/25)
+    //0106 修正メモ：閉鎖を閉園に変更した。Park Informationというタイトルを付け
+    private static final int PARK_OPEN_HOUR = 9; // パークの開始時刻
+    private static final int PARK_CLOSE_HOUR = 21; // パークの閉園時刻
+    private static final int DAY_TICKET_START_HOUR = 11; // 昼チケットの開始時刻
+    private static final int NIGHT_TICKET_START_HOUR = 16; // 夜チケットの開始時刻
+    //----------------------------------------------
     //                            Ticket Information
     //----------------------------------------------
     private final TicketType ticketType; // チケットの種別識別子
@@ -112,43 +122,37 @@ public class Ticket {
     // ===================================================================================
     //                                                                  Ticket type method
     //                                                                         ===========
-    // TODO edo すでに現状としては、TicketのnewはdoBuy内で統一されているから... by jflute (2025/12/25)
+    // TODO done edo すでに現状としては、TicketのnewはdoBuy内で統一されているから... by jflute (2025/12/25)
     // ここのstaticのFactoryメソッドたちは、テストとかそういうところでしか使われていない。
     // なので基本的にはもう消しても良いもの。思い出でコメントアウトしてもいいかも。
-    /**
-     * 通常チケット（昼夜問わず使える）
-     * @return 生成されたチケット
-     */
-    public static Ticket creatNormalTicket() {
-        return new Ticket(TicketType.ONE_DAY);
-    }
+    //0106 修正メモ：doBuy内で担保できているためこちらはコメントアウトしましました。
+    // /**
+    //  * 通常チケット（昼夜問わず使える）
+    //  * @return 生成されたチケット
+    //  */
+    // public static Ticket creatNormalTicket() {
+    //     return new Ticket(TicketType.ONE_DAY);
+    // }
 
-    /**
-     * 夜2日券専用チケット
-     * @return 生成されたチケット
-     */
-    public static Ticket creatNightOnlyTicket() {
-        return new Ticket(TicketType.NIGHT_ONLY_TWO_DAY);
-    }
+    // /**
+    //  * 夜2日券専用チケット
+    //  * @return 生成されたチケット
+    //  */
+    // public static Ticket creatNightOnlyTicket() {
+    //     return new Ticket(TicketType.NIGHT_ONLY_TWO_DAY);
+    // }
 
-    /**
-     * 昼2日券専用チケット
-     * @return 生成されたチケット
-     */
-    public static Ticket creatDayTimeOnlyTicket() {
-        return new Ticket(TicketType.DAY_TIME_ONLY_TWO_DAY);
-    }
+    // /**
+    //  * 昼2日券専用チケット
+    //  * @return 生成されたチケット
+    //  */
+    // public static Ticket creatDayTimeOnlyTicket() {
+    //     return new Ticket(TicketType.DAY_TIME_ONLY_TWO_DAY);
+    // }
 
     // ===================================================================================
     //                                                                             In Park
     //                                                                            =======
-    // TODO edo 近くに置きたい気持ちわかるけど、オーソドックスにはクラスの先頭の方で定数定義 by jflute (2025/12/25)
-    // #1on1: 閉鎖はちょっとかわいそうかも。でも門のあけしめでは閉鎖という言葉も合ってる (2025/12/25)
-    private static final int PARK_OPEN_HOUR = 9; // パークの開始時刻
-    private static final int PARK_CLOSE_HOUR = 21; // パークの閉鎖時刻
-    private static final int DAY_TICKET_START_HOUR = 11; // 昼チケットの開始時刻
-    private static final int NIGHT_TICKET_START_HOUR = 16; // 夜チケットの開始時刻
-
     /**
      * パークに入園する。
      * 残り使用可能日数がない場合や、既に入園済みの場合、時間帯が合わない場合は例外をスローする。
@@ -157,26 +161,39 @@ public class Ticket {
      * @throws IllegalStateException 残り使用可能日数がない、既に入園済み、または時間帯が合わない場合
      */
     public void doInPark(int currentHour) {
+        doInPark(currentHour, 0);
+    }
+
+    /**
+     * パークに入園する。
+     * 残り使用可能日数がない場合や、既に入園済みの場合、時間帯が合わない場合は例外をスローする。
+     *
+     * @param currentHour 現在の時刻（0-23の範囲）
+     * @param currentMinute 現在の分（0-59の範囲）
+     * @throws IllegalStateException 残り使用可能日数がない、既に入園済み、または時間帯が合わない場合
+     */
+    public void doInPark(int currentHour, int currentMinute) {
         if (restDays <= 0) {
             throw new IllegalStateException("No remaining days: displayedPrice=" + displayPrice);
         }
         if (currentIn) {
             throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
         }
-        validateTimeRestriction(currentHour);
+        validateTimeRestriction(currentHour, currentMinute);
         currentIn = true;
     }
 
     /**
      * 時間帯制限をチェックする。
-     * 通常チケット: 9-21時まで入園可能
-     * 昼専用チケット: 11-16時まで入園可能
-     * 夜専用チケット: 16-21時まで入園可能
+     * 通常チケット: 9:00-21:00まで入園可能（21:00ちょうどは可能、21:01以降は不可）
+     * 昼専用チケット: 11:00-15:59まで入園可能（16:00以降は不可）
+     * 夜専用チケット: 16:00-20:59まで入園可能（21:00以降は不可）
      *
-     * @param currentHour 現在の時刻（0-23の範囲で設定）
+     * @param currentHour 現在の時刻（0-23の範囲）
+     * @param currentMinute 現在の分（0-59の範囲）
      * @throws IllegalStateException 時間帯が合わない場合、または営業時間外の場合
      */
-    private void validateTimeRestriction(int currentHour) {
+    private void validateTimeRestriction(int currentHour, int currentMinute) {
         // #1on1: 21時10分は入園できてはいけないので、そのときは currentHour は22じゃないいけない想定ロジック (2025/12/25)
         // つまり、呼び出し側は現在日時を取得した時に21時を1分1秒でも過ぎてたら切り上げで22を導出するようにすべし。
         // 一方で、8時50分も入園できていはいけないが、今の論理で言うと9を引数で渡すことになるので、
@@ -184,27 +201,32 @@ public class Ticket {
         // 切り捨てするとbegin側のロジックはOKだけど、end側のロジックがダメになっちゃう。
         // 逆に、切り上げだとend側のロジックはOKだけど、begin側のロジックがダメになっちゃう。
         // (一方で一方で、DayTimeOnlyの方は、両方切り捨てだと辻褄合う。NightOnlyも切り捨て)
-        // TODO edo ↑の矛盾を調整してみてください by jflute (2025/12/25)
+        // TODO done edo ↑の矛盾を調整してみてください by jflute (2025/12/25)
+        //0106 修正メモ: currentMinuteを追加し、分もチェックするようにした。
+        //分を追加することによって、厳格な時間帯チェックが可能になった。
 
         // 営業時間外チェック（全チケット共通）
-        if (currentHour < PARK_OPEN_HOUR || currentHour > PARK_CLOSE_HOUR) {
-            throw new IllegalStateException("Park is closed at this hour: currentHour=" + currentHour
-                    + " (Open: " + PARK_OPEN_HOUR + "-" + PARK_CLOSE_HOUR + ")");
+        // 9:00より前、または21:01以降は入園不可
+        if (currentHour < PARK_OPEN_HOUR || (currentHour == PARK_CLOSE_HOUR && currentMinute > 0) || currentHour > PARK_CLOSE_HOUR) {
+            throw new IllegalStateException("Park is closed at this time: " + currentHour + ":" + String.format("%02d", currentMinute)
+                    + " (Open: " + PARK_OPEN_HOUR + ":00-" + PARK_CLOSE_HOUR + ":00)");
         }
 
-        // 昼専用チケットの時間帯チェック（11-16時）
+        // 昼専用チケットの時間帯チェック（11:00-16:00）
         if (ticketType.isDayTimeOnly()) {
             if (currentHour < DAY_TICKET_START_HOUR || currentHour >= NIGHT_TICKET_START_HOUR) {
                 throw new IllegalStateException("Daytime-only ticket can only be used between "
-                        + DAY_TICKET_START_HOUR + " and " + NIGHT_TICKET_START_HOUR + ": currentHour=" + currentHour);
+                        + DAY_TICKET_START_HOUR + ":00 and " + NIGHT_TICKET_START_HOUR + ":00: "
+                        + currentHour + ":" + String.format("%02d", currentMinute));
             }
         }
 
-        // 夜専用チケットの時間帯チェック（16-21時）
+        // 夜専用チケットの時間帯チェック（16:00-21:00）
         if (ticketType.isNightOnly()) {
-            if (currentHour < NIGHT_TICKET_START_HOUR) {
+            if (currentHour < NIGHT_TICKET_START_HOUR || (currentHour == PARK_CLOSE_HOUR && currentMinute > 0)) {
                 throw new IllegalStateException("Night-only ticket can only be used from "
-                        + NIGHT_TICKET_START_HOUR + " onwards: currentHour=" + currentHour);
+                        + NIGHT_TICKET_START_HOUR + ":00 to " + PARK_CLOSE_HOUR + ":00: "
+                        + currentHour + ":" + String.format("%02d", currentMinute));
             }
         }
     }
@@ -225,33 +247,8 @@ public class Ticket {
         restDays--; // 使用日数を減らす
     }
 
-    // TODO edo もう使わなくなってしまった (by えどさん) by jflute (2025/12/25)
-    // ========================================================================================
-    //                                                                               Time logic
-    //                                                                              ===========
-    //-----------------------------------------
-    //                                    Night
-    //----------------------------------------
-    /**
-     * done edo notNight()くんを誰も呼び出していない (ロジックも含めて見直しを) by jflute (2025/10/15)
-     * 夜だけ使えるチケットかどうかを判定する
-     * @return 夜専用チケットの場合true、そうでなければfalse
-     */
-    public boolean isNightOnly() {
-        return ticketType.isNightOnly();
-    }
-
-    //-----------------------------------------
-    //                                    Day Time
-    //----------------------------------------
-    /**
-     * お昼だけ使えるチケットかどうかを判定する
-     * @return お昼専用チケットの場合true、そうでなければfalse
-     */
-    public boolean isDayTimeOnly() {
-        return ticketType.isDayTimeOnly();
-    }
-
+    // TODO done edo もう使わなくなってしまった (by えどさん) by jflute (2025/12/25)
+    //0106 修正メモ：Ticket typeの方にtime　logicを引っ越ししたので、こちらは削除しました。
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
