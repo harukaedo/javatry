@@ -75,12 +75,13 @@ public enum TicketType {
     /** チケットの価格 */
     private final int price;
 
-    // TODO edo purchaseQuantityという言葉、もうちょい消費というニュアンスがある方がわかりやすいかも by jflute (2025/12/25)
+    // TODO done edo purchaseQuantityという言葉、もうちょい消費というニュアンスがある方がわかりやすいかも by jflute (2025/12/25)
     // 動的な在庫の枚数としっかり区別をするため。在庫消費という言葉があるようなので消費でOKそう。
     // (jfluteが在庫消費を知らなかったので、えどさんに平謝り)
     // (リファクタリングトレーニングだと思って)
+    //260111修正メモ: purchaseQuantityをusedTicketQuantityに変更して、在庫消費というニュアンスがあるようにした
     /** 購入時に在庫を消費する枚数 */
-    private final int purchaseQuantity;
+    private final int usedTicketQuantity;
     /** 夜だけ使用可能なチケット */
     private final boolean nightOnly;
     /** お昼だけ使用可能なチケット */
@@ -100,7 +101,7 @@ public enum TicketType {
     private TicketType(int days, int price, int purchaseQuantity, boolean nightOnly, boolean dayTimeOnly) {
         this.days = days;
         this.price = price;
-        this.purchaseQuantity = purchaseQuantity;
+        this.usedTicketQuantity = purchaseQuantity;
         this.nightOnly = nightOnly;
         this.dayTimeOnly = dayTimeOnly;
     }
@@ -125,8 +126,8 @@ public enum TicketType {
     /**
      * @return 購入時に在庫を消費する枚数
      */
-    public int getPurchaseQuantity() {
-        return purchaseQuantity;
+    public int getUsedTicketQuantity() {
+        return usedTicketQuantity;
     }
 
     /**

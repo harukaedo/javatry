@@ -245,12 +245,14 @@ public class TicketBooth {
      * @return 購入されたチケットとお釣り金額
      */
     private TicketBuyResult doBuyTicket(Integer handedMoney, TicketType ticketType) {
-        // TODO edo getPrice()も変数抽出して、重要な処理の行をスッキリさせましょう by jflute (2025/12/25)
+        // TODO done edo getPrice()も変数抽出して、重要な処理の行をスッキリさせましょう by jflute (2025/12/25)
         // (ぜひ、VSCodeで変数抽出のショートカット探してみてください)
-        int purchaseQuantity = ticketType.getPurchaseQuantity();
-        validatePurchaseRequirements(handedMoney, ticketType.getPrice(), purchaseQuantity);
-        processPurchase(ticketType.getPrice(), purchaseQuantity);
-        int change = calculateChange(handedMoney, ticketType.getPrice());
+        //0111修正メモ： getPrice()を変数int ticketPriceに切り出して抽出して、処理行を簡潔にした
+        int purchaseQuantity = ticketType.getUsedTicketQuantity();
+        int ticketPrice = ticketType.getPrice();
+        validatePurchaseRequirements(handedMoney, ticketPrice, purchaseQuantity);
+        processPurchase(ticketPrice, purchaseQuantity);
+        int change = calculateChange(handedMoney, ticketPrice);
         return new TicketBuyResult(new Ticket(ticketType), change);
     }
     
