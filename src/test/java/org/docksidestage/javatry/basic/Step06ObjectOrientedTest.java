@@ -21,10 +21,12 @@ import org.docksidestage.bizfw.basic.objanimal.Animal;
 import org.docksidestage.bizfw.basic.objanimal.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.Cat;
 import org.docksidestage.bizfw.basic.objanimal.Dog;
+import org.docksidestage.bizfw.basic.objanimal.Penguin;
 import org.docksidestage.bizfw.basic.objanimal.Zombie;
 import org.docksidestage.bizfw.basic.objanimal.loud.AlarmClock;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
+import org.docksidestage.bizfw.basic.objanimal.swimmer.Swimmable;
 import org.docksidestage.unit.PlainTestCase;
 
 // #1on1: UIデザインでオブジェクト指向に触れたことがある by えどさん // (2025/10/15)
@@ -373,29 +375,42 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     public void test_objectOriented_polymorphism_interface_dispatch() {
         Loudable loudable = new Zombie();
         String sea = loudable.soundLoudly();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => uooo
         String land = ((Zombie) loudable).bark().getBarkWord();
-        log(land); // your answer? => 
+        log(land); // your answer? => uooo
     }
+    //0111自分なりの回答
+    //ZombieインスタンスをLoudable型の変数に代入し、bark().getBarkWord()を返す
+    //ZombieのgetBarkWord()は"uooo"
+    //((Zombie) loudable).bark().getBarkWord();でloudableをZombieにキャストしてるため
+    //結果は同じuooo
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_interface_hierarchy() {
         Loudable loudable = new AlarmClock();
         String sea = loudable.soundLoudly();
-        log(sea); // your answer? => 
+        log(sea); // your answer? =>jiri jiri jiri--- 
         boolean land = loudable instanceof Animal;
-        log(land); // your answer? => 
+        log(land); // your answer? => false
     }
+    //0111自分なりの回答
+    //AlarmClockインスタンスをLoudable型の変数に代入し、soundLoudly()を返す
+    //soundLoudly()は"jiri jiri jiri---"
+    //loudable instanceof Animal;でloudableがAnimal型のインスタンスかどうかを判定している
+    //結果はfalse
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_interface_partImpl() {
         Animal seaAnimal = new Cat();
         Animal landAnimal = new Zombie();
         boolean sea = seaAnimal instanceof FastRunner;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true
         boolean land = landAnimal instanceof FastRunner;
-        log(land); // your answer? => 
+        log(land); // your answer? => false
     }
+    //0111自分なりの回答
+    //CatとZombiは同じAnimalを継承しているが、両方runメソッドを持っているわけではない。
+    //Catクラスはrunメソッドを持つためtrue、Zombieクラスはrunメソッドを持たないためfalse
 
     /**
      * Make Dog class implement FastRunner interface. (the method implementation is same as Cat class) <br>
@@ -403,6 +418,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_polymorphism_interface_runnerImpl() {
         // your confirmation code here
+        Animal seaAnimal = new Dog();
+        boolean sea = seaAnimal instanceof FastRunner;
+        log(sea); //期待値：true
     }
 
     /**
@@ -413,8 +431,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // write your memo here:
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // what is difference?
-        //
-        // _/_/_/_/_/_/_/_/_/_/
+        //抽象クラスは、関連性の高いクラスをそれぞれ持つことができる（例）AnimalクラスでDogクラス、Catクラスなど
+        //インターフェースは、関連性の低いクラスでも同じ振る舞いを持たせることができる (例：FastRunnerインターフェースをDogクラス,Vehicleクラス(乗り物)クラスがあった場合はCarクラスなど)
     }
 
     // ===================================================================================
@@ -426,6 +444,11 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_polymorphism_makeConcrete() {
         // your confirmation code here
+        Animal animal = new Penguin();
+        String sea = animal.bark().getBarkWord();
+        log(sea); //期待値：aww,aww
+        boolean run = animal instanceof FastRunner;
+        log(run); //期待値：false
     }
 
     /**
@@ -434,6 +457,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_polymorphism_makeInterface() {
         // your confirmation code here
+        Animal animal = new Penguin();
+        boolean swim = animal instanceof Swimmable;
+        log(swim); //期待値：true
     }
 
     // ===================================================================================
