@@ -241,8 +241,11 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     // プログラミングでは、(Javaなら)インスタンスメソッド
     // 例えば、タグコメントの Attribute は、オブジェクト指向の属性という言葉から来ている。
     
-    // TODO jflute 次回1on1, オブジェクトとは？ (2025/12/12)
+    // done jflute 次回1on1, オブジェクトとは？ (2025/12/12)
     // オブジェクトという言葉の話ではなく、オブジェクトになりうるものってどんなもの？の話
+    // #1on1: 一つ一つの変数(データ)の関係性にフォーカスを当てて、ひとまとまりの概念を見つけ出して、それがオブジェクトになる。
+    // そこに付与される振る舞い(メソッド)は、データがあれば自然と導き出されるので、まずはデータ同士の関係性。
+    // ↑はボトムアップ的な設計の仕方。
 
     // ===================================================================================
     //                                                              Polymorphism Beginning
@@ -288,7 +291,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     //DogはAnimalを継承しているため、Animalコンストラクタが呼び出しされてanimal.bark()の処理が実行される。
     //初期値が10で各メソッドでhitPointが1ずつ減っていくため、最終的に7になる。
 
-    // TODO jflute 次回1on1, ポリモーフィズムのプログラム上のメリット追っていく (2025/12/25)
+    // done jflute 次回1on1, ポリモーフィズムのプログラム上のメリット追っていく (2025/12/25)
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_3rd_fromMethod() {
         Animal animal = createAnyAnimal();
@@ -305,6 +308,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     //DogはAnimalを継承しているため、Animalコンストラクタが呼び出しされてanimal.bark()の処理が実行される。
     //初期値が10で各メソッドでhitPointが1ずつ減っていくため、最終的に7になる。
 
+    // #1on1: こっちを変えれば、test_側に手を入れる必要がないので比較的安心だし.... (2026/01/16)
+    // 呼び出し側に影響を与えずに結果を変更できるというのが作業的にも嬉しい。(便利)
     private Animal createAnyAnimal() {
         return new Dog();
     }
@@ -366,8 +371,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //同じメソッドを使って、異なるclassのインスタンスを扱えるようになる。
         //抽象的なメソッドを作ることで拡張性が高くなり汎用的に使える。
         // _/_/_/_/_/_/_/_/_/_/
+        // #1on1: "汎用的" という言葉Good (2026/01/16)
     }
 
+    // TODO jflute 次回1on1インターフェースから (2026/01/16)
     // ===================================================================================
     //                                                              Polymorphism Interface
     //                                                              ======================
@@ -461,6 +468,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         boolean swim = animal instanceof Swimmable;
         log(swim); //期待値：true
     }
+    // #1on1: ペンギンかわいい (2026/01/16)
 
     // ===================================================================================
     //                                                                           Challenge

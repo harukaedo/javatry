@@ -41,7 +41,7 @@ public class Ticket {
     //----------------------------------------------
     //                             Park Information
     //----------------------------------------------
-    // TODO done edo 近くに置きたい気持ちわかるけど、オーソドックスにはクラスの先頭の方で定数定義 by jflute (2025/12/25)
+    // done edo 近くに置きたい気持ちわかるけど、オーソドックスにはクラスの先頭の方で定数定義 by jflute (2025/12/25)
     // #1on1: 閉鎖はちょっとかわいそうかも。でも門のあけしめでは閉鎖という言葉も合ってる (2025/12/25)
     //0106 修正メモ：閉鎖を閉園に変更した。Park Informationというタイトルを付け
     private static final int PARK_OPEN_HOUR = 9; // パークの開始時刻
@@ -122,7 +122,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                  Ticket type method
     //                                                                         ===========
-    // TODO done edo すでに現状としては、TicketのnewはdoBuy内で統一されているから... by jflute (2025/12/25)
+    // done edo すでに現状としては、TicketのnewはdoBuy内で統一されているから... by jflute (2025/12/25)
     // ここのstaticのFactoryメソッドたちは、テストとかそういうところでしか使われていない。
     // なので基本的にはもう消しても良いもの。思い出でコメントアウトしてもいいかも。
     //0106 修正メモ：doBuy内で担保できているためこちらはコメントアウトしましました。
@@ -201,9 +201,12 @@ public class Ticket {
         // 切り捨てするとbegin側のロジックはOKだけど、end側のロジックがダメになっちゃう。
         // 逆に、切り上げだとend側のロジックはOKだけど、begin側のロジックがダメになっちゃう。
         // (一方で一方で、DayTimeOnlyの方は、両方切り捨てだと辻褄合う。NightOnlyも切り捨て)
-        // TODO done edo ↑の矛盾を調整してみてください by jflute (2025/12/25)
+        // done edo ↑の矛盾を調整してみてください by jflute (2025/12/25)
         //0106 修正メモ: currentMinuteを追加し、分もチェックするようにした。
         //分を追加することによって、厳格な時間帯チェックが可能になった。
+        // #1on1: 一方で、hourだけで実装を済ませるためには、21:00ぴったりの入園をナシにして、
+        // 昼と同じように終了の判定のロジックを統一するといいかも。
+        // TODO edo ↑これやってみましょう。miniteの消すためというよりかは、統一性を保つため (言い訳) by jflute (2026/01/16)
 
         // 営業時間外チェック（全チケット共通）
         // 9:00より前、または21:01以降は入園不可
@@ -213,8 +216,14 @@ public class Ticket {
         }
 
         // 昼専用チケットの時間帯チェック（11:00-16:00）
+        // #1on1: 今のロジックだと厳密には（11:00-15:59）と言える。終わりの時間の統一性が少し気になる (2026/01/16)
+        // 夜専用チケットと続いているものなので、16時ぴったりが両方入れるも変だし、まあ悪くないかも...
+        // 一方で、もし昼が（11:00-15:00）という風に、夜と繋がってなくて同じロジックだったら、終わりの時間の統一性が気になる。
         if (ticketType.isDayTimeOnly()) {
             if (currentHour < DAY_TICKET_START_HOUR || currentHour >= NIGHT_TICKET_START_HOUR) {
+                // TODO edo SQLのbetweenだと、to時間も含むニュアンスになるので、ちょっと紛らわしいかも by jflute (2026/01/16)
+                // TODO edo メソッド切り出しエクササイズ。2つの例外throw(昼夜)をprivateメソッドで再利用してみましょう by jflute (2026/01/16)
+                // throw createOutOfTimeException(...);
                 throw new IllegalStateException("Daytime-only ticket can only be used between "
                         + DAY_TICKET_START_HOUR + ":00 and " + NIGHT_TICKET_START_HOUR + ":00: "
                         + currentHour + ":" + String.format("%02d", currentMinute));
@@ -230,6 +239,9 @@ public class Ticket {
             }
         }
     }
+    
+    // #1on1: SQL書いた記念パーティー！おめでとうございます。 (2026/01/16)
+    // ID検索や日付絞り込み、but 日本時間で出さないとなのでTimeZone問題。
 
     // done edo [いいね] outを作ったのGood by jflute (2025/10/03)
     /**
@@ -247,7 +259,7 @@ public class Ticket {
         restDays--; // 使用日数を減らす
     }
 
-    // TODO done edo もう使わなくなってしまった (by えどさん) by jflute (2025/12/25)
+    // done edo もう使わなくなってしまった (by えどさん) by jflute (2025/12/25)
     //0106 修正メモ：Ticket typeの方にtime　logicを引っ越ししたので、こちらは削除しました。
     // ===================================================================================
     //                                                                            Accessor

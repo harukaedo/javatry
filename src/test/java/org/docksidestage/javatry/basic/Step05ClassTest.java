@@ -430,7 +430,7 @@ public class Step05ClassTest extends PlainTestCase {
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
         assertEquals(TicketType.NIGHT_ONLY_TWO_DAY, nightOnlyTwoDayPassport.getTicketType()); // TicketTypeで確認
 
-        // TODO done edo 修行++: このifだと今夜かは問わないので、テストの実行が昼でもうまくいっちゃう by jflute (2025/11/14)
+        // done edo 修行++: このifだと今夜かは問わないので、テストの実行が昼でもうまくいっちゃう by jflute (2025/11/14)
         // UnitTestを昼に実行したら落ちるようにしたい。
         //1117 修正メモ：Ticketクラスにテーマパークの営業時間を定義し、夜の時間帯や昼の時間帯も定義した
         //夜の時間帯外（16:00未満）は入園できないことを確認

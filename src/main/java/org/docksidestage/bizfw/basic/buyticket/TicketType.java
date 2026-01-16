@@ -75,7 +75,7 @@ public enum TicketType {
     /** チケットの価格 */
     private final int price;
 
-    // TODO done edo purchaseQuantityという言葉、もうちょい消費というニュアンスがある方がわかりやすいかも by jflute (2025/12/25)
+    // done edo purchaseQuantityという言葉、もうちょい消費というニュアンスがある方がわかりやすいかも by jflute (2025/12/25)
     // 動的な在庫の枚数としっかり区別をするため。在庫消費という言葉があるようなので消費でOKそう。
     // (jfluteが在庫消費を知らなかったので、えどさんに平謝り)
     // (リファクタリングトレーニングだと思って)
@@ -90,6 +90,7 @@ public enum TicketType {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
+    // TODO edo purchaseQuantity まだ残ってた。他のクラスも検索して探してみましょう by jflute (2026/01/16)
     /**
      * チケット種別を生成する。
      * @param days 使用可能日数
