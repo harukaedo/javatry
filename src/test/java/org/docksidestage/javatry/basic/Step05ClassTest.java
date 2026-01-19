@@ -245,7 +245,7 @@ public class Step05ClassTest extends PlainTestCase {
         assertEquals(TicketType.ONE_DAY, ticket.getTicketType()); // TicketTypeで確認
         log(ticket.getDisplayPrice()); // should be same as one-day price
         log(ticket.isCurrentIn()); // should be false
-        ticket.doInPark(10, 0); // 営業時間内（10時0分）で入園
+        ticket.doInPark(10); // 営業時間内（10時代）で入園
         log(ticket.isCurrentIn()); // should be true
     }
 
@@ -282,7 +282,7 @@ public class Step05ClassTest extends PlainTestCase {
         assertEquals(TicketType.TWO_DAY, twoDayPassport.getTicketType()); // TicketTypeで確認
 
         // 1日目の入園、退園
-        twoDayPassport.doInPark(13, 0); // 営業時間内（13時0分）で入園
+        twoDayPassport.doInPark(13); // 営業時間内（13時代）で入園
         log(twoDayPassport.isCurrentIn()); // trueになる
         twoDayPassport.doOutPark();
         log(twoDayPassport.getRestDays()); // 1日使われたため、残り1日になる
@@ -290,7 +290,7 @@ public class Step05ClassTest extends PlainTestCase {
         assertEquals(TicketType.TWO_DAY, twoDayPassport.getTicketType());
 
         // 2日目の入園、退園
-        twoDayPassport.doInPark(16, 0); // 営業時間内（16時0分）で入園
+        twoDayPassport.doInPark(16); // 営業時間内（16時代）で入園
         log(twoDayPassport.isCurrentIn()); // trueになる
         twoDayPassport.doOutPark();
         log(twoDayPassport.getRestDays()); // 残りの1日が使われたため、残りが0となる
@@ -395,7 +395,7 @@ public class Step05ClassTest extends PlainTestCase {
         log(nightOnlyTwoDayPassport.getRestDays()); // 残りチケット日数が2日になる
 
         // 夜の時間帯（16:00-21:00）で入園
-        nightOnlyTwoDayPassport.doInPark(17, 0); // 17時0分に入園
+        nightOnlyTwoDayPassport.doInPark(17); // 17時代に入園
         log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn());
         nightOnlyTwoDayPassport.doOutPark();
         log("Current in park: " + nightOnlyTwoDayPassport.isCurrentIn());
@@ -437,14 +437,14 @@ public class Step05ClassTest extends PlainTestCase {
         //夜の時間帯（16:00-21:00）は入園できることを確認
 
         try {
-            nightOnlyTwoDayPassport.doInPark(14, 0); // 14時0分に入園を試みる
+            nightOnlyTwoDayPassport.doInPark(14); // 14時代に入園を試みる
             fail("Night-only ticket should not be usable before 16:00");
         } catch (IllegalStateException e) {
             log("Expected exception: " + e.getMessage());
         }
 
         // 夜の時間帯（16:00-21:00）は入園できることを確認
-        nightOnlyTwoDayPassport.doInPark(17, 0); // 17時0分に入園
+        nightOnlyTwoDayPassport.doInPark(17); // 17時代に入園
         log("Successfully entered at night: " + nightOnlyTwoDayPassport.isCurrentIn());
     }
 
@@ -463,14 +463,14 @@ public class Step05ClassTest extends PlainTestCase {
 
         // 昼の時間帯外（16:00以降）は入園できないことを確認
         try {
-            dayTimeOnlyTwoDayPassport.doInPark(17, 0); // 17時0分に入園チャレンジ
+            dayTimeOnlyTwoDayPassport.doInPark(17); // 17時代に入園チャレンジ
             fail("Daytime-only ticket should not be usable after 16:00");
         } catch (IllegalStateException e) {
             log("Expected exception: " + e.getMessage());
         }
 
         // 昼の時間帯（11:00-16:00）は入園できることを確認
-        dayTimeOnlyTwoDayPassport.doInPark(13, 0); // 13時0分チャレンジ
+        dayTimeOnlyTwoDayPassport.doInPark(13); // 13時代に入園チャレンジ
         log("Successfully entered during daytime: " + dayTimeOnlyTwoDayPassport.isCurrentIn());
     }
 
@@ -528,7 +528,7 @@ public class Step05ClassTest extends PlainTestCase {
         log("CurrentIn (before): " + oneDay.isCurrentIn()); // 期待値：false
         
         // doInPark()の確認
-        oneDay.doInPark(10, 0);
+        oneDay.doInPark(10);
         log("CurrentIn (after doInPark): " + oneDay.isCurrentIn()); // 期待値：true
         
         // doOutPark()の確認

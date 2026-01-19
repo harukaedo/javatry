@@ -183,8 +183,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //
         // [do in park now!!!]
         //
-        ticket.doInPark(16, 0); // 16時0分に入園
-
+        ticket.doInPark(16); // 16時代に入園
         // *doInPark() has this process:
         //if (alreadyIn) {
         //    throw new IllegalStateException("Already in park by this ticket: displayPrice=" + displayPrice);

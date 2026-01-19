@@ -209,22 +209,33 @@ public class Ticket {
         if (ticketType.isDayTimeOnly()) {
             if (currentHour < DAY_TICKET_START_HOUR || currentHour >= NIGHT_TICKET_START_HOUR) {
                 // TODO done edo SQLのbetweenだと、to時間も含むニュアンスになるので、ちょっと紛らわしいかも by jflute (2026/01/16)
-                // TODO edo メソッド切り出しエクササイズ。2つの例外throw(昼夜)をprivateメソッドで再利用してみましょう by jflute (2026/01/16)
+                // TODO done edo メソッド切り出しエクササイズ。2つの例外throw(昼夜)をprivateメソッドで再利用してみましょう by jflute (2026/01/16)
                 // throw createOutOfTimeException(...);
-                throw new IllegalStateException("Daytime-only ticket can only be used from "
-                        + DAY_TICKET_START_HOUR + ":00 until " + NIGHT_TICKET_START_HOUR + ":00 "
-                        + currentHour + ":00");
+                createOutOfTimeException( "Daytime-only", DAY_TICKET_START_HOUR, NIGHT_TICKET_START_HOUR, currentHour);        
             }
         }
 
         // 夜専用チケットの時間帯チェック（16:00-20:59）
         if (ticketType.isNightOnly()) {
             if (currentHour < NIGHT_TICKET_START_HOUR || currentHour >= PARK_CLOSE_HOUR) {
-                throw new IllegalStateException("Night-only ticket can only be used from "
-                        + NIGHT_TICKET_START_HOUR + ":00 until " + PARK_CLOSE_HOUR + ":00 "
-                        + currentHour + ":00");
+                createOutOfTimeException( "Night-only", NIGHT_TICKET_START_HOUR, PARK_CLOSE_HOUR, currentHour);
             }
         }
+    }
+
+    //1119
+    //1119修正メモ：createOutOfTimeExceptionメソッドを生成し、時間帯制限を超えた場合の例外を作成するようにした
+    //Daytime-only:11:00-16:00までしか使えませんよ（疑問：untilは16:00ぴったりを除くという文脈なのか？）
+    //Night-only:16:00-21:00までしか使えませんよ（疑問：untilは21:00ぴったりを除くという文脈なのか？）
+    /**
+     * 時間帯制限を超えた場合の例外を作成する。
+     * @param ticketTypeName チケットの種類（通常、昼専用、夜専用）
+     * @param startTime チケットの開始時刻
+     * @param endTime チケットの終了時刻
+     * @param currentHour 現在の時刻
+     */
+    private void createOutOfTimeException(String ticketTypeName, int startTime, int endTime, int currentHour) {
+        throw new IllegalStateException(ticketTypeName + " can only be used from " + startTime + ":00 until " + endTime + ":00 " + currentHour + ":00");
     }
     
     // #1on1: SQL書いた記念パーティー！おめでとうございます。 (2026/01/16)
