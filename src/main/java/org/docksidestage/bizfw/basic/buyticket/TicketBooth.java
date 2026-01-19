@@ -248,10 +248,10 @@ public class TicketBooth {
         // done edo getPrice()も変数抽出して、重要な処理の行をスッキリさせましょう by jflute (2025/12/25)
         // (ぜひ、VSCodeで変数抽出のショートカット探してみてください)
         //0111修正メモ： getPrice()を変数int ticketPriceに切り出して抽出して、処理行を簡潔にした
-        int purchaseQuantity = ticketType.getUsedTicketQuantity();
+        int usedTicketQuantity = ticketType.getUsedTicketQuantity();
         int ticketPrice = ticketType.getPrice();
-        validatePurchaseRequirements(handedMoney, ticketPrice, purchaseQuantity);
-        processPurchase(ticketPrice, purchaseQuantity);
+        validatePurchaseRequirements(handedMoney, ticketPrice, usedTicketQuantity);
+        processPurchase(ticketPrice, usedTicketQuantity);
         int change = calculateChange(handedMoney, ticketPrice);
         return new TicketBuyResult(new Ticket(ticketType), change);
     }

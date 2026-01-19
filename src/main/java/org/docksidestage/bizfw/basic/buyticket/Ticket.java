@@ -161,39 +161,26 @@ public class Ticket {
      * @throws IllegalStateException 残り使用可能日数がない、既に入園済み、または時間帯が合わない場合
      */
     public void doInPark(int currentHour) {
-        doInPark(currentHour, 0);
-    }
-
-    /**
-     * パークに入園する。
-     * 残り使用可能日数がない場合や、既に入園済みの場合、時間帯が合わない場合は例外をスローする。
-     *
-     * @param currentHour 現在の時刻（0-23の範囲）
-     * @param currentMinute 現在の分（0-59の範囲）
-     * @throws IllegalStateException 残り使用可能日数がない、既に入園済み、または時間帯が合わない場合
-     */
-    public void doInPark(int currentHour, int currentMinute) {
         if (restDays <= 0) {
             throw new IllegalStateException("No remaining days: displayedPrice=" + displayPrice);
         }
         if (currentIn) {
             throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
         }
-        validateTimeRestriction(currentHour, currentMinute);
+        validateTimeRestriction(currentHour);
         currentIn = true;
     }
 
     /**
      * 時間帯制限をチェックする。
-     * 通常チケット: 9:00-21:00まで入園可能（21:00ちょうどは可能、21:01以降は不可）
-     * 昼専用チケット: 11:00-15:59まで入園可能（16:00以降は不可）
+     * 通常チケット: 9:00-20:59まで入園可能（21:00で閉園し、入園不可とする。）
+     * 昼専用チケット: 11:00-15:59まで入園可能（16:00以降は夜専用チケットとなる）
      * 夜専用チケット: 16:00-20:59まで入園可能（21:00以降は不可）
      *
      * @param currentHour 現在の時刻（0-23の範囲）
-     * @param currentMinute 現在の分（0-59の範囲）
      * @throws IllegalStateException 時間帯が合わない場合、または営業時間外の場合
      */
-    private void validateTimeRestriction(int currentHour, int currentMinute) {
+    private void validateTimeRestriction(int currentHour) {
         // #1on1: 21時10分は入園できてはいけないので、そのときは currentHour は22じゃないいけない想定ロジック (2025/12/25)
         // つまり、呼び出し側は現在日時を取得した時に21時を1分1秒でも過ぎてたら切り上げで22を導出するようにすべし。
         // 一方で、8時50分も入園できていはいけないが、今の論理で言うと9を引数で渡すことになるので、
@@ -206,36 +193,36 @@ public class Ticket {
         //分を追加することによって、厳格な時間帯チェックが可能になった。
         // #1on1: 一方で、hourだけで実装を済ませるためには、21:00ぴったりの入園をナシにして、
         // 昼と同じように終了の判定のロジックを統一するといいかも。
-        // TODO edo ↑これやってみましょう。miniteの消すためというよりかは、統一性を保つため (言い訳) by jflute (2026/01/16)
+        // TODO done edo ↑これやってみましょう。miniteの消すためというよりかは、統一性を保つため (言い訳) by jflute (2026/01/16)
 
         // 営業時間外チェック（全チケット共通）
-        // 9:00より前、または21:01以降は入園不可
-        if (currentHour < PARK_OPEN_HOUR || (currentHour == PARK_CLOSE_HOUR && currentMinute > 0) || currentHour > PARK_CLOSE_HOUR) {
-            throw new IllegalStateException("Park is closed at this time: " + currentHour + ":" + String.format("%02d", currentMinute)
+        // 9:00より前、または21:00以降は入園不可
+        if (currentHour < PARK_OPEN_HOUR ||  currentHour >= PARK_CLOSE_HOUR) {
+            throw new IllegalStateException("Park is closed at this time: " + currentHour 
                     + " (Open: " + PARK_OPEN_HOUR + ":00-" + PARK_CLOSE_HOUR + ":00)");
         }
 
-        // 昼専用チケットの時間帯チェック（11:00-16:00）
+        // 昼専用チケットの時間帯チェック（11:00-15:59）
         // #1on1: 今のロジックだと厳密には（11:00-15:59）と言える。終わりの時間の統一性が少し気になる (2026/01/16)
         // 夜専用チケットと続いているものなので、16時ぴったりが両方入れるも変だし、まあ悪くないかも...
         // 一方で、もし昼が（11:00-15:00）という風に、夜と繋がってなくて同じロジックだったら、終わりの時間の統一性が気になる。
         if (ticketType.isDayTimeOnly()) {
             if (currentHour < DAY_TICKET_START_HOUR || currentHour >= NIGHT_TICKET_START_HOUR) {
-                // TODO edo SQLのbetweenだと、to時間も含むニュアンスになるので、ちょっと紛らわしいかも by jflute (2026/01/16)
+                // TODO done edo SQLのbetweenだと、to時間も含むニュアンスになるので、ちょっと紛らわしいかも by jflute (2026/01/16)
                 // TODO edo メソッド切り出しエクササイズ。2つの例外throw(昼夜)をprivateメソッドで再利用してみましょう by jflute (2026/01/16)
                 // throw createOutOfTimeException(...);
-                throw new IllegalStateException("Daytime-only ticket can only be used between "
-                        + DAY_TICKET_START_HOUR + ":00 and " + NIGHT_TICKET_START_HOUR + ":00: "
-                        + currentHour + ":" + String.format("%02d", currentMinute));
+                throw new IllegalStateException("Daytime-only ticket can only be used from "
+                        + DAY_TICKET_START_HOUR + ":00 until " + NIGHT_TICKET_START_HOUR + ":00 "
+                        + currentHour + ":00");
             }
         }
 
-        // 夜専用チケットの時間帯チェック（16:00-21:00）
+        // 夜専用チケットの時間帯チェック（16:00-20:59）
         if (ticketType.isNightOnly()) {
-            if (currentHour < NIGHT_TICKET_START_HOUR || (currentHour == PARK_CLOSE_HOUR && currentMinute > 0)) {
+            if (currentHour < NIGHT_TICKET_START_HOUR || currentHour >= PARK_CLOSE_HOUR) {
                 throw new IllegalStateException("Night-only ticket can only be used from "
-                        + NIGHT_TICKET_START_HOUR + ":00 to " + PARK_CLOSE_HOUR + ":00: "
-                        + currentHour + ":" + String.format("%02d", currentMinute));
+                        + NIGHT_TICKET_START_HOUR + ":00 until " + PARK_CLOSE_HOUR + ":00 "
+                        + currentHour + ":00");
             }
         }
     }

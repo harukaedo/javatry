@@ -90,19 +90,21 @@ public enum TicketType {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    // TODO edo purchaseQuantity まだ残ってた。他のクラスも検索して探してみましょう by jflute (2026/01/16)
+    // TODO done edo purchaseQuantity まだ残ってた。他のクラスも検索して探してみましょう by jflute (2026/01/16)
+    //0119修正メモ: purchaseQuantityまだ残ってたため、usedTicketQuantityに変更した
+    //purchaseQuantityを検索した感じコメントの部分でしか残っていなかったため、もう大丈夫なはず。
     /**
      * チケット種別を生成する。
      * @param days 使用可能日数
      * @param price チケットの価格
-     * @param purchaseQuantity 購入時に在庫を消費する枚数
+     * @param usedTicketQuantity 購入時に在庫を消費する枚数
      * @param nightOnly 夜だけ使用可能なチケットかどうか
      * @param dayTimeOnly お昼だけ使用可能なチケットかどうか
      */
-    private TicketType(int days, int price, int purchaseQuantity, boolean nightOnly, boolean dayTimeOnly) {
+    private TicketType(int days, int price, int usedTicketQuantity, boolean nightOnly, boolean dayTimeOnly) {
         this.days = days;
         this.price = price;
-        this.usedTicketQuantity = purchaseQuantity;
+        this.usedTicketQuantity = usedTicketQuantity;
         this.nightOnly = nightOnly;
         this.dayTimeOnly = dayTimeOnly;
     }
