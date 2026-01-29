@@ -90,7 +90,7 @@ public enum TicketType {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    // TODO done edo purchaseQuantity まだ残ってた。他のクラスも検索して探してみましょう by jflute (2026/01/16)
+    // done edo purchaseQuantity まだ残ってた。他のクラスも検索して探してみましょう by jflute (2026/01/16)
     //0119修正メモ: purchaseQuantityまだ残ってたため、usedTicketQuantityに変更した
     //purchaseQuantityを検索した感じコメントの部分でしか残っていなかったため、もう大丈夫なはず。
     /**
