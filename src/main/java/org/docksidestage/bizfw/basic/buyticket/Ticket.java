@@ -193,14 +193,15 @@ public class Ticket {
         //分を追加することによって、厳格な時間帯チェックが可能になった。
         // #1on1: 一方で、hourだけで実装を済ませるためには、21:00ぴったりの入園をナシにして、
         // 昼と同じように終了の判定のロジックを統一するといいかも。
-        // done edo ↑これやってみましょう。miniteの消すためというよりかは、統一性を保つため (言い訳) by jflute (2026/01/16)
-        // TODO edo 三つのif文のOutOfTimeの判定が統一化されたので、そこも切り出してメソッド化してみましょう by jflute (2026/01/29)
+        // done edo ↑これやってみましょう。minuteの消すためというよりかは、統一性を保つため (言い訳) by jflute (2026/01/16)
+        // TODO done edo 三つのif文のOutOfTimeの判定が統一化されたので、そこも切り出してメソッド化してみましょう by jflute (2026/01/29)
+        //0206修正メモ：isOutOfTimeメソッドを生成し、時間帯制限を超えているかどうかを判定するようにした
 
         // 営業時間外チェック（全チケット共通）
         // 9:00より前、または21:00以降は入園不可
         int parkOpenHour = PARK_OPEN_HOUR;
         int parkCloseHour = PARK_CLOSE_HOUR;
-        if (currentHour < parkOpenHour ||  currentHour >= parkCloseHour) {
+        if (currentHour < parkOpenHour || currentHour >= parkCloseHour) {
             throw new IllegalStateException("Park is closed at this time: " + currentHour 
                     + " (Open: " + PARK_OPEN_HOUR + ":00-" + PARK_CLOSE_HOUR + ":00)");
         }
@@ -210,23 +211,35 @@ public class Ticket {
         // 夜専用チケットと続いているものなので、16時ぴったりが両方入れるも変だし、まあ悪くないかも...
         // 一方で、もし昼が（11:00-15:00）という風に、夜と繋がってなくて同じロジックだったら、終わりの時間の統一性が気になる。
         if (ticketType.isDayTimeOnly()) {
-            if (currentHour < DAY_TICKET_START_HOUR || currentHour >= NIGHT_TICKET_START_HOUR) {
-                // done edo SQLのbetweenだと、to時間も含むニュアンスになるので、ちょっと紛らわしいかも by jflute (2026/01/16)
-                // done edo メソッド切り出しエクササイズ。2つの例外throw(昼夜)をprivateメソッドで再利用してみましょう by jflute (2026/01/16)
-                // throw createOutOfTimeException(...);
-                createOutOfTimeException( "Daytime-only", DAY_TICKET_START_HOUR, NIGHT_TICKET_START_HOUR, currentHour);        
+            // done edo SQLのbetweenだと、to時間も含むニュアンスになるので、ちょっと紛らわしいかも by jflute (2026/01/16)
+            // done edo メソッド切り出しエクササイズ。2つの例外throw(昼夜)をprivateメソッドで再利用してみましょう by jflute (2026/01/16)
+            // throw createOutOfTimeException(...);
+            if (isOutOfTime(currentHour, DAY_TICKET_START_HOUR, NIGHT_TICKET_START_HOUR)) {
+                throwOutOfTimeException("Daytime-only", DAY_TICKET_START_HOUR, NIGHT_TICKET_START_HOUR, currentHour);
             }
         }
 
         // 夜専用チケットの時間帯チェック（16:00-20:59）
         if (ticketType.isNightOnly()) {
-            if (currentHour < NIGHT_TICKET_START_HOUR || currentHour >= PARK_CLOSE_HOUR) {
-                createOutOfTimeException( "Night-only", NIGHT_TICKET_START_HOUR, PARK_CLOSE_HOUR, currentHour);
+            if (isOutOfTime(currentHour, NIGHT_TICKET_START_HOUR, PARK_CLOSE_HOUR)) {
+                throwOutOfTimeException("Night-only", NIGHT_TICKET_START_HOUR, PARK_CLOSE_HOUR, currentHour);
             }
         }
     }
 
-    // TODO edo createだと生成してるだけでthrowしてる感がないので、throwOutOf...() にしちゃった方がわかりやすいかなと by jflute (2026/01/29)
+
+    /**
+     * 時間帯制限を超えているかどうかを判定する。
+     * @param currentHour 現在の時刻
+     * @param startTime チケットの開始時刻
+     * @param endTime チケットの終了時刻
+     * @return 時間帯制限を超えている場合true、超えていない場合false
+     */
+    private boolean isOutOfTime(int currentHour, int startTime, int endTime) {
+        return currentHour < startTime || currentHour >= endTime;
+    }
+    // TODO done edo createだと生成してるだけでthrowしてる感がないので、throwOutOf...() にしちゃった方がわかりやすいかなと by jflute (2026/01/29)
+    //0202修正メモ：createOutOfTimeExceptionメソッドをthrowOutOfTimeExceptionメソッドに変更した
     //1119
     //1119修正メモ：createOutOfTimeExceptionメソッドを生成し、時間帯制限を超えた場合の例外を作成するようにした
     //Daytime-only:11:00-16:00までしか使えませんよ（疑問：untilは16:00ぴったりを除くという文脈なのか？）
@@ -238,10 +251,10 @@ public class Ticket {
      * @param endTime チケットの終了時刻
      * @param currentHour 現在の時刻
      */
-    private void createOutOfTimeException(String ticketTypeName, int startTime, int endTime, int currentHour) {
+    private void throwOutOfTimeException(String ticketTypeName, int startTime, int endTime, int currentHour) {
         throw new IllegalStateException(ticketTypeName + " can only be used from " + startTime + ":00 until " + endTime + ":00 " + currentHour + ":00");
     }
-    
+
     // #1on1: SQL書いた記念パーティー！おめでとうございます。 (2026/01/16)
     // ID検索や日付絞り込み、but 日本時間で出さないとなのでTimeZone問題。
 

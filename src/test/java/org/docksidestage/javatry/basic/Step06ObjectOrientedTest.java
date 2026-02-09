@@ -27,6 +27,9 @@ import org.docksidestage.bizfw.basic.objanimal.loud.AlarmClock;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
 import org.docksidestage.bizfw.basic.objanimal.swimmer.Swimmable;
+import org.docksidestage.javatry.basic.st6.dbms.St6Dbms;
+import org.docksidestage.javatry.basic.st6.dbms.St6MySql;
+import org.docksidestage.javatry.basic.st6.dbms.St6PostgreSql;
 import org.docksidestage.unit.PlainTestCase;
 
 // #1on1: UIデザインでオブジェクト指向に触れたことがある by えどさん // (2025/10/15)
@@ -509,8 +512,16 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      * Extract St6MySql, St6PostgreSql (basic.st6.dbms)'s process to abstract class (as super class and sub-class) <br>
      * (St6MySql, St6PostgreSql (basic.st6.dbms) から抽象クラスを抽出してみましょう (スーパークラスとサブクラスの関係に))
      */
+    //0206 自分なりの回答
+    //St6Dbmsを抽象クラスとして抽出し、St6MySqlとSt6PostgreSqlをサブクラスとして抽出した。
+    //St6DbmsのbuildPagingQueryメソッドを抽象メソッドとして抽出し、St6MySqlとSt6PostgreSqlでそれぞれ実装した。
+    //mysqlとpostgreSqlの使い分けの方法を教えて欲しいです🙏
     public void test_objectOriented_writing_generalization_extractToAbstract() {
         // your confirmation code here
+        St6Dbms mysql = new St6MySql();
+        St6Dbms postgreSql = new St6PostgreSql();
+        log(mysql.buildPagingQuery(20, 3));
+        log(postgreSql.buildPagingQuery(20, 3));
     }
 
     /**
