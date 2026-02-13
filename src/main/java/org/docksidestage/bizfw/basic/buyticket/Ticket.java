@@ -194,7 +194,7 @@ public class Ticket {
         // #1on1: 一方で、hourだけで実装を済ませるためには、21:00ぴったりの入園をナシにして、
         // 昼と同じように終了の判定のロジックを統一するといいかも。
         // done edo ↑これやってみましょう。minuteの消すためというよりかは、統一性を保つため (言い訳) by jflute (2026/01/16)
-        // TODO done edo 三つのif文のOutOfTimeの判定が統一化されたので、そこも切り出してメソッド化してみましょう by jflute (2026/01/29)
+        // done edo 三つのif文のOutOfTimeの判定が統一化されたので、そこも切り出してメソッド化してみましょう by jflute (2026/01/29)
         //0206修正メモ：isOutOfTimeメソッドを生成し、時間帯制限を超えているかどうかを判定するようにした
 
         // 営業時間外チェック（全チケット共通）
@@ -226,7 +226,24 @@ public class Ticket {
             }
         }
     }
-
+    
+    // #1on1: もし、isOutOfTime(), throw...() の流れも再利用して、start,endの指定の冗長をなくすなら... (2026/02/13)
+    /*
+    private void verifyParkInTime(String title, int currentHour, int startTime, int endTime) {
+        if (isOutOfTime(currentHour, startTime, endTime)) {
+            throwOutOfTimeException(title, startTime, endTime, currentHour);
+        }
+    }
+     */
+    // #1on1: リファクタリングに積極的な人と消極的な人の違い話 (2026/02/13)
+    // リファクタリングタイムで、既存コードを俯瞰して見ることができている by えど様
+    //
+    // TODO edo [読み物課題] リファクタリングは思考のツール by jflute (2026/02/13)
+    // https://jflute.hatenadiary.jp/entry/20121202/1354442627
+    // 最終的な形を作ってからじゃないと、良い名前というのはなかなか思い浮かばないもの
+    //
+    // TODO edo [読み物課題] リファクタリングという行為が好きか？ by jflute (2026/02/13)
+    // https://jflute.hatenadiary.jp/entry/20220328/loverefactor
 
     /**
      * 時間帯制限を超えているかどうかを判定する。
@@ -238,7 +255,7 @@ public class Ticket {
     private boolean isOutOfTime(int currentHour, int startTime, int endTime) {
         return currentHour < startTime || currentHour >= endTime;
     }
-    // TODO done edo createだと生成してるだけでthrowしてる感がないので、throwOutOf...() にしちゃった方がわかりやすいかなと by jflute (2026/01/29)
+    // done edo createだと生成してるだけでthrowしてる感がないので、throwOutOf...() にしちゃった方がわかりやすいかなと by jflute (2026/01/29)
     //0202修正メモ：createOutOfTimeExceptionメソッドをthrowOutOfTimeExceptionメソッドに変更した
     //1119
     //1119修正メモ：createOutOfTimeExceptionメソッドを生成し、時間帯制限を超えた場合の例外を作成するようにした
