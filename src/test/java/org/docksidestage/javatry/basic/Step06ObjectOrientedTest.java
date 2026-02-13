@@ -516,6 +516,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     //St6Dbmsを抽象クラスとして抽出し、St6MySqlとSt6PostgreSqlをサブクラスとして抽出した。
     //St6DbmsのbuildPagingQueryメソッドを抽象メソッドとして抽出し、St6MySqlとSt6PostgreSqlでそれぞれ実装した。
     //mysqlとpostgreSqlの使い分けの方法を教えて欲しいです🙏
+    // #1on1: ↑St6Dbmsクラスので方で説明した 🐧 (2026/02/13)
     public void test_objectOriented_writing_generalization_extractToAbstract() {
         // your confirmation code here
         St6Dbms mysql = new St6MySql();
