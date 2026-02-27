@@ -376,7 +376,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // #1on1: "汎用的" という言葉Good (2026/01/16)
     }
 
-    // TODO jflute 次回1on1インターフェースから (2026/01/16)
+    // done jflute 次回1on1インターフェースから (2026/01/16)
     // ===================================================================================
     //                                                              Polymorphism Interface
     //                                                              ======================
@@ -517,6 +517,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     //St6DbmsのbuildPagingQueryメソッドを抽象メソッドとして抽出し、St6MySqlとSt6PostgreSqlでそれぞれ実装した。
     //mysqlとpostgreSqlの使い分けの方法を教えて欲しいです🙏
     // #1on1: ↑St6Dbmsクラスので方で説明した 🐧 (2026/02/13)
+    // #1on1: 日本語のメソッド名、変数名、あまり提出する時には使わないけど... (2026/02/26)
+    // 暫定で日本語で書いておいて後で直すとかは全然アリ。
     public void test_objectOriented_writing_generalization_extractToAbstract() {
         // your confirmation code here
         St6Dbms mysql = new St6MySql();
