@@ -18,7 +18,7 @@ package org.docksidestage.javatry.basic;
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.objanimal.Animal;
-import org.docksidestage.bizfw.basic.objanimal.BarkedSound;
+import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.Cat;
 import org.docksidestage.bizfw.basic.objanimal.Dog;
 import org.docksidestage.bizfw.basic.objanimal.Penguin;
@@ -542,8 +542,16 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      * Extract Animal's bark() process as BarkingProcess class to also avoid large abstract class. <br>
      * (抽象クラス肥大化を抑制するためにも、Animalのbark()のプロセス(処理)をBarkingProcessクラスとして切り出しましょう)
      */
+    //0304自分なりの回答
+    //BarkingProcessクラスとBarkedSoundクラスをサブパッケージにまとめた。
+    //BarkingProcessクラスは、barkメソッドを持ち、barkメソッドでは、breatheInメソッド、prepareAbdominalMuscleメソッド、getBarkWordメソッド、doBarkメソッドを呼び出している。
+    //BarkedSoundクラスは、barkWordを持ち、barkWordを返すメソッドを持っている。
     public void test_objectOriented_writing_withDelegation() {
         // your confirmation code here
+        Animal animal = new Dog();
+        BarkedSound sound = animal.bark();
+        String sea = sound.getBarkWord();
+        log(sea); // your answer? => wan
     }
 
     /**
@@ -563,8 +571,16 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      *   |-...
      * </pre>
      */
+    //0304自分なりの回答
+    //BarkingProcessクラスとBarkedSoundクラスをサブパッケージにまとめた。
+    //BarkingProcessクラスは、barkメソッドを持ち、barkメソッドでは、breatheInメソッド、prepareAbdominalMuscleメソッド、getBarkWordメソッド、doBarkメソッドを呼び出している。
+    //BarkedSoundクラスは、barkWordを持ち、barkWordを返すメソッドを持っている。
     public void test_objectOriented_writing_withPackageRefactoring() {
         // your confirmation code here
+        Animal animal = new Dog();
+        BarkedSound sound = animal.bark();
+        String sea = sound.getBarkWord();
+        log(sea); // your answer? => wan
     }
 
     /**
@@ -575,7 +591,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // write your memo here:
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // is it correct?
-        //
+        // 厳密には、動物クラスには属さないと思う。ゾンビの定義を考えた時に、一度死んだ者が復活するので、
+        // 動物クラスには属さないと思う。
+        // クラスを作るのであれば、幽霊やゾンビを含めたネクロクラスを作った方が良い
         // _/_/_/_/_/_/_/_/_/_/
     }
 }

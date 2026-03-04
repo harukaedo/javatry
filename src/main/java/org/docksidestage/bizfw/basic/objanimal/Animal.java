@@ -15,6 +15,7 @@
  */
 package org.docksidestage.bizfw.basic.objanimal;
 
+import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,11 +51,7 @@ public abstract class Animal implements Loudable {
     //                                                                               Bark
     //                                                                              ======
     public BarkedSound bark() {
-        breatheIn();
-        prepareAbdominalMuscle();
-        String barkWord = getBarkWord();
-        BarkedSound barkedSound = doBark(barkWord);
-        return barkedSound;
+        return new BarkingProcess().bark(this);
     }
 
     protected void breatheIn() { // actually depends on barking
@@ -73,6 +70,7 @@ public abstract class Animal implements Loudable {
         downHitPoint();
         return new BarkedSound(barkWord);
     }
+
 
     // ===================================================================================
     //                                                                           Hit Point
