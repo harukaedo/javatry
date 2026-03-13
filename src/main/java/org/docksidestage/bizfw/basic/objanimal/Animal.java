@@ -35,7 +35,7 @@ public abstract class Animal implements Loudable {
     //                                                                           Attribute
     //                                                                           =========
     protected int hitPoint; // is HP
-
+    
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
@@ -53,7 +53,15 @@ public abstract class Animal implements Loudable {
     public BarkedSound bark() {
         return new BarkingProcess().bark(this);
     }
+    
+    // #1on1: Javaのprotectedの説明、サブクラスに公開、もしくは、同じpackageに公開、という二つの特徴 (2026/03/13)
+    // BarkingProcess と Animal は親子関係ないので、サブクラス公開は関係ない。
+    // ただ、同じpackageにあるのであれば「同じpackage公開」としてprotectedのメソッドにアクセスできる。
+    // でも、barkingパッケージに移動した後のBarkingProcess側からの呼び出しでは、同じpackageじゃなくなったので呼べない。
+    // packageスコープでの呼び出しは、ファイルの物理構造に依存するもので、できれば避けたい。
+    // たまたま動いてるって感じで、ちょっとリファクタリングすると動かなくなる。
 
+    // TODO edo コメント見ると、barkingのための息継ぎなので、barking専用と考えて良い by jflute (2026/03/13)
     protected void breatheIn() { // actually depends on barking
         logger.debug("...Breathing in for barking"); // dummy implementation
         downHitPoint();
@@ -64,8 +72,12 @@ public abstract class Animal implements Loudable {
         downHitPoint();
     }
 
+    // TODO edo 修行++: これはサブクラス解決用のメソッドなので移動はできない。じゃあpublicにするか？ by jflute (2026/03/13)
+    // できればpublicにせず、protectedを維持したまま、BarkingProcessを実現させたい。
+    // (いったん、publicしちゃってもOK。ただとぅどぅ残したまま)
     protected abstract String getBarkWord();
 
+    // TODO edo これは確実に、barking専用メソッドなので、Processの一部にしちゃっていいかなと by jflute (2026/03/13)
     protected BarkedSound doBark(String barkWord) {
         downHitPoint();
         return new BarkedSound(barkWord);

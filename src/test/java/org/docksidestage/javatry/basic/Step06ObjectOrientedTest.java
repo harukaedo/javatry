@@ -527,6 +527,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         log(postgreSql.buildPagingQuery(20, 3));
     }
 
+    // TODO edo どこかでOSも好きになってあげてください by jflute (2026/03/13)
     /**
      * Extract St6OperationSystem (basic.st6.os)'s process to concrete classes (as super class and sub-class) <br>
      * (St6OperationSystem (basic.st6.os) からコンクリートクラスを抽出してみましょう (スーパークラスとサブクラスの関係に))
@@ -552,6 +553,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
         log(sea); // your answer? => wan
+        
+        // #1on1: 抽象クラス肥大化のお話。その抑制方法として、別クラスに処理をお願いする (2026/03/13)
     }
 
     /**
@@ -595,5 +598,16 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // 動物クラスには属さないと思う。
         // クラスを作るのであれば、幽霊やゾンビを含めたネクロクラスを作った方が良い
         // _/_/_/_/_/_/_/_/_/_/
+        // #1on1: "ゾンビの定義を考えた時に" という言葉が素晴らしい (2026/03/13)
+        //
+        // バイオハザード: 犬(オオカミ)のゾンビもいる。
+        // その感覚で言うと、Animalの状態として捉えてもいいのかも。(e.g. 単なるboolean)
+        //
+        // ゾンビ王国のゾンビ王子: それだったらゾンビは種族と捉えて今の実装でもいいかも。
+        //
+        // その言葉の概念が曖昧なまま、もしくは、うまく解釈できていないまま、
+        // その状態でクラスとか作って実装しても、うまくいくわけがない。
+        //
+        // だから、業務プログラマーは「業務理解力」が大事。
     }
 }
