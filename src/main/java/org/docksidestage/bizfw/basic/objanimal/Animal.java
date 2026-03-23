@@ -16,20 +16,14 @@
 package org.docksidestage.bizfw.basic.objanimal;
 
 import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
+import org.docksidestage.bizfw.basic.objanimal.barking.BarkingProcess;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The object for animal(動物).
  * @author jflute
  */
 public abstract class Animal implements Loudable {
-
-    // ===================================================================================
-    //                                                                          Definition
-    //                                                                          ==========
-    private static final Logger logger = LoggerFactory.getLogger(Animal.class);
 
     // ===================================================================================
     //                                                                           Attribute
@@ -61,26 +55,18 @@ public abstract class Animal implements Loudable {
     // packageスコープでの呼び出しは、ファイルの物理構造に依存するもので、できれば避けたい。
     // たまたま動いてるって感じで、ちょっとリファクタリングすると動かなくなる。
 
-    // TODO edo コメント見ると、barkingのための息継ぎなので、barking専用と考えて良い by jflute (2026/03/13)
-    protected void breatheIn() { // actually depends on barking
-        logger.debug("...Breathing in for barking"); // dummy implementation
-        downHitPoint();
-    }
 
-    protected void prepareAbdominalMuscle() { // also actually depends on barking
-        logger.debug("...Using my abdominal muscle for barking"); // dummy implementation
-        downHitPoint();
-    }
-
-    // TODO edo 修行++: これはサブクラス解決用のメソッドなので移動はできない。じゃあpublicにするか？ by jflute (2026/03/13)
+    // TODO done edo 修行++: これはサブクラス解決用のメソッドなので移動はできない。じゃあpublicにするか？ by jflute (2026/03/13)
     // できればpublicにせず、protectedを維持したまま、BarkingProcessを実現させたい。
     // (いったん、publicしちゃってもOK。ただとぅどぅ残したまま)
+    //0319修正メモ：別パッケージから protected を直接呼べない問題に対してprotectedを公開するだけの
+    // 薄いpublicのメソッド（ラッパーメソッド）を作成してgetBarkWord自体はprotectedを維持した。
+    //これは、修行達成になっているのかレビューしていただけると助かります。
+    //日常の業務で、あまり外で渡したくない関数やメソッドをラッパーして渡すことがあったためそこを参考にしました
     protected abstract String getBarkWord();
 
-    // TODO edo これは確実に、barking専用メソッドなので、Processの一部にしちゃっていいかなと by jflute (2026/03/13)
-    protected BarkedSound doBark(String barkWord) {
-        downHitPoint();
-        return new BarkedSound(barkWord);
+    public String barkWord() {
+        return getBarkWord();
     }
 
 
@@ -92,6 +78,10 @@ public abstract class Animal implements Loudable {
         if (hitPoint <= 0) {
             throw new IllegalStateException("I'm very tired, so I want to sleep" + getBarkWord());
         }
+    }
+
+    public void downHitPointForBark() {
+        downHitPoint();
     }
 
     // ===================================================================================
