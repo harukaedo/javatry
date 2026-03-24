@@ -54,8 +54,7 @@ public class Zombie extends Animal {
     //                                                                               Bark
     //                                                                              ======
     @Override
-    protected void breatheIn() {
-        super.breatheIn();
+    protected void breatheInForBark() {
         zombieDiary.countBreatheIn();
     }
 

@@ -47,8 +47,7 @@ public class Penguin extends Animal implements Swimmable {
     //                                                                               Bark
     //                                                                              ======
     @Override
-    protected void breatheIn() {
-        super.breatheIn();
+    protected void breatheInForBark() {
         penguinDiary.countBreatheIn();
     }
 

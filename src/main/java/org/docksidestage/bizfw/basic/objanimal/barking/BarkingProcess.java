@@ -11,7 +11,7 @@ public class BarkingProcess {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    private static final Logger logger = LoggerFactory.getLogger(Animal.class);
+    private static final Logger logger = LoggerFactory.getLogger(BarkingProcess.class);
 
     public BarkedSound bark(Animal animal) {
         breatheIn(animal);

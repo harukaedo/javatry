@@ -42,6 +42,16 @@ public abstract class Animal implements Loudable {
     }
 
     // ===================================================================================
+    //                                                                              breath
+    //    
+    //0319修正メモ：ペンギンとゾンビが、super.breatheinでAnimal共通処理となったいた。
+    // AnimalにはもうbreatheIn本体はないのでbreatheInをBarkingProcess側で呼ぶためのトリガーを用意してあげて
+    // 各々の動物で上書きしてあげるように変更                                                           ======
+    protected void breatheInForBark(){
+    }
+
+
+    // ===================================================================================
     //                                                                               Bark
     //                                                                              ======
     public BarkedSound bark() {
