@@ -30,6 +30,11 @@ import org.docksidestage.bizfw.basic.objanimal.swimmer.Swimmable;
 import org.docksidestage.javatry.basic.st6.dbms.St6Dbms;
 import org.docksidestage.javatry.basic.st6.dbms.St6MySql;
 import org.docksidestage.javatry.basic.st6.dbms.St6PostgreSql;
+import org.docksidestage.javatry.basic.st6.os.St6OperationSystem;
+import org.docksidestage.javatry.basic.st6.os.St6Windows;
+import org.docksidestage.javatry.basic.st6.os.St6Mac;
+import org.docksidestage.javatry.basic.st6.os.St6OldWindows;
+
 import org.docksidestage.unit.PlainTestCase;
 
 // #1on1: UIデザインでオブジェクト指向に触れたことがある by えどさん // (2025/10/15)
@@ -532,8 +537,22 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      * Extract St6OperationSystem (basic.st6.os)'s process to concrete classes (as super class and sub-class) <br>
      * (St6OperationSystem (basic.st6.os) からコンクリートクラスを抽出してみましょう (スーパークラスとサブクラスの関係に))
      */
+    //0319メモ：コンクートクラスの対象となるのがmac/windows/oldwindowsになるのでそこで切り分けたい
+    //抽象的なものはそれぞれのOSで共通処理を持っているところなので this.loginId = loginId;関連はスーパークラスにおいておく。
+    // |-os
+    //   |-St6OperationSystem
+    //   |-St6Mac
+    //   |-St6Windows
+    //   |-StOldWindows
     public void test_objectOriented_writing_specialization_extractToConcrete() {
         // your confirmation code here
+        St6OperationSystem mac = new St6Mac("chikuwa");
+        St6OperationSystem windows = new St6Windows("chikuwa");
+        St6OperationSystem oldWindows = new St6OldWindows("chikuwa");
+
+        log(mac.buildUserResourcePath("chikuwa.jpeg"));
+        log(windows.buildUserResourcePath("chikuwa.jpeg"));
+        log(oldWindows.buildUserResourcePath("chikuwa.jpeg"));
     }
 
     // ===================================================================================
