@@ -20,7 +20,7 @@ public class BarkingProcess {
         return doBark(animal,barkWord);
     }
 
-    // TODO done edo コメント見ると、barkingのための息継ぎなので、barking専用と考えて良い by jflute (2026/03/13)
+    // done edo コメント見ると、barkingのための息継ぎなので、barking専用と考えて良い by jflute (2026/03/13)
     //0319 修正メモ：breatheIn,prepareAbdominalMuscle,doBarkは BarkingProcessの一部であるため
     // BarkingProcessに引っ越した。引っ越したことによりそれぞれが各animalのメソッドを引数で受ける形になったため
     //animal.hogehogeからhogehoge(animal)に変更。
@@ -35,7 +35,7 @@ public class BarkingProcess {
         animal.downHitPointForBark();
     }
 
-    // TODO done edo これは確実に、barking専用メソッドなので、Processの一部にしちゃっていいかなと by jflute (2026/03/13)
+    // done edo これは確実に、barking専用メソッドなので、Processの一部にしちゃっていいかなと by jflute (2026/03/13)
     protected BarkedSound doBark(Animal animal,String barkWord) {
         animal.downHitPointForBark();
         return new BarkedSound(barkWord);

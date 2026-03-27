@@ -55,6 +55,10 @@ public  abstract class St6OperationSystem {
     protected abstract String getFileSeparator();
     protected abstract String getUserDirectory();
 
+    // #1on1: こういうif文を構造で解決するメリット (2026/03/27)
+    // できるだけこういうif文を書きたくない。
+    // (妥協するケースはある: 局所的で増える可能性もほぼゼロとか、重要度低い業務とか、徹夜リリースとか)
+
     // protected String getFileSeparator() {
     //     if (OS_TYPE_MAC.equalsIgnoreCase(osType)) {
     //         return "/";

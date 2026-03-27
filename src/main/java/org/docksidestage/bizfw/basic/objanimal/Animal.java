@@ -47,6 +47,17 @@ public abstract class Animal implements Loudable {
     //0319修正メモ：ペンギンとゾンビが、super.breatheinでAnimal共通処理となったいた。
     // AnimalにはもうbreatheIn本体はないのでbreatheInをBarkingProcess側で呼ぶためのトリガーを用意してあげて
     // 各々の動物で上書きしてあげるように変更                                                           ======
+    // TODO edo 修行++: breatheInForBark()を呼び出している人が誰もいない by jflute (2026/03/27)
+    // 確かに、BarkingProcessがbreathIn()の中でこれを呼べば成立するはず。
+    // でも、protectedだから、BarkingProcessから呼ぶことはできない。
+    // publicなら実現できるが、結局カプセル化の話に戻ってきちゃう。
+    // 逆にいうと、downHitPoint()のpublicが解決すればこっちも同時に解決するかも。
+    //
+    // 一方で、こっちは別のやり方でも解決できる。downHitPoint()が解決してなくても、こっちだけ解決することできる。
+    // hint1: オブジェクト指向はもっと自由。
+    // hint2: ザ・オブジェクト指向 (階層構造をどう作るか？どこで作るか？は自由)
+    // hint3: ↑はAnimalだけのものじゃない (例えば、ZombieDiaryとPenguinDiaryがAnimalDiaryを継承するとか)
+    //
     protected void breatheInForBark(){
     }
 
@@ -66,13 +77,17 @@ public abstract class Animal implements Loudable {
     // たまたま動いてるって感じで、ちょっとリファクタリングすると動かなくなる。
 
 
-    // TODO done edo 修行++: これはサブクラス解決用のメソッドなので移動はできない。じゃあpublicにするか？ by jflute (2026/03/13)
+    // done edo 修行++: これはサブクラス解決用のメソッドなので移動はできない。じゃあpublicにするか？ by jflute (2026/03/13)
     // できればpublicにせず、protectedを維持したまま、BarkingProcessを実現させたい。
     // (いったん、publicしちゃってもOK。ただとぅどぅ残したまま)
     //0319修正メモ：別パッケージから protected を直接呼べない問題に対してprotectedを公開するだけの
     // 薄いpublicのメソッド（ラッパーメソッド）を作成してgetBarkWord自体はprotectedを維持した。
     //これは、修行達成になっているのかレビューしていただけると助かります。
     //日常の業務で、あまり外で渡したくない関数やメソッドをラッパーして渡すことがあったためそこを参考にしました
+    // #1on1: そもそもpublicにしたくない理由は？ (元々protectedで隠されていた理由は？) (2026/03/27)
+    // downHitPoint()の方を参照。
+    // TODO edo 修行++: getBarkWord(), downHitPoint()に比べてこっちは比較的楽に実現(解決)できます by jflute (2026/03/27)
+    // hint1: すでに知ってる文法レベルの組み合わせで解決できる。
     protected abstract String getBarkWord();
 
     public String barkWord() {
@@ -83,6 +98,20 @@ public abstract class Animal implements Loudable {
     // ===================================================================================
     //                                                                           Hit Point
     //                                                                           =========
+    // #1on1: そもそもpublicにしたくない理由は？ (元々protectedで隠されていた理由は？) (2026/03/27)
+    // 内部処理を公開してしまうと、内部都合で内部処理を変更する時に影響範囲が大きくなってしまう。
+    // getBarkWord()に比べて、むやみに呼ばれるとAnimalはどうなっちゃう？
+    // getBarkWord()はまだ情報が漏れるだけ(それもよくないけど)...
+    // downHitPoint()はむやみに体力減らされてしまう...何も行動をしてないのに体力が減るみたいなこともありえる。
+    //
+    //  getBarkWord(): select
+    //  downHitPoint(): update // 状態が変わる
+    //
+    // publicだと内部状態を壊れてしまう (壊される可能性が出てきてしまう)
+    // publicで (BarkingProcess以外の) 他のクラスから呼ばれてしまうことを避けたい。
+    //
+    // オブジェクト指向のカプセル化の本質。
+    //
     protected void downHitPoint() {
         --hitPoint;
         if (hitPoint <= 0) {
@@ -90,6 +119,9 @@ public abstract class Animal implements Loudable {
         }
     }
 
+    // #1on1: ラッパー自体は悪くないけど、ラッパー自体がpublicだと、結局呼ばれてしまう (2026/03/27)
+    // TODO edo 修行#: downHitPoint()のラッパーもpublicじゃないようにしたい by jflute (2026/03/27)
+    // hint1: ラッパーがメソッドだったりクラスだったり、色々な形式の可能性はある (2026/03/27)
     public void downHitPointForBark() {
         downHitPoint();
     }
