@@ -122,10 +122,11 @@ public abstract class Animal implements Loudable {
     // #1on1: ラッパー自体は悪くないけど、ラッパー自体がpublicだと、結局呼ばれてしまう (2026/03/27)
     // TODO edo 修行#: downHitPoint()のラッパーもpublicじゃないようにしたい by jflute (2026/03/27)
     // hint1: ラッパーがメソッドだったりクラスだったり、色々な形式の可能性はある (2026/03/27)
+    // hint2: Animal自身とBarkingProcessだけ (Animalが許してるクラスだけ) が呼べるような状態にしたい (2026/03/27)
     public void downHitPointForBark() {
         downHitPoint();
     }
-
+    
     // ===================================================================================
     //                                                                               Loud
     //                                                                              ======
