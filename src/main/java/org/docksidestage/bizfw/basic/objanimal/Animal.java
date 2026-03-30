@@ -17,6 +17,7 @@ package org.docksidestage.bizfw.basic.objanimal;
 
 import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.barking.BarkingProcess;
+import org.docksidestage.bizfw.basic.objanimal.diary.AnimalDiary;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 
 /**
@@ -47,7 +48,7 @@ public abstract class Animal implements Loudable {
     //0319修正メモ：ペンギンとゾンビが、super.breatheinでAnimal共通処理となったいた。
     // AnimalにはもうbreatheIn本体はないのでbreatheInをBarkingProcess側で呼ぶためのトリガーを用意してあげて
     // 各々の動物で上書きしてあげるように変更                                                           ======
-    // TODO edo 修行++: breatheInForBark()を呼び出している人が誰もいない by jflute (2026/03/27)
+    // TODO done edo 修行++: breatheInForBark()を呼び出している人が誰もいない by jflute (2026/03/27)
     // 確かに、BarkingProcessがbreathIn()の中でこれを呼べば成立するはず。
     // でも、protectedだから、BarkingProcessから呼ぶことはできない。
     // publicなら実現できるが、結局カプセル化の話に戻ってきちゃう。
@@ -58,15 +59,25 @@ public abstract class Animal implements Loudable {
     // hint2: ザ・オブジェクト指向 (階層構造をどう作るか？どこで作るか？は自由)
     // hint3: ↑はAnimalだけのものじゃない (例えば、ZombieDiaryとPenguinDiaryがAnimalDiaryを継承するとか)
     //
-    protected void breatheInForBark(){
+    // protected void breatheInForBark(){
+    // }
+    //0330修正メモ：AnimalDiary を返す getAnimalDiary() を追加し、Animal自身が自分に対応するdiary を取り出せるようにする。
+    //デフォルトでは new AnimalDiary() を返すので、DogやCatには独自のDiaryは更新されない
+    //PenguinDiary / ZombieDiaryをAnimalDiary継承に変更し、それぞれのdiaryをgetAnimalDiary() で返すようにする。
+    // これで「息継ぎ記録の差分」は動物本体ではなくそれぞれの動物のdiary側が持つ構造になる
+    //BarkingProcess.javaではAnimalDiaryを受け取るようにして、breatheIn() の中で animalDiary.breatheInForBark() を呼ぶ形に。
+    //流れ的に
+    //1.Animalが自分のdiaryをBarkingProcessに渡す。
+    //2.BarkingProcessはdiaryに息継ぎ記録を頼む
+    protected AnimalDiary getAnimalDiary(){
+        return new AnimalDiary();
     }
-
 
     // ===================================================================================
     //                                                                               Bark
     //                                                                              ======
     public BarkedSound bark() {
-        return new BarkingProcess().bark(this, getBarkWord());
+        return new BarkingProcess().bark(this, getBarkWord(),getAnimalDiary());
     }
     
     // #1on1: Javaのprotectedの説明、サブクラスに公開、もしくは、同じpackageに公開、という二つの特徴 (2026/03/13)

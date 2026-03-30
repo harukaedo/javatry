@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.objanimal;
 
+import org.docksidestage.bizfw.basic.objanimal.diary.AnimalDiary;
+
 /**
  * The object for zombie(ゾンビ).
  * @author jflute
@@ -37,7 +39,7 @@ public class Zombie extends Animal {
         return -1; // magic number for infinity hit point
     }
 
-    public static class ZombieDiary {
+    public static class ZombieDiary extends AnimalDiary{
 
         private int breatheInCount;
 
@@ -54,8 +56,8 @@ public class Zombie extends Animal {
     //                                                                               Bark
     //                                                                              ======
     @Override
-    protected void breatheInForBark() {
-        zombieDiary.countBreatheIn();
+    protected AnimalDiary getAnimalDiary() {
+        return zombieDiary;
     }
 
     @Override

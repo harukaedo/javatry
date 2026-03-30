@@ -1,5 +1,6 @@
 package org.docksidestage.bizfw.basic.objanimal;
 
+import org.docksidestage.bizfw.basic.objanimal.diary.AnimalDiary;
 import org.docksidestage.bizfw.basic.objanimal.swimmer.Swimmable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class Penguin extends Animal implements Swimmable {
         return +2;
     }
 
-    public static class PenguinDiary {
+    public static class PenguinDiary extends AnimalDiary{
         private int breatheInCount;
 
         public void countBreatheIn() {
@@ -47,8 +48,8 @@ public class Penguin extends Animal implements Swimmable {
     //                                                                               Bark
     //                                                                              ======
     @Override
-    protected void breatheInForBark() {
-        penguinDiary.countBreatheIn();
+    protected AnimalDiary getAnimalDiary() {
+        return penguinDiary;
     }
 
     @Override

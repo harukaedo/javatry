@@ -1,6 +1,7 @@
 package org.docksidestage.bizfw.basic.objanimal.barking;
 
 import org.docksidestage.bizfw.basic.objanimal.Animal;
+import org.docksidestage.bizfw.basic.objanimal.diary.AnimalDiary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /**
@@ -13,8 +14,8 @@ public class BarkingProcess {
     //                                                                          ==========
     private static final Logger logger = LoggerFactory.getLogger(BarkingProcess.class);
 
-    public BarkedSound bark(Animal animal, String barkWord) {
-        breatheIn(animal);
+    public BarkedSound bark(Animal animal, String barkWord, AnimalDiary animalDiary) {
+        breatheIn(animal, animalDiary);
         prepareAbdominalMuscle(animal);
         return doBark(animal,barkWord);
     }
@@ -24,8 +25,9 @@ public class BarkingProcess {
     // BarkingProcessに引っ越した。引っ越したことによりそれぞれが各animalのメソッドを引数で受ける形になったため
     //animal.hogehogeからhogehoge(animal)に変更。
     //Animal自身には、getBarkWord() と downHitPoint() のような、動物自身の状態や差分に関わる責務を残した
-    protected void breatheIn(Animal animal) { // actually depends on barking
+    protected void breatheIn(Animal animal, AnimalDiary animalDiary) { // actually depends on barking
         logger.debug("...Breathing in for barking"); // dummy implementation
+        animalDiary.breatheInForBark();
         animal.downHitPointForBark();
     }
 
