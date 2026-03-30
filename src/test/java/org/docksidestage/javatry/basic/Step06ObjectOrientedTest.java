@@ -31,9 +31,9 @@ import org.docksidestage.javatry.basic.st6.dbms.St6Dbms;
 import org.docksidestage.javatry.basic.st6.dbms.St6MySql;
 import org.docksidestage.javatry.basic.st6.dbms.St6PostgreSql;
 import org.docksidestage.javatry.basic.st6.os.St6Windows;
+import org.docksidestage.javatry.basic.st6.os.base.St6OperationSystem;
 import org.docksidestage.javatry.basic.st6.os.St6Mac;
 import org.docksidestage.javatry.basic.st6.os.St6OldWindows;
-import org.docksidestage.javatry.basic.st6.os.St6OperationSystem;
 import org.docksidestage.unit.PlainTestCase;
 
 // #1on1: UIデザインでオブジェクト指向に触れたことがある by えどさん // (2025/10/15)
