@@ -13,10 +13,9 @@ public class BarkingProcess {
     //                                                                          ==========
     private static final Logger logger = LoggerFactory.getLogger(BarkingProcess.class);
 
-    public BarkedSound bark(Animal animal) {
+    public BarkedSound bark(Animal animal, String barkWord) {
         breatheIn(animal);
         prepareAbdominalMuscle(animal);
-        String barkWord = animal.barkWord();
         return doBark(animal,barkWord);
     }
 

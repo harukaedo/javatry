@@ -66,7 +66,7 @@ public abstract class Animal implements Loudable {
     //                                                                               Bark
     //                                                                              ======
     public BarkedSound bark() {
-        return new BarkingProcess().bark(this);
+        return new BarkingProcess().bark(this, getBarkWord());
     }
     
     // #1on1: Javaのprotectedの説明、サブクラスに公開、もしくは、同じpackageに公開、という二つの特徴 (2026/03/13)
@@ -86,13 +86,29 @@ public abstract class Animal implements Loudable {
     //日常の業務で、あまり外で渡したくない関数やメソッドをラッパーして渡すことがあったためそこを参考にしました
     // #1on1: そもそもpublicにしたくない理由は？ (元々protectedで隠されていた理由は？) (2026/03/27)
     // downHitPoint()の方を参照。
-    // TODO edo 修行++: getBarkWord(), downHitPoint()に比べてこっちは比較的楽に実現(解決)できます by jflute (2026/03/27)
+    // TODO done edo 修行++: getBarkWord(), downHitPoint()に比べてこっちは比較的楽に実現(解決)できます by jflute (2026/03/27)
     // hint1: すでに知ってる文法レベルの組み合わせで解決できる。
     protected abstract String getBarkWord();
+    //0330修正メモ：　
+    //修正前
+    // new BarkingProcess().bark(this)
+    // BarkingProcess の中で animal.barkWord()
+    // Animal.barkWord() の中で getBarkWord()
+    // 鳴き声文字列を使って BarkedSound を作る
+    //→鳴く処理の流れの途中で BarkingProcess が Animal に公開された窓口を使って鳴き声を取りにいく
+    //どんな鳴き声なのかはAnimal起因なのにBarking Process側に鳴き声を取得する責務を置きすぎていた
+    //=====================================================================================
+    //修正後
+    //Animal.bark() の中で getBarkWord()
+    //new BarkingProcess().bark(this, barkWord)
+    //BarkingProcess は受け取った文字列で BarkedSound を作る
+    //→鳴き声を知っている Animal が、自分で値を取り出してBarkingProcess側に渡す
+    //学びそれぞれの責務を再考することが大事
 
-    public String barkWord() {
-        return getBarkWord();
-    }
+    // public String barkWord() {
+    //     return getBarkWord();
+    // }
+    
 
 
     // ===================================================================================
