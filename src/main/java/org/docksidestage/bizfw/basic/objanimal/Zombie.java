@@ -64,6 +64,29 @@ public class Zombie extends Animal {
     protected String getBarkWord() {
         return "uooo"; // what in English?
     }
+    
+    // #1on1: Diaryの階層構造ではなく、BarkingProcess自体を階層構造にしてしまうやり方 (2026/04/10)
+    // o ZombieDiary: 明示的でわかりやすい拡張ポイント、一方で柔軟性は低い (追加の時に修正が多くなる)
+    // o ZombieBarkingProcess: 柔軟性が高い、一方でなんでもできちゃうからわかりやすさは低くなる
+    // 何を重視してどう演出するか？がまさしくコーディングデザイン。
+    //@Override
+    //protected BarkingProcess createBarkingProcess() {
+    //    return new ZombieBarkingProcess();
+    //}
+    //
+    //public class ZombieBarkingProcess extends BarkingProcess {
+    //
+    //    @Override
+    //    protected void breatheIn(Animal animal, AnimalDiary animalDiary) {
+    //        super.breatheIn(animal, animalDiary);
+    //        zombieDiary.countBreatheIn();
+    //    }
+    //    
+    //    @Override
+    //    protected void prepareAbdominalMuscle(Animal animal) {
+    //        super.prepareAbdominalMuscle(animal);
+    //    }
+    //}
 
     // ===================================================================================
     //                                                                           Hit Point

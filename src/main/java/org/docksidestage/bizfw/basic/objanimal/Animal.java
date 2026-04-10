@@ -48,7 +48,7 @@ public abstract class Animal implements Loudable {
     //0319修正メモ：ペンギンとゾンビが、super.breatheinでAnimal共通処理となったいた。
     // AnimalにはもうbreatheIn本体はないのでbreatheInをBarkingProcess側で呼ぶためのトリガーを用意してあげて
     // 各々の動物で上書きしてあげるように変更                                                           ======
-    // TODO done edo 修行++: breatheInForBark()を呼び出している人が誰もいない by jflute (2026/03/27)
+    // done edo 修行++: breatheInForBark()を呼び出している人が誰もいない by jflute (2026/03/27)
     // 確かに、BarkingProcessがbreathIn()の中でこれを呼べば成立するはず。
     // でも、protectedだから、BarkingProcessから呼ぶことはできない。
     // publicなら実現できるが、結局カプセル化の話に戻ってきちゃう。
@@ -79,6 +79,9 @@ public abstract class Animal implements Loudable {
     public BarkedSound bark() {
         return new BarkingProcess().bark(this, getBarkWord(),getAnimalDiary());
     }
+    // #1on1: newしているところをメソッド内でベタっと書くと、オーバーライドしづらい話 (2026/04/10)
+    // protected の createメソッドに切り出しておいて、具象クラスに「お好きなように」ってするテクニックもある。
+    // こういうところもコーディングデザイン。動きは同じでも、将来の周りの人に与える影響が変わる。
     
     // #1on1: Javaのprotectedの説明、サブクラスに公開、もしくは、同じpackageに公開、という二つの特徴 (2026/03/13)
     // BarkingProcess と Animal は親子関係ないので、サブクラス公開は関係ない。
@@ -97,8 +100,11 @@ public abstract class Animal implements Loudable {
     //日常の業務で、あまり外で渡したくない関数やメソッドをラッパーして渡すことがあったためそこを参考にしました
     // #1on1: そもそもpublicにしたくない理由は？ (元々protectedで隠されていた理由は？) (2026/03/27)
     // downHitPoint()の方を参照。
-    // TODO done edo 修行++: getBarkWord(), downHitPoint()に比べてこっちは比較的楽に実現(解決)できます by jflute (2026/03/27)
+    // done edo 修行++: getBarkWord(), downHitPoint()に比べてこっちは比較的楽に実現(解決)できます by jflute (2026/03/27)
     // hint1: すでに知ってる文法レベルの組み合わせで解決できる。
+    // #1on1: 難しい世界にいると、難しい文法を使わないと解決できないって思い込んじゃう (2026/04/10)
+    // 引数/戻り値デザインと言っても過言ではない。大事な道具。
+    // また、こっちは参照するだけ。SQLで言うとselectするだけなので、結果を渡せばそれでいい。
     protected abstract String getBarkWord();
     //0330修正メモ：　
     //修正前

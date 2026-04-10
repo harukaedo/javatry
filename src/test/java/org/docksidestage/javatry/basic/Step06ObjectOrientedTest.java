@@ -354,12 +354,15 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_6th_overriddenWithoutSuper() {
-        Animal animal = new Zombie();
+        Zombie zombie = new Zombie();
+        Animal animal = zombie;
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
         log(sea); // your answer? => uooo
         int land = animal.getHitPoint();
         log(land); // your answer? => -1
+        
+        log(zombie.getZombieDiary().getBreatheInCount());
     }
     //1220自分なりの回答
     //doAnimalSeaLand_for_6thメソッドでAnimal型の変数を引数に取り、barkメソッドを呼び出す。
