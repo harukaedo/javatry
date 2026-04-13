@@ -25,7 +25,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りに実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author harukaedo
  */
 public class Step07ExceptionTest extends PlainTestCase {
 
@@ -47,8 +47,13 @@ public class Step07ExceptionTest extends PlainTestCase {
         } finally {
             sea.append("broadway");
         }
-        log(sea); // your answer? =>
+        log(sea); // your answer? =>hangarbroadway
     }
+    //0413自分なりの回答
+    //thrower.land();が呼ばれてSt7BasicExceptionThrower内でprivate void onemanまで進む。
+    //ここではIllegalStateExceptionが例外としてthrowされるのでtryは実行されない。
+    //catchでsea.append("hangar");が実行される
+    //finallyは必ず実行され、hangarbroadwayとなる。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_basic_message() {
@@ -60,8 +65,13 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (IllegalStateException e) {
             sea = e.getMessage();
         }
-        log(sea); // your answer? =>
+        log(sea); // your answer? =>oneman at showbase
     }
+    //0413自分なりの回答
+    //同じく、thrower.land();が呼ばれてSt7BasicExceptionThrower内でprivate void onemanまで進む。
+    //IllegalStateExceptionが例外としてthrowされるのでtryは実行されない。
+    //catchでIllegalStateException側のイベントとしてstringをメッセージとして受け取る
+    //(例外オブジェクトのコンストラクタに渡された文字列を取得)
 
     /**
      * What class name and method name and row number cause the exception? (you can execute and watch logs) <br>
@@ -75,8 +85,12 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (IllegalStateException e) {
             log(e);
         }
-        // your answer? => 
+        // your answer? => St7BasicExceptionThrower,oneman,40
     }
+    //0413自分なりの回答
+    //クラス自体はsrc/test/java/org/docksidestage/javatry/basic/st7/St7BasicExceptionThrower.javaの
+    //St7BasicExceptionThrower
+    //例外をIllegalStateExceptionとして流すメソッドはonemanであり、例外自体は40行目で流している
 
     // ===================================================================================
     //                                                                           Hierarchy
@@ -88,36 +102,66 @@ public class Step07ExceptionTest extends PlainTestCase {
     public void test_exception_hierarchy_Runtime_instanceof_RuntimeException() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof RuntimeException;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true
     }
+    //0413自分なりの回答
+    //IllegalStateExceptionはclass IllegalStateException extends RuntimeException
+    //となっているためRuntimeExceptionを継承していることになっている
+    //そのため、回答もtrueになる。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Runtime_instanceof_Exception() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof Exception;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true
     }
+    //0413自分なりの回答
+    //上の問題と同様、IllegalStateExceptionはclass IllegalStateException extends RuntimeException
+    //となっているためRuntimeExceptionを継承していることになっている
+    //さらにRuntimeExceptionはRuntimeException extends Exceptionとなっているため
+    //結局はExceptionも継承してると言える。
+    //the 階層構造
+
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Runtime_instanceof_Error() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof Error;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => false
     }
+    //0413自分なりの回答
+    //Errorはclass Error extends ThrowableとなっていてIllegalStateException自体は同じThrowableを継承しているが
+    // 別の継承のツリーにいるため継承しているとは言えない。
+    //そのため回答もfalseになる。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Runtime_instanceof_Throwable() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof Throwable;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true
     }
+    //0413自分なりの回答
+    //IllegalStateExceptionは先ほどtest_exception_hierarchy_Runtime_instanceof_Exceptionにて
+    //回答したException extends Throwableとなっていて、これも階層構造になっているので結局継承していることになる
+    //階層構造
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Throwable_instanceof_Exception() {
         Object exp = new Throwable("mystic");
         boolean sea = exp instanceof Exception;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => false
     }
+    //0413自分なりの回答
+    //Exception extends Throwableとなっているが、ExceptionはThrowableの子になるようなものなので
+    //Throwable自体がExceptionを継承しているわけじゃない。
+    //下記だったらtrueだった
+    /*
+    public void test_exception_hierarchy_Throwable_instanceof_Exception() {
+        Object exp = new Exception("mystic");
+        boolean sea = exp instanceof Throwable;
+        log(sea); 
+    }
+     */
 
     // ===================================================================================
     //                                                                         NullPointer
@@ -135,8 +179,12 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (NullPointerException e) {
             log(e);
         }
-        // your answer? => 
+        // your answer? => null.nullだった変数はland, 177行目
     }
+    //0413自分なりの回答
+    //三項演算子の書き方。『条件 ? A : B』
+    //条件式が正しい場合はA（真）を取るためここでnullが値として入る
+    //業務でもたまに使うけど、いつもどっちだったっけ？ってなる😅
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_nullpointer_headache() {
@@ -144,13 +192,18 @@ public class Step07ExceptionTest extends PlainTestCase {
             String sea = "mystic";
             String land = !!!sea.equals("mystic") ? null : "oneman";
             String piari = !!!sea.equals("mystic") ? "plaza" : null;
-            int sum = land.length() + piari.length();
+            int sum = land.length() + piari.length();//6+0
             log(sum);
         } catch (NullPointerException e) {
             log(e);
         }
-        // your answer? => 
+        // your answer? => 6
     }
+    //0413
+    //正しい回答　null
+    //条件式の取る方は正しかったが、nullは文字の長さにはならないので、そもそも
+    //計算に辿り着かなくて結局nullで終わってしまう。
+    //計算に行かないためcatchに回されてnull扱いで終わる
 
     /**
      * Refactor to immediately understand what variable (is null) causes the NullPointerException by row number in stack trace. <br>
@@ -159,12 +212,12 @@ public class Step07ExceptionTest extends PlainTestCase {
     public void test_exception_nullpointer_refactorCode() {
         try {
             String sea = "mystic";
-            String land = !!!sea.equals("mystic") ? null : "oneman";
-            String piari = !!!sea.equals("mystic") ? "plaza" : null;
-            int sum = land.length() + piari.length();
+            String land = !!!sea.equals("mystic") ? null : "oneman";//oneman,6
+            String piari = !!!sea.equals("mystic") ? "plaza" : null;//null
+            int sum = land.length() + piari.length();//計算が成り立たないのでcatchへ
             log(sum);
         } catch (NullPointerException e) {
-            log(e);
+            log(e);//ここでnull
         }
     }
 
