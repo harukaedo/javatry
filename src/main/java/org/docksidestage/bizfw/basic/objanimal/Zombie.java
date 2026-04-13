@@ -43,6 +43,11 @@ public class Zombie extends Animal {
 
         private int breatheInCount;
 
+        @Override
+        public void breatheInForBark() {
+            countBreatheIn();
+        }
+
         public void countBreatheIn() {
             ++breatheInCount;
         }

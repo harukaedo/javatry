@@ -35,6 +35,11 @@ public class Penguin extends Animal implements Swimmable {
     public static class PenguinDiary extends AnimalDiary{
         private int breatheInCount;
 
+        @Override
+        public void breatheInForBark() {
+            countBreatheIn();
+        }
+
         public void countBreatheIn() {
             --breatheInCount;
         }
