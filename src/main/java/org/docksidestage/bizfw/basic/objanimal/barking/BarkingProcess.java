@@ -27,7 +27,7 @@ public class BarkingProcess {
     //Animal自身には、getBarkWord() と downHitPoint() のような、動物自身の状態や差分に関わる責務を残した
     protected void breatheIn(Animal animal, AnimalDiary animalDiary) { // actually depends on barking
         logger.debug("...Breathing in for barking"); // dummy implementation
-        // TODO done edo ZombieDiaryでbreatheInForBark()がオーバーライドされてないので結局空振りしてる by jflute (2026/04/10)
+        // done edo ZombieDiaryでbreatheInForBark()がオーバーライドされてないので結局空振りしてる by jflute (2026/04/10)
         // #1on1: ザ・仕組みって感じ。スーパードミノの仕掛けが途中で途切れたみたいな感じ。 (2026/04/10)
         //0413 修正メモ：ZombieDiaryとPenguinDiaryにOverrideを追加し、それぞれで息継ぎの記録をできるようにした。
         animalDiary.breatheInForBark();

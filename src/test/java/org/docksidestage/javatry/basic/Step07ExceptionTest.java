@@ -185,6 +185,8 @@ public class Step07ExceptionTest extends PlainTestCase {
     //三項演算子の書き方。『条件 ? A : B』
     //条件式が正しい場合はA（真）を取るためここでnullが値として入る
     //業務でもたまに使うけど、いつもどっちだったっけ？ってなる😅
+    // TODO edo [ふぉろー] 確かに。一応順番イメージ true/false って感じではあるのかな。 by jflute (2026/04/26)
+    // 一方で、三項演算子は乱用しない方が良いものという感覚ではある。シンプルな場面なら見やすいけど、込み入ってくると見づらい。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_nullpointer_headache() {
@@ -217,6 +219,7 @@ public class Step07ExceptionTest extends PlainTestCase {
             int sum = land.length() + piari.length();//計算が成り立たないのでcatchへ
             log(sum);
         } catch (NullPointerException e) {
+            // TODO edo これだと結局、どっちの変数がnullだったのかわからない by jflute (2026/04/26)
             log(e);//ここでnull
         }
     }
