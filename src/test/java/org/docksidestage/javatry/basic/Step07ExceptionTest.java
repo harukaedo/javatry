@@ -15,6 +15,9 @@
  */
 package org.docksidestage.javatry.basic;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.docksidestage.bizfw.basic.supercar.SupercarClient;
 import org.docksidestage.javatry.basic.st7.St7BasicExceptionThrower;
 import org.docksidestage.javatry.basic.st7.St7ConstructorChallengeException;
@@ -219,10 +222,28 @@ public class Step07ExceptionTest extends PlainTestCase {
             int sum = land.length() + piari.length();//計算が成り立たないのでcatchへ
             log(sum);
         } catch (NullPointerException e) {
-            // TODO edo これだと結局、どっちの変数がnullだったのかわからない by jflute (2026/04/26)
+            // TODO done edo これだと結局、どっちの変数がnullだったのかわからない by jflute (2026/04/26)
             log(e);//ここでnull
         }
     }
+
+    public void test_exception_nullpointer_refactorCode_refactor() {
+        try {
+            String sea = "mystic";
+            String land = !sea.equals("mystic") ? null : "oneman";//oneman,6
+            String piari = !sea.equals("mystic") ? "plaza" : null;//null
+            int landLength = land.length(); //6
+            int piariLength = piari.length(); //null -> この時点で、nullになるのでどの変数でNullPointerを引き起こしたのかがわかるようになる
+            int sum = landLength + piariLength;//ぱっとみはどっちがnullかこれだけだとわからない。
+            log(sum);
+        } catch (NullPointerException e) {
+            log(e);//ここでnull
+        }
+    }
+    //0428 修正メモ：
+    //まず、条件式の前にある『!!!』は、否定の否定の否定で、結局は『!』と同じ意味になっていて進次郎構文みたいになっていたので修正してわかりやすくした
+    //さらに、nullがどっちの変数で発生しているのかがわからない状態だったので、変数を分けて、最後にlengthとlemgthを足すことで
+    // どこでNullPointerExceptionが発生しているのかがわかるようにした。
 
     // ===================================================================================
     //                                                                   Checked Exception
@@ -232,7 +253,21 @@ public class Step07ExceptionTest extends PlainTestCase {
      * (new java.io.File(".") の canonical path を取得してログに表示、I/Oエラーの時はメッセージとスタックトレースを代わりに表示)
      */
     public void test_exception_checkedException_basic() {
+        File file = new File("."); //今いるディレクトリを指す
+        try {
+            String canonicalPath = file.getCanonicalPath(); //今いる正規化されたパスを取得する
+            log(canonicalPath);
+        } catch (IOException e) {
+            log(e.getMessage(), e);
+        }
     }
+    //0428 memo
+    //I/Oエラーとは?
+    //https://qiita.com/pitan109/items/c9910edddc007126df41
+    //I/Oエラーは、Input/Outputのエラーで、ファイルの読み書きやネットワーク通信などの入出力処理で発生するエラーのこと。
+    //エラーが起きてしまった場合、メッセージとスタックトレースを代わりに表示とのことだったので
+    //catchブロックで、IOExceptionが発生したときに、e.getMessage()でエラーメッセージを取得し、eを渡すことでスタックトレースも表示するようにした。
+
 
     // ===================================================================================
     //                                                                               Cause
@@ -252,36 +287,36 @@ public class Step07ExceptionTest extends PlainTestCase {
             Throwable cause = e.getCause();
             sea = cause.getMessage();
             land = cause.getClass().getSimpleName();
-            log(sea); // your answer? => 
-            log(land); // your answer? => 
-            log(e); // your answer? => 
-        }
-    }
+            log(sea); // your answer? => Failed to call the second help method: symbol= - 1
+            log(land); // your answer? => IllegalArgumentException
+            log(e); // your answer? => NumberFormatException
+    }   
 
-    private void throwCauseFirstLevel() {
-        int symbol = Integer.MAX_VALUE - 0x7ffffffe;
+    private void throwCauseFirstLevel() { //1段階
+        int symbol = Integer.MAX_VALUE - 0x7ffffffe; //2147483647 - 2147483647 = 1
+        // 16進数直す(15*16^7+15*16^6+15*16^5+15*16^4+15*16^3+15*16^2+15*16^1+14*16^0)
         try {
-            throwCauseSecondLevel(symbol);
+            throwCauseSecondLevel(symbol); // => throwCauseSecondLevel(1)
         } catch (IllegalArgumentException e) {
             throw new IllegalStateException("Failed to call the second help method: symbol=" + symbol, e);
         }
     }
 
-    private void throwCauseSecondLevel(int symbol) {
+    private void throwCauseSecondLevel(int symbol) { //2段階
         try {
             --symbol;
             symbol--;
             if (symbol < 0) {
-                throwCauseThirdLevel(symbol);
+                throwCauseThirdLevel(symbol); // => throwCauseThirdLevel(-1)
             }
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Failed to call the third help method: symbol=" + symbol, e);
+            throw new IllegalArgumentException("Failed to call the third help method: symbol=" + symbol, e); //これが発生
         }
     }
 
-    private void throwCauseThirdLevel(int symbol) {
+    private void throwCauseThirdLevel(int symbol) { //3段階
         if (symbol < 0) {
-            Integer.valueOf("piari");
+            Integer.valueOf("piari"); //symbolが-1のため、Integer.valueOf("piari")でNumberFormatExceptionが発生する
         }
     }
 
