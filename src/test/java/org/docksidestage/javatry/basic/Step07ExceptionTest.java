@@ -188,8 +188,9 @@ public class Step07ExceptionTest extends PlainTestCase {
     //三項演算子の書き方。『条件 ? A : B』
     //条件式が正しい場合はA（真）を取るためここでnullが値として入る
     //業務でもたまに使うけど、いつもどっちだったっけ？ってなる😅
-    // TODO edo [ふぉろー] 確かに。一応順番イメージ true/false って感じではあるのかな。 by jflute (2026/04/26)
+    // done edo [ふぉろー] 確かに。一応順番イメージ true/false って感じではあるのかな。 by jflute (2026/04/26)
     // 一方で、三項演算子は乱用しない方が良いものという感覚ではある。シンプルな場面なら見やすいけど、込み入ってくると見づらい。
+    // #1on1: if ... else ... で考えるといいかも (2026/05/08)
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_nullpointer_headache() {
@@ -222,7 +223,7 @@ public class Step07ExceptionTest extends PlainTestCase {
             int sum = land.length() + piari.length();//計算が成り立たないのでcatchへ
             log(sum);
         } catch (NullPointerException e) {
-            // TODO done edo これだと結局、どっちの変数がnullだったのかわからない by jflute (2026/04/26)
+            // done edo これだと結局、どっちの変数がnullだったのかわからない by jflute (2026/04/26)
             log(e);//ここでnull
         }
     }
@@ -232,6 +233,9 @@ public class Step07ExceptionTest extends PlainTestCase {
             String sea = "mystic";
             String land = !sea.equals("mystic") ? null : "oneman";//oneman,6
             String piari = !sea.equals("mystic") ? "plaza" : null;//null
+            // #1on1: 行を分けたことで、スタックトレースの行から変数を特定できるようになった (2026/05/08)
+            // ただ、これを常にやるかといったらなかなか面倒なのでやったりやらなかったりではある。
+            // ここでは、スタックトレースの行番号からコードを追う習慣を学んでもらうことの方が大事。
             int landLength = land.length(); //6
             int piariLength = piari.length(); //null -> この時点で、nullになるのでどの変数でNullPointerを引き起こしたのかがわかるようになる
             int sum = landLength + piariLength;//ぱっとみはどっちがnullかこれだけだとわからない。
@@ -268,7 +272,26 @@ public class Step07ExceptionTest extends PlainTestCase {
     //エラーが起きてしまった場合、メッセージとスタックトレースを代わりに表示とのことだったので
     //catchブロックで、IOExceptionが発生したときに、e.getMessage()でエラーメッセージを取得し、eを渡すことでスタックトレースも表示するようにした。
 
+    // #1on1: チェック例外とは？ (2026/05/08)
+    // throwされた例外をcatchする義務が生まれる (or さらに呼び出し側にthrowsでたらい回しにする)
+    // それをやらないと、コンパイルエラーになる。catchの強制力のある機能。
+    // 一見便利そうな機能ではある。catchのし忘れを未然に防いでくれる。
+    // ただ、Javaでこの機能、ぜんぜん流行ってない。なぜ？
+    // 家の鍵の話。
+    // 頭の上の隕石の話。
+    // 確率の違い。
+    // 隕石ぐらいのレベルのところで、チェック例外がたくさん使われていたら...面倒でしょうがない。
+    // 既存のチェック例外が、けっこうそれに違い場面でたくさん使われていて、印象とても悪い。
+    // (他にも複合的に色々な要因はあるだろうけど)
+    // TicketSoldOutException は本来チェック例外でも良さそうな場面だけど...
+    // 流行ってないから使ってもわりとみんなビックリするし、まあいいやって感じなる。
+    // (世の中、便利でも時々しか使わないものだと、使い方を忘れたりとかで使わなくなっちゃうものある)
+    //
+    // チェック例外を覚える話というより、
+    // 例外ハンドリングをするのか？しないのか？の判断基準の要因を学んで欲しい。
+    // 確率の違いで、ぼくらは「まあいいや」になったりする。
 
+    // TODO jflute 次回1on1ここから (2026/05/08)
     // ===================================================================================
     //                                                                               Cause
     //                                                                               =====
