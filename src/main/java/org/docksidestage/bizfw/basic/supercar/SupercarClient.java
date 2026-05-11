@@ -29,14 +29,15 @@ public class SupercarClient {
     private final Collection<Supercar> orderedCustomCarCollection = new ArrayList<>();
 
     public void buySupercar() {
-        SupercarDealer dealer = createDealer();
-        String clientRequirement = prepareClientRequirement();
-        Supercar orderedCustomCar = dealer.orderSupercar(clientRequirement);
+        SupercarDealer dealer = createDealer();//ディーラーを呼ぶ
+        String clientRequirement = prepareClientRequirement();//顧客の要求を準備する
+        Supercar orderedCustomCar = dealer.orderSupercar(clientRequirement);//ディーラーに注文する
         orderedCustomCarCollection.add(orderedCustomCar);
     }
 
     private String prepareClientRequirement() {
         return "steering wheel is like sea"; // may be changed future
+        //顧客の要望：雑談。海みたいなハンドルってこれ？https://castel.jp/item/43934/
     }
 
     protected SupercarDealer createDealer() {

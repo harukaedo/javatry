@@ -313,7 +313,8 @@ public class Step07ExceptionTest extends PlainTestCase {
             log(sea); // your answer? => Failed to call the second help method: symbol= - 1
             log(land); // your answer? => IllegalArgumentException
             log(e); // your answer? => NumberFormatException
-    }   
+        }
+    }
 
     private void throwCauseFirstLevel() { //1段階
         int symbol = Integer.MAX_VALUE - 0x7ffffffe; //2147483647 - 2147483647 = 1
@@ -359,9 +360,15 @@ public class Step07ExceptionTest extends PlainTestCase {
             // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
             // What happens? Write situation and cause here. (何が起きた？状況と原因をここに書いてみましょう)
             // - - - - - - - - - -
+            //[状況]
+            //顧客から注文を受け、販売業者が工場に発注→工場で部品を組み立て→完成したスーパーカーを顧客に納品する処理の一連の流れを追っていくコードになっている。
+            //顧客が出した注文に対して、ネジ工場の工程で「このネジは作れません」というエラーが発生し、
+            //車の組み立てを完了できなかった。
             //
-            //
-            //
+            //[原因]
+            //1.販売店から製造工場へ発注する際、顧客の要望とは異なるハンドルのカタログ番号で発注してしまった。
+            //2.その種類のハンドルに使うネジは、現在は製造中止となっており、ネジ工場では生産できなくなっていた。
+            //3.そのため、ネジ工場で「このネジは作れません」というエラーが発生し、車の組み立てを完了できなかった。
             // _/_/_/_/_/_/_/_/_/_/
         }
     }

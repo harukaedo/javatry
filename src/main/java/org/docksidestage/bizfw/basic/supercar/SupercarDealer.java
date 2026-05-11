@@ -24,9 +24,9 @@ import org.docksidestage.bizfw.basic.supercar.SupercarManufacturer.Supercar;
 public class SupercarDealer {
 
     public Supercar orderSupercar(String clientRequirement) {
-        SupercarManufacturer supercarManufacturer = createSupercarManufacturer();
-        if (clientRequirement.contains("steering wheel is like sea")) {
-            return supercarManufacturer.makeSupercar("piari");
+        SupercarManufacturer supercarManufacturer = createSupercarManufacturer();//工場を用意する
+        if (clientRequirement.contains("steering wheel is like sea")) {//顧客の要望にヒットするためこのif文に入る
+            return supercarManufacturer.makeSupercar("piari");//なぜかpiariのカタログになる
         } else if (clientRequirement.contains("steering wheel is useful on land")) {
             return supercarManufacturer.makeSupercar("land");
         } else if (clientRequirement.contains("steering wheel has many shop")) {

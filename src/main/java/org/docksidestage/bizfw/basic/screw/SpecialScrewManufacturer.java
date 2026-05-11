@@ -24,8 +24,8 @@ import org.docksidestage.bizfw.basic.screw.exception.ScrewCannotMakeBySpecExcept
 public class SpecialScrewManufacturer {
 
     public SpecialScrew makeSpecialScrew(ScrewSpec screwSpec) {
-        if (isKawaiiFaceScrewSpec(screwSpec)) {
-            String msg = "The kawaii face is already unsupported so we cannot make it.";
+        if (isKawaiiFaceScrewSpec(screwSpec)) {//\(^_^)/はかわいい顔のねじスペックであるため、このif文に入る
+            String msg = "The kawaii face is already unsupported so we cannot make it.";//サ終していて作れないため、例外を投げる
             throw new ScrewCannotMakeBySpecException(msg);
         }
         return new SpecialScrew(screwSpec.getSpecText());
@@ -33,7 +33,7 @@ public class SpecialScrewManufacturer {
 
     private boolean isKawaiiFaceScrewSpec(ScrewSpec screwSpec) {
         String specText = screwSpec.getSpecText();
-        String kawaiiText = new String(new byte[] { 0x5c, 0x28, 0x5e, 0x5f, 0x5e, 0x29, 0x2f });
+        String kawaiiText = new String(new byte[] { 0x5c, 0x28, 0x5e, 0x5f, 0x5e, 0x29, 0x2f });//\(^_^)/
         return specText.equals(kawaiiText);
     }
 }

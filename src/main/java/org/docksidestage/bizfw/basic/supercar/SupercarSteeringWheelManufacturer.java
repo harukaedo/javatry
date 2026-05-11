@@ -31,12 +31,12 @@ public class SupercarSteeringWheelManufacturer {
         return new SupercarSteeringWheelComponentDB();
     }
 
-    public SteeringWheel makeSteeringWheel(Integer steeringWheelId) {
-        String specText = componentDB.findClincherSpecText(steeringWheelId);
-        ScrewSpec screwSpec = new ScrewSpec(specText);
+    public SteeringWheel makeSteeringWheel(Integer steeringWheelId) { //idは3
+        String specText = componentDB.findClincherSpecText(steeringWheelId);//SupercarSteeringWheelComponentDBからidに合致するスペックテキストを引く
+        ScrewSpec screwSpec = new ScrewSpec(specText);//スペックテキストをもとに、ScrewSpec(ネジの仕様)を作成する
 
         SpecialScrewManufacturer screwManufacturer = createSpecialScrewManufacturer();
-        SpecialScrew screw = screwManufacturer.makeSpecialScrew(screwSpec);
+        SpecialScrew screw = screwManufacturer.makeSpecialScrew(screwSpec);//仕様をもとに、ネジを製造する
 
         return new SteeringWheel(screw);
     }

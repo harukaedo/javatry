@@ -25,11 +25,11 @@ public class SupercarManufacturer {
 
     private final SupercarEasyCatalog catalog = new SupercarEasyCatalog();
 
-    public Supercar makeSupercar(String catalogKey) {
-        Integer steeringWheelId = catalog.findSteeringWheelSpecId(catalogKey);
+    public Supercar makeSupercar(String catalogKey) {//src/main/java/org/docksidestage/bizfw/basic/supercar/SupercarDealer.javaにて指定したカタログキーをみる
+        Integer steeringWheelId = catalog.findSteeringWheelSpecId(catalogKey);//"piari"に合致するカタログidを見つける
 
         SupercarSteeringWheelManufacturer wheelManufacturer = createSupercarSteeringWheelManufacturer();
-        SteeringWheel steeringWheel = wheelManufacturer.makeSteeringWheel(steeringWheelId);
+        SteeringWheel steeringWheel = wheelManufacturer.makeSteeringWheel(steeringWheelId);//製造業者にハンドルの製造を依頼する
 
         return new Supercar(steeringWheel);
     }
