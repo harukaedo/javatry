@@ -38,6 +38,7 @@ public class SupercarClient {
     private String prepareClientRequirement() {
         return "steering wheel is like sea"; // may be changed future
         //顧客の要望：雑談。海みたいなハンドルってこれ？https://castel.jp/item/43934/
+        // #1on1: おもしろい！ (2026/05/19)
     }
 
     protected SupercarDealer createDealer() {
