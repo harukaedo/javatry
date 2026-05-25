@@ -25,14 +25,20 @@ public class SupercarDealer {
 
     public Supercar orderSupercar(String clientRequirement) {
         SupercarManufacturer supercarManufacturer = createSupercarManufacturer();//工場を用意する
-        if (clientRequirement.contains("steering wheel is like sea")) {//顧客の要望にヒットするためこのif文に入る
-            return supercarManufacturer.makeSupercar("piari");//なぜかpiariのカタログになる
-        } else if (clientRequirement.contains("steering wheel is useful on land")) {
-            return supercarManufacturer.makeSupercar("land");
-        } else if (clientRequirement.contains("steering wheel has many shop")) {
-            return supercarManufacturer.makeSupercar("piari");
-        } else {
-            throw new IllegalStateException("Cannot understand the client requirement: " + clientRequirement);
+        //0525修正メモ：どのカタログキーが選ばれたのか分かるように、例外メッセージを変更
+        try {
+            if (clientRequirement.contains("steering wheel is like sea")) {//顧客の要望にヒットするためこのif文に入る
+                return supercarManufacturer.makeSupercar("piari");//なぜかpiariのカタログになる
+            } else if (clientRequirement.contains("steering wheel is useful on land")) {
+                return supercarManufacturer.makeSupercar("land");
+            } else if (clientRequirement.contains("steering wheel has many shop")) {
+                return supercarManufacturer.makeSupercar("piari");
+            } else {
+                throw new IllegalStateException("Cannot understand the client requirement: " + clientRequirement);
+            }
+        } catch (Exception e) {
+            String msg = "Failed to order supercar because of manufacturing failure: clientRequirement=" + clientRequirement;
+            throw new RuntimeException(msg, e);
         }
     }
 

@@ -29,7 +29,15 @@ public class SupercarManufacturer {
         Integer steeringWheelId = catalog.findSteeringWheelSpecId(catalogKey);//"piari"に合致するカタログidを見つける
 
         SupercarSteeringWheelManufacturer wheelManufacturer = createSupercarSteeringWheelManufacturer();
-        SteeringWheel steeringWheel = wheelManufacturer.makeSteeringWheel(steeringWheelId);//製造業者にハンドルの製造を依頼する
+        //SteeringWheel steeringWheel = wheelManufacturer.makeSteeringWheel(steeringWheelId);//製造業者にハンドルの製造を依頼する
+        //0525修正メモ：ハンドルの製造に失敗する可能性があるため、例外処理を追加
+        SteeringWheel steeringWheel;
+        try {
+            steeringWheel = wheelManufacturer.makeSteeringWheel(steeringWheelId);//製造業者にハンドルの製造を依頼する
+        } catch (Exception e) {
+            String msg = "Failed to make supercar because of steering wheel manufacturing failure: catalogKey=" + catalogKey + ", steeringWheelId=" + steeringWheelId;
+            throw new RuntimeException(msg, e);
+        }
 
         return new Supercar(steeringWheel);
     }

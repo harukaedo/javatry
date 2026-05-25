@@ -36,7 +36,15 @@ public class SupercarSteeringWheelManufacturer {
         ScrewSpec screwSpec = new ScrewSpec(specText);//スペックテキストをもとに、ScrewSpec(ネジの仕様)を作成する
 
         SpecialScrewManufacturer screwManufacturer = createSpecialScrewManufacturer();
-        SpecialScrew screw = screwManufacturer.makeSpecialScrew(screwSpec);//仕様をもとに、ネジを製造する
+        //SpecialScrew screw = screwManufacturer.makeSpecialScrew(screwSpec);//仕様をもとに、ネジを製造する
+        //0525修正メモ：ネジの製造に失敗する可能性があるため、例外処理を追加
+        SpecialScrew screw;
+        try{
+            screw = screwManufacturer.makeSpecialScrew(screwSpec);//仕様をもとに、ネジを製造する
+        } catch (Exception e) {
+            String msg = "Failed to make steering wheel because of screw manufacturing failure: steeringWheelId=" + steeringWheelId + ", screwSpec=" + screwSpec;
+            throw new RuntimeException(msg, e);
+        }
 
         return new SteeringWheel(screw);
     }

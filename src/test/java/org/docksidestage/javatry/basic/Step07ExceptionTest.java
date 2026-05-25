@@ -383,6 +383,54 @@ public class Step07ExceptionTest extends PlainTestCase {
      * by only exception information as far as possible. <br>
      * できるだけ例外情報だけでその状況が理解できるように、Supercarのクラスたちの例外ハンドリングを改善しましょう。
      */
+    //0525修正メモ
+    //SpecialScrewManufacturerでscrewSpec をメッセージに入れることで、どのスペックのネジが作れなかったのかがわかるようにした。
+    //SupercarSteeringWheelManufacturerで、ネジの製造に失敗する可能性があるため、例外処理を追加し、どのハンドルのカタログ番号で発注したのか、どのスペックのネジが作れなかったのかがわかるようにした。
+    //SupercarManufacturerで、ハンドルの製造に失敗する可能性があるため、例外処理を追加し、どのハンドルのカタログ番号で発注したのか、どのスペックのネジが作れなかったのかがわかるようにした。
+    //SupercarDealerで、販売店から製造工場へ発注する際、顧客の要望とは異なるハンドルのカタログ番号で発注してしまった可能性があるため、例外処理を追加し、どのハンドルのカタログ番号で発注したのかがわかるようにした。
+
+    //例外メッセージ
+    /*
+    2026-05-25 18:18:32,272 [main] DEBUG (PlainTestCase@log():705) - <<< Step07ExceptionTest.test_exception_translation_improveChallenge() >>>
+    2026-05-25 18:18:32,273 [main] DEBUG (PlainTestCase@log():709) - *No hint here for training.
+    java.lang.RuntimeException: Failed to order supercar because of manufacturing failure: clientRequirement=steering wheel is like sea
+	at org.docksidestage.bizfw.basic.supercar.SupercarDealer.orderSupercar(SupercarDealer.java:41)
+	at org.docksidestage.bizfw.basic.supercar.SupercarClient.buySupercar(SupercarClient.java:34)
+	at org.docksidestage.javatry.basic.Step07ExceptionTest.test_exception_translation_improveChallenge(Step07ExceptionTest.java:396)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at junit.framework.TestCase.runTest(TestCase.java:168)
+	at org.docksidestage.unit.PlainTestCase.runTest(PlainTestCase.java:98)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:110)
+	at junit.framework.TestResult.runProtected(TestResult.java:128)
+	at junit.framework.TestResult.run(TestResult.java:113)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at junit.framework.TestSuite.runTest(TestSuite.java:243)
+	at junit.framework.TestSuite.run(TestSuite.java:238)
+	at org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:157)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:73)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:244)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:65)
+    Caused by: java.lang.RuntimeException: Failed to make supercar because of steering wheel manufacturing failure: catalogKey=piari, steeringWheelId=3
+	at org.docksidestage.bizfw.basic.supercar.SupercarManufacturer.makeSupercar(SupercarManufacturer.java:39)
+	at org.docksidestage.bizfw.basic.supercar.SupercarDealer.orderSupercar(SupercarDealer.java:31)
+	... 23 common frames omitted
+    Caused by: java.lang.RuntimeException: Failed to make steering wheel because of screw manufacturing failure: steeringWheelId=3, screwSpec=ScrewSpec:{\(^_^)/}
+	at org.docksidestage.bizfw.basic.supercar.SupercarSteeringWheelManufacturer.makeSteeringWheel(SupercarSteeringWheelManufacturer.java:46)
+	at org.docksidestage.bizfw.basic.supercar.SupercarManufacturer.makeSupercar(SupercarManufacturer.java:36)
+	... 24 common frames omitted
+    Caused by: org.docksidestage.bizfw.basic.screw.exception.ScrewCannotMakeBySpecException: Cannot make special screw because the kawaii face is already unsupported: screwSpec=ScrewSpec:{\(^_^)/}
+	at org.docksidestage.bizfw.basic.screw.SpecialScrewManufacturer.makeSpecialScrew(SpecialScrewManufacturer.java:31)
+	at org.docksidestage.bizfw.basic.supercar.SupercarSteeringWheelManufacturer.makeSteeringWheel(SupercarSteeringWheelManufacturer.java:43)
+	... 25 common frames omitted
+     */
     public void test_exception_translation_improveChallenge() {
         try {
             new SupercarClient().buySupercar(); // you can fix the classes
@@ -411,7 +459,11 @@ public class Step07ExceptionTest extends PlainTestCase {
         try {
             helpThrowIllegalState();
         } catch (IllegalStateException e) {
-            throw new St7ConstructorChallengeException("Failed to do something.");
+            //0525修正メモ eを渡すことで、helpThrowIllegalStateで発生したIllegalStateExceptionが原因として保持されるようにした。
+            //IllegalStateExceptionではimportantValueが何だったかが書いてあるはずなのに、catch側でそのeを繋がずに、
+            //新しい例外を投げてしまうことで元の例外スタックトレースも消えてしまう
+            //catch 側で cause として渡す
+            throw new St7ConstructorChallengeException("Failed to do something.", e);
         }
     }
 
@@ -433,9 +485,21 @@ public class Step07ExceptionTest extends PlainTestCase {
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // Write here. (ここに書いてみましょう)
         // - - - - - - - - - -
+        //ExceptionとErrorは、throw/catchできる仕組みは同じ。
+        //何が違うか？
+        //Exception（例外）
+        //想定内のトラブル。アプリケーションレベルでの異常になるため、プログラム上で想定してあげて適切に処理してあげる必要がある。
+        //例）ファイルが見つからない、不正な引数が入ってくる、ユーザーの入力が不正など。
         //
+        //Error（エラー）
+        //想定外のトラブル。システムレベルでの異常になるため、プログラム上で想定してあげることが難しい。基本的には、プログラム上で処理することはできない。
+        //例）メモリ不足、スタックオーバーフローなど。
         //
-        //
+        //車の運転で例えると....
+        //Exceptionは、車の運転中に起こるトラブルで、例えば、ガソリンが切れた、タイヤがパンクしたなどなど...
+        // これらは、事前に想定しておくことができるため、適切な対処をすることができる！
+        //Errorは、車の運転中に起こる想定外のトラブルで、例えば、ブレーキが完全に故障した、エンジンが突然停止したなど...
+        //事前に想定しておくことが難しいので制御しようがない！
         // _/_/_/_/_/_/_/_/_/_/
     }
 }

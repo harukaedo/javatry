@@ -17,6 +17,7 @@ package org.docksidestage.javatry.basic.st7;
 
 /**
  * @author jflute
+ * @author harukaedo
  */
 public class St7ConstructorChallengeException extends RuntimeException {
 
@@ -24,5 +25,10 @@ public class St7ConstructorChallengeException extends RuntimeException {
 
     public St7ConstructorChallengeException(String msg) {
         super(msg);
+    }
+
+    //0525修正メモ: 例外クラスにケースを受け取れるコンストラクタがなかったので追加する
+    public St7ConstructorChallengeException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 }
