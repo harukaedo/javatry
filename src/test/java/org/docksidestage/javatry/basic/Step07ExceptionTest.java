@@ -431,6 +431,8 @@ public class Step07ExceptionTest extends PlainTestCase {
 	at org.docksidestage.bizfw.basic.supercar.SupercarSteeringWheelManufacturer.makeSteeringWheel(SupercarSteeringWheelManufacturer.java:43)
 	... 25 common frames omitted
      */
+    // #1on1: しっかり例外の翻訳ができていて、デバッグ情報も充実している (2026/06/05)
+    // RuntimeExecption祭りはちょい雑だけど、まあご愛嬌。
     public void test_exception_translation_improveChallenge() {
         try {
             new SupercarClient().buySupercar(); // you can fix the classes
@@ -463,6 +465,7 @@ public class Step07ExceptionTest extends PlainTestCase {
             //IllegalStateExceptionではimportantValueが何だったかが書いてあるはずなのに、catch側でそのeを繋がずに、
             //新しい例外を投げてしまうことで元の例外スタックトレースも消えてしまう
             //catch 側で cause として渡す
+            // #1on1: 例外の握りつぶしの話 (2026/06/05)
             throw new St7ConstructorChallengeException("Failed to do something.", e);
         }
     }
@@ -501,5 +504,16 @@ public class Step07ExceptionTest extends PlainTestCase {
         //Errorは、車の運転中に起こる想定外のトラブルで、例えば、ブレーキが完全に故障した、エンジンが突然停止したなど...
         //事前に想定しておくことが難しいので制御しようがない！
         // _/_/_/_/_/_/_/_/_/_/
+        
+        // #1on1: エラーにはダメというニュアンス、例外はただの例外(正常なレアケース、エラーかまだわからない) (2026/06/05)
+        // throwする瞬間は、その事象がエラーかどうかは、立場的にわからない。ので、例外としてthrow。
+        // catchする人は全体像を知っているので、その人がエラーなのか？正常なレアケースなのか？判断。
+        // エラーハンドリング自体は、ログ出したりとかで、Errorクラスをthrowするとかないので、Errorクラスを目にすることがない。
+        // throwされている途中はまだ例外(まだエラーかどうかわからない状態)なので、throwされるのはException。
+        // JavaのErrorクラスは、throwする瞬間からダメというのが判断できるものばかり。
+        //
+        // 他の言語だと、ErrorがExceptionを継承するものも。Exceptionが抽象概念。
+        // Python, Ruby, TypeScript, Go
+        // 使ってる言葉が違うだけで、やってることみんな同じ。
     }
 }
