@@ -159,7 +159,7 @@ public abstract class Animal implements Loudable {
     public void downHitPointForBark() {
         downHitPoint();
     }
-    
+
     // ===================================================================================
     //                                                                               Loud
     //                                                                              ======

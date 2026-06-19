@@ -50,6 +50,11 @@ public class Step08Java8FunctionTest extends PlainTestCase {
     public void test_java8_lambda_callback_basic() {
         String title = "over";
 
+        // #1on1: コールバックとは？ (2026/06/19)
+        // もともとは一般用語。
+        //  A  → B
+        //  A' ← B
+
         //log(stage + ": " + title);
         // 1.クラスに名前をつけて事前に用意
         log("...Executing named class callback(!?)");
@@ -64,6 +69,8 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             }
         });
 
+        // #1on1: 無名インナークラス(匿名クラス)を省略したと言っても過言ではない (2026/06/19)
+        // コンパイラーの推論を使っている。
         //log(stage + ": " + title);
         //3.2をさらに省略して、TSのアロー関数的な感じでメソッドが一つのみの場合、
         //new Consumer<String>() {  public void accept(String stage・・・を省略できる
@@ -89,6 +96,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
      * (ログに出力される文字列の順番は？ (カンマ区切りで書き出しましょう))
      */
     public void test_java8_lambda_callback_order() {
+        // #1on1: 一緒にしっかり辿った (2026/06/19)
         log("harbor");
         helpCallbackConsumer(stage -> {
             log(stage);
@@ -145,6 +153,9 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         log(sea); // your answer? => number: 7
     }
 
+    // #1on1: メソッドという言葉と、関数という言葉の違い (2026/06/19)
+    // Function interface の Function とは？
+
     //R apply(T t); Tを引数として受け取り、Rを返すメソッドとなる
     private String helpCallbackFunction(Function<Integer, String> oneArgLambda) {
         return oneArgLambda.apply(7);
@@ -186,6 +197,8 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             "dockside"
         );
         //１行だけなら右のほうがいい？🤔 helpCallbackSupplier(() -> "dockside");
+        // #1on1: 1行だけでも、1行が横に長い場合などはblockで調整することもある (2026/06/19)
+        // あと、厳密には行数ではない。1statementかどうか？
 
         //helpCallbackSupplier(() -> "hangar"); // piari
         //BlockのLambda式に
@@ -207,6 +220,13 @@ public class Step08Java8FunctionTest extends PlainTestCase {
      * (二つのlog()によって出力される文字列は同じでしょうか？ (yes or no))
      */
     public void test_java8_optional_concept() {
+        // #1on1: Optionalになると何が嬉しい？ (2026/06/19)
+        // Optionalが処理の代理をしてくれる by えどさん
+        // 確かにその通りだけど、isPresent() か != null くらいの違いなのでちょっと小さい。
+        // ないかもしれない可能性を、コンパイラーが教えてくれるか？教えてくれないか？
+        // TypeScriptの union型 e.g. | undefined も同じ。
+        // 普通の型の変数に対する厳しさでいうと、TypeScriptの方が上。
+
         //実態は St8Member(memberId, "broadway", new St8Withdrawal(11, "music"));
         St8Member oldmember = new St8DbFacade().oldselectMember(1);
         if (oldmember != null) {
@@ -223,6 +243,10 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         // your answer? => yes
         //St8Member oldmembe・・・はnull じゃないので if に入る → log(1, "broadway")
         //Optionaljで、nullじゃないのでisPresentで中身出力　→ log(1, "broadway")
+        
+        // #1on1: Optionalが遅く導入された理由は？ (2026/06/19)
+        // そのままだと安全でもどんくさい。
+        // Lambda式と一緒になって、表現力が豊かになって、好まれる書き方できるようになった。
     }
 
     /**
@@ -290,6 +314,10 @@ public class Step08Java8FunctionTest extends PlainTestCase {
 
         //mapとflatMapの違い
         //読むhttps://qiita.com/KevinFQ/items/97137efb2159009b60e1
+        
+        // #1on1: map and flatMap() (2026/06/19)
+        // https://dbflute.seasar.org/ja/manual/topic/programming/java/java8/mapandflat.html
+        // えどさん頑張った
 
         //dstore = null
         //間違い
@@ -324,6 +352,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         log(miraco); // your answer? => 12
     }
 
+    // TODO jflute 将来の1on1でorElseThrow() (2026/06/19)
     /**
      * What string is sea variables at the method end? <br>
      * (メソッド終了時の変数 sea の中身は？)
